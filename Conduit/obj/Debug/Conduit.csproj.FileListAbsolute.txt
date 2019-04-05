@@ -1,0 +1,54 @@
+C:\Users\Heffel\source\repos\Conduit\Conduit\obj\Debug\Conduit.csprojAssemblyReference.cache
+C:\Users\Heffel\source\repos\Conduit\Conduit\obj\Debug\Left Edition Panel\ButtonsPanel.baml
+C:\Users\Heffel\source\repos\Conduit\Conduit\obj\Debug\Left Edition Panel\ConnectorPropertyEditor.baml
+C:\Users\Heffel\source\repos\Conduit\Conduit\obj\Debug\Left Edition Panel\EditorStyles.baml
+C:\Users\Heffel\source\repos\Conduit\Conduit\obj\Debug\Left Edition Panel\NodePropertyEditor.baml
+C:\Users\Heffel\source\repos\Conduit\Conduit\obj\Debug\Left Edition Panel\ParametersEditor.baml
+C:\Users\Heffel\source\repos\Conduit\Conduit\obj\Debug\Left Edition Panel\SnapSpotPropertyEditor.baml
+C:\Users\Heffel\source\repos\Conduit\Conduit\obj\Debug\Left Edition Panel\ButtonsPanel.g.cs
+C:\Users\Heffel\source\repos\Conduit\Conduit\obj\Debug\Left Edition Panel\ConnectorPropertyEditor.g.cs
+C:\Users\Heffel\source\repos\Conduit\Conduit\obj\Debug\Left Edition Panel\NodePropertyEditor.g.cs
+C:\Users\Heffel\source\repos\Conduit\Conduit\obj\Debug\Left Edition Panel\ParametersEditor.g.cs
+C:\Users\Heffel\source\repos\Conduit\Conduit\obj\Debug\Left Edition Panel\SnapSpotPropertyEditor.g.cs
+C:\Users\Heffel\source\repos\Conduit\Conduit\obj\Debug\MainWindow.g.cs
+C:\Users\Heffel\source\repos\Conduit\Conduit\obj\Debug\App.g.cs
+C:\Users\Heffel\source\repos\Conduit\Conduit\obj\Debug\GeneratedInternalTypeHelper.g.cs
+C:\Users\Heffel\source\repos\Conduit\Conduit\obj\Debug\Conduit_MarkupCompile.cache
+C:\Users\Heffel\source\repos\Conduit\Conduit\obj\Debug\Conduit_MarkupCompile.lref
+C:\Users\Heffel\source\repos\Conduit\Conduit\bin\Debug\Conduit.exe.config
+C:\Users\Heffel\source\repos\Conduit\Conduit\bin\Debug\Conduit.exe
+C:\Users\Heffel\source\repos\Conduit\Conduit\bin\Debug\Conduit.pdb
+C:\Users\Heffel\source\repos\Conduit\Conduit\obj\Debug\MainWindow.baml
+C:\Users\Heffel\source\repos\Conduit\Conduit\obj\Debug\Conduit.g.resources
+C:\Users\Heffel\source\repos\Conduit\Conduit\obj\Debug\Conduit.Properties.Resources.resources
+C:\Users\Heffel\source\repos\Conduit\Conduit\obj\Debug\Conduit.csproj.GenerateResource.cache
+C:\Users\Heffel\source\repos\Conduit\Conduit\obj\Debug\Conduit.csproj.CoreCompileInputs.cache
+C:\Users\Heffel\source\repos\Conduit\Conduit\obj\Debug\Conduit.exe
+C:\Users\Heffel\source\repos\Conduit\Conduit\obj\Debug\Conduit.pdb
+C:\Users\Matt\Desktop\Conduit\Conduit\bin\Debug\Conduit.exe.config
+C:\Users\Matt\Desktop\Conduit\Conduit\bin\Debug\Conduit.exe
+C:\Users\Matt\Desktop\Conduit\Conduit\bin\Debug\Conduit.pdb
+C:\Users\Matt\Desktop\Conduit\Conduit\obj\Debug\Conduit.csprojAssemblyReference.cache
+C:\Users\Matt\Desktop\Conduit\Conduit\obj\Debug\Left Edition Panel\ButtonsPanel.baml
+C:\Users\Matt\Desktop\Conduit\Conduit\obj\Debug\Left Edition Panel\ConnectorPropertyEditor.baml
+C:\Users\Matt\Desktop\Conduit\Conduit\obj\Debug\Left Edition Panel\EditorStyles.baml
+C:\Users\Matt\Desktop\Conduit\Conduit\obj\Debug\Left Edition Panel\NodePropertyEditor.baml
+C:\Users\Matt\Desktop\Conduit\Conduit\obj\Debug\Left Edition Panel\ParametersEditor.baml
+C:\Users\Matt\Desktop\Conduit\Conduit\obj\Debug\Left Edition Panel\SnapSpotPropertyEditor.baml
+C:\Users\Matt\Desktop\Conduit\Conduit\obj\Debug\Left Edition Panel\ButtonsPanel.g.cs
+C:\Users\Matt\Desktop\Conduit\Conduit\obj\Debug\Left Edition Panel\ConnectorPropertyEditor.g.cs
+C:\Users\Matt\Desktop\Conduit\Conduit\obj\Debug\Left Edition Panel\NodePropertyEditor.g.cs
+C:\Users\Matt\Desktop\Conduit\Conduit\obj\Debug\Left Edition Panel\ParametersEditor.g.cs
+C:\Users\Matt\Desktop\Conduit\Conduit\obj\Debug\Left Edition Panel\SnapSpotPropertyEditor.g.cs
+C:\Users\Matt\Desktop\Conduit\Conduit\obj\Debug\MainWindow.g.cs
+C:\Users\Matt\Desktop\Conduit\Conduit\obj\Debug\App.g.cs
+C:\Users\Matt\Desktop\Conduit\Conduit\obj\Debug\GeneratedInternalTypeHelper.g.cs
+C:\Users\Matt\Desktop\Conduit\Conduit\obj\Debug\Conduit_MarkupCompile.cache
+C:\Users\Matt\Desktop\Conduit\Conduit\obj\Debug\Conduit_MarkupCompile.lref
+C:\Users\Matt\Desktop\Conduit\Conduit\obj\Debug\MainWindow.baml
+C:\Users\Matt\Desktop\Conduit\Conduit\obj\Debug\Conduit.g.resources
+C:\Users\Matt\Desktop\Conduit\Conduit\obj\Debug\Conduit.Properties.Resources.resources
+C:\Users\Matt\Desktop\Conduit\Conduit\obj\Debug\Conduit.csproj.GenerateResource.cache
+C:\Users\Matt\Desktop\Conduit\Conduit\obj\Debug\Conduit.csproj.CoreCompileInputs.cache
+C:\Users\Matt\Desktop\Conduit\Conduit\obj\Debug\Conduit.exe
+C:\Users\Matt\Desktop\Conduit\Conduit\obj\Debug\Conduit.pdb
