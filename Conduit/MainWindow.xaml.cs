@@ -16,6 +16,8 @@ namespace Conduit
         public List<Node> Nodes { get; set; }
         public List<Connector> Connectors { get; set; }
 
+        private int n = 0;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -129,6 +131,14 @@ namespace Conduit
         {
             var vm = DataContext as MainViewModel;
             vm.CreateNewNode();
+            
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            n++;
+            NodeCreator nc = new NodeCreator(7);
+            nc.Show();
         }
     }
 }
