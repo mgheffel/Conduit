@@ -84,6 +84,7 @@ namespace Conduit
             MessageBox.Show("Clicked");
             var vm = v.DataContext as MainViewModel;
             vm.CreateNewNode();
+            Close();
 
         }
 
