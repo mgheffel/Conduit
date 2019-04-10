@@ -137,7 +137,7 @@ namespace Conduit
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
             n++;
-            NodeCreator nc = new NodeCreator(7);
+            NodeCreator nc = new NodeCreator(5, this);
             nc.Show();
         }
     }

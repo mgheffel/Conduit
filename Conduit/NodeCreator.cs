@@ -13,10 +13,14 @@ namespace Conduit
     public partial class NodeCreator : Form
     {
         private int n;
-        public NodeCreator(int k)
+
+        
+        private MainWindow v;
+        public NodeCreator(int k, MainWindow a)
         {
             InitializeComponent();
             n = k;
+            v = a;
             createFields();
         }
 
@@ -78,6 +82,8 @@ namespace Conduit
         void button_Click(object sender, EventArgs e)
         {
             MessageBox.Show("Clicked");
+            var vm = v.DataContext as MainViewModel;
+            vm.CreateNewNode();
 
         }
 
