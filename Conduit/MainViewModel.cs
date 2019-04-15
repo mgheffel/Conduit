@@ -128,22 +128,21 @@ namespace Conduit
             }
         }
 
-        public void CreateNewNode()
+        public Node CreateNewNode()
         {
-
             var newnode = new Node()
             {
                 Name = "Node" + (Nodes.Count + 1),
                 IsNew = true,
 
-                                  Size = { Value = new Point(150, 120) },
+                                    Size = { Value = new Point(150, 120) },
                                     ShortName = "N",
                                     Location = { Value = new Point(256, 100) },
                                     Color = Colors.AliceBlue
             };
-
             Nodes.Add(newnode);
             SelectedObject = newnode;
+            return newnode;
         }
 
         public void RemoveNewObjects()
@@ -179,6 +178,9 @@ namespace Conduit
             Connectors.Add(connector);
             SelectedObject = connector;
         }
+
+  
+            
 
         #endregion
 

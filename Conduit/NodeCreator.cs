@@ -22,6 +22,7 @@ namespace Conduit
             n = k;
             v = a;
             createFields();
+            this.AutoSize = true;
         }
 
         private void createFields()
@@ -81,9 +82,9 @@ namespace Conduit
         }
         void button_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Clicked");
             var vm = v.DataContext as MainViewModel;
             vm.CreateNewNode();
+            v.updateNodes();
             Close();
 
         }

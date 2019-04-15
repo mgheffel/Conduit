@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+using System.Linq; // added
 using Conduit;
 
 namespace Conduit
@@ -22,6 +23,7 @@ namespace Conduit
         {
             InitializeComponent();
             DataContext = new MainViewModel();
+            updateNodes();
         }
 
         private void Thumb_Drag(object sender, DragDeltaEventArgs e)
@@ -131,14 +133,22 @@ namespace Conduit
         {
             var vm = DataContext as MainViewModel;
             vm.CreateNewNode();
-            
+            updateNodes();
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
-        {
-            n++;
-            NodeCreator nc = new NodeCreator(5, this);
+        { 
+            n = Nodes.Count + 1;
+            NodeCreator nc = new NodeCreator(n, this);
             nc.Show();
+            
+        }
+
+        public void updateNodes()
+        {
+            var vm = DataContext as MainViewModel;
+            List<Node> a = vm.Nodes.ToList();
+            Nodes = a;
         }
     }
 }
