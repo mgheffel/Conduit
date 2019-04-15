@@ -92,8 +92,9 @@ namespace Conduit
         public MainViewModel()
         {
             _nodes = new ObservableCollection<Node>(NodesDataSource.GetRandomNodes());
-            _connectors = new ObservableCollection<Connector>(NodesDataSource.GetRandomConnectors(Nodes.ToList()));
-            _snaps = new ObservableCollection<SnapSpot>(Nodes.SelectMany(x => x.Snaps));
+           _connectors = new ObservableCollection<Connector>(NodesDataSource.GetRandomConnectors(Nodes.ToList()));
+           _snaps = new ObservableCollection<SnapSpot>(Nodes.SelectMany(x => x.Snaps));
+           
         }
 
         #endregion
@@ -130,6 +131,7 @@ namespace Conduit
 
         public Node CreateNewNode()
         {
+            int n = Nodes.Count + 1;
             var newnode = new Node()
             {
                 Name = "Node" + (Nodes.Count + 1),
@@ -140,9 +142,35 @@ namespace Conduit
                                     Location = { Value = new Point(256, 100) },
                                     Color = Colors.AliceBlue
             };
+            addSnapPoints(newnode, n, n);
+            
             Nodes.Add(newnode);
             SelectedObject = newnode;
             return newnode;
+        }
+
+        public void addSnapPoints(Node node, int left, int right) {
+            double y = .1;
+            for (int i = 0 ; i < left; i++)
+            {
+                
+                SnapSpot s = new SnapSpot(node) { Offset = { X = 0, Y = y }, Angle = -90, Name = "InputSnap " + i, LockX = true };
+                node.Snaps.Add(s);
+                Snaps.Add(s);
+                y = y + .1;
+
+            }
+            double x = .1;
+            for (int j = 0; j < right; j++)
+            {
+
+                SnapSpot s = new SnapSpot(node) { Offset = { X = 1, Y = x }, Angle = -90, Name = "OutputSnap " + j, LockX = true };
+                node.Snaps.Add(s);
+                Snaps.Add(s);
+                x = x + .1;
+
+            }
+            
         }
 
         public void RemoveNewObjects()
