@@ -149,7 +149,16 @@ namespace Conduit
         {
             var vm = DataContext as MainViewModel;
             List<Node> a = vm.Nodes.ToList();
+            List<Connector> b = vm.Connectors.ToList();
             Nodes = a;
+            Connectors = b;
+
+        }
+
+        private void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+            newConnector c = new newConnector(this);
+            c.Show();
         }
     }
 }

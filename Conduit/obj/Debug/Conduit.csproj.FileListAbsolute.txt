@@ -26,3 +26,4 @@ C:\Users\kbowers\Source\Repos\SeniorProject2\Conduit\obj\Debug\Conduit.csproj.Ge
 C:\Users\kbowers\Source\Repos\SeniorProject2\Conduit\obj\Debug\Conduit.csproj.CoreCompileInputs.cache
 C:\Users\kbowers\Source\Repos\SeniorProject2\Conduit\obj\Debug\Conduit.exe
 C:\Users\kbowers\Source\Repos\SeniorProject2\Conduit\obj\Debug\Conduit.pdb
+C:\Users\kbowers\Source\Repos\SeniorProject2\Conduit\obj\Debug\Conduit.newConnector.resources

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Media;
 
+
 namespace Conduit
 {
     public class MainViewModel: INotifyPropertyChanged
@@ -131,7 +132,8 @@ namespace Conduit
 
         public Node CreateNewNode()
         {
-            int n = Nodes.Count + 1;
+            int input = Nodes.Count + 1;
+            int output = Nodes.Count + 1;
             var newnode = new Node()
             {
                 Name = "Node" + (Nodes.Count + 1),
@@ -142,7 +144,7 @@ namespace Conduit
                                     Location = { Value = new Point(256, 100) },
                                     Color = Colors.AliceBlue
             };
-            addSnapPoints(newnode, n, n);
+            addSnapPoints(newnode, input, output);
             
             Nodes.Add(newnode);
             SelectedObject = newnode;
@@ -205,6 +207,43 @@ namespace Conduit
 
             Connectors.Add(connector);
             SelectedObject = connector;
+        }
+
+        public void customConnector(Node a, Node b)
+        {
+            int x = a.Snaps.Count;
+            int y = b.Snaps.Count;
+            int input = 0;
+            int output = 0;
+            for(int i=x/2; i<x; i++)
+            {
+              if (a.Snaps[i].IsConnected == false)
+                {
+                    input = i;
+                    break;
+                }
+            }
+            for (int k = 0; k < y; k++)
+            {
+                if (b.Snaps[k].IsConnected == false)
+                {
+                    output = k;
+                    break;
+                }
+            }
+
+            var connector = new Connector()
+            {
+                Name = "Connector" + (Connectors.Count + 1),
+                IsNew = true,
+                Start = a.Snaps[input],
+                End = b.Snaps[output],
+                Color = Colors.Red
+            };
+            Connectors.Add(connector);
+            SelectedObject = connector;
+            a.Snaps[input].IsConnected = true;
+            b.Snaps[output].IsConnected = true;
         }
 
   

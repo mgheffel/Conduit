@@ -83,7 +83,7 @@ namespace Conduit
         void button_Click(object sender, EventArgs e)
         {
             var vm = v.DataContext as MainViewModel;
-            Node node =vm.CreateNewNode();
+            Node node = vm.CreateNewNode();
             v.updateNodes();
             Close();
             
