@@ -160,5 +160,11 @@ namespace Conduit
             newConnector c = new newConnector(this);
             c.Show();
         }
+
+        private void Button_Click_3(object sender, RoutedEventArgs e)
+        {
+            Beocat b = new Beocat();
+            b.Show();
+        }
     }
 }

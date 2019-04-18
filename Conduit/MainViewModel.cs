@@ -92,7 +92,7 @@ namespace Conduit
 
         public MainViewModel()
         {
-            _nodes = new ObservableCollection<Node>(NodesDataSource.GetRandomNodes());
+           _nodes = new ObservableCollection<Node>(NodesDataSource.GetRandomNodes());
            _connectors = new ObservableCollection<Connector>(NodesDataSource.GetRandomConnectors(Nodes.ToList()));
            _snaps = new ObservableCollection<SnapSpot>(Nodes.SelectMany(x => x.Snaps));
            
