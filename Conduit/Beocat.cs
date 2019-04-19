@@ -32,15 +32,17 @@ namespace Conduit
                     try
                     {
                         ssh.Connect();
+                        var result = ssh.RunCommand("df -h");
+                        MessageBox.Show("Successful Login");
                     }
                     catch (Renci.SshNet.Common.SshAuthenticationException)
                     {
                         MessageBox.Show("Wrong Password");
                     }
-                    var result = ssh.RunCommand("df -h");
+                    
                     //ssh.Disconnect();
                 }
-                MessageBox.Show("Successful Login");
+               
             }
             
         }
