@@ -132,8 +132,8 @@ namespace Conduit
 
         public Node CreateNewNode()
         {
-            int input = Nodes.Count + 1;
-            int output = Nodes.Count + 1;
+            int input = 4;
+            int output = 3;
             var newnode = new Node()
             {
                 Name = "Node" + (Nodes.Count + 1),
@@ -159,17 +159,17 @@ namespace Conduit
                 SnapSpot s = new SnapSpot(node) { Offset = { X = 0, Y = y }, Angle = -90, Name = "InputSnap " + i, LockX = true };
                 node.Snaps.Add(s);
                 Snaps.Add(s);
-                y = y + .1;
+                y = y + .25;
 
             }
-            double x = .1;
+            double x = .25;
             for (int j = 0; j < right; j++)
             {
 
                 SnapSpot s = new SnapSpot(node) { Offset = { X = 1, Y = x }, Angle = -90, Name = "OutputSnap " + j, LockX = true };
                 node.Snaps.Add(s);
                 Snaps.Add(s);
-                x = x + .1;
+                x = x + .25;
 
             }
             
