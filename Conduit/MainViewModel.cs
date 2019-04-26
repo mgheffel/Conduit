@@ -215,7 +215,9 @@ namespace Conduit
             int y = b.Snaps.Count;
             int input = 0;
             int output = 0;
-            for(int i=x/2; i<x; i++)
+
+            bool make = true;
+            for(int i = x/2 +1; i<x; i++)
             {
               if (a.Snaps[i].IsConnected == false)
                 {
@@ -223,27 +225,43 @@ namespace Conduit
                     break;
                 }
             }
-            for (int k = 0; k < y; k++)
+            if (input == 0)
             {
-                if (b.Snaps[k].IsConnected == false)
+                make = false;
+                MessageBox.Show("Not output availability for "+ a.Name);
+            }
+           
+                for (int k = 0; k <= y / 2; k++)
                 {
-                    output = k;
-                    break;
+                    if (b.Snaps[k].IsConnected == false)
+                    {
+                        output = k;
+                        break;
+                    }
                 }
+            if (b.Snaps[0].IsConnected == true && output == 0)
+            {
+                make = false;
+                MessageBox.Show("Not input availability for " + b.Name);
             }
 
-            var connector = new Connector()
+            if (make)
             {
-                Name = "Connector" + (Connectors.Count + 1),
-                IsNew = true,
-                Start = a.Snaps[input],
-                End = b.Snaps[output],
-                Color = Colors.Red
-            };
-            Connectors.Add(connector);
-            SelectedObject = connector;
-            a.Snaps[input].IsConnected = true;
-            b.Snaps[output].IsConnected = true;
+                var connector = new Connector()
+                {
+                    Name = "Connector" + (Connectors.Count + 1),
+                    IsNew = true,
+                    Start = a.Snaps[input],
+                    End = b.Snaps[output],
+                    Color = Colors.Red
+                };
+                Connectors.Add(connector);
+                SelectedObject = connector;
+                a.Snaps[input].IsConnected = true;
+                b.Snaps[output].IsConnected = true;
+            }
+            
+            
         }
 
   
