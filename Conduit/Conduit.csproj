@@ -67,6 +67,12 @@
     <Compile Include="Beocat.Designer.cs">
       <DependentUpon>Beocat.cs</DependentUpon>
     </Compile>
+    <Compile Include="SaveFile.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SaveFile.Designer.cs">
+      <DependentUpon>SaveFile.cs</DependentUpon>
+    </Compile>
     <Compile Include="newConnector.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -146,6 +152,9 @@
     </Compile>
     <EmbeddedResource Include="Beocat.resx">
       <DependentUpon>Beocat.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SaveFile.resx">
+      <DependentUpon>SaveFile.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="newConnector.resx">
       <DependentUpon>newConnector.cs</DependentUpon>

@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System.Windows;
+
+
 namespace Conduit
 {
     public class Node: DiagramObject
@@ -8,6 +10,7 @@ namespace Conduit
         {
             Size.ValueChanged = RecalculateSnaps;
             Location.ValueChanged = RecalculateSnaps;
+            
         }
 
         private void RecalculateSnaps()
@@ -49,6 +52,9 @@ namespace Conduit
         }
 
         private string _shortName;
+        
+        
+
         public string ShortName
         {
             get { return _shortName; }

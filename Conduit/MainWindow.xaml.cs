@@ -24,6 +24,7 @@ namespace Conduit
             InitializeComponent();
             DataContext = new MainViewModel();
             updateNodes();
+            
         }
 
         private void Thumb_Drag(object sender, DragDeltaEventArgs e)
@@ -81,6 +82,7 @@ namespace Conduit
                     {
                         //connector.Start = node;
                         node.IsHighlighted = true;
+                        
                         e.Handled = true;
                         return;
                     }
@@ -132,8 +134,7 @@ namespace Conduit
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             var vm = DataContext as MainViewModel;
-           
-            Node node=vm.CreateNewNode();
+            Node node = vm.CreateNewNode();
             updateNodes();
         }
 
@@ -165,6 +166,13 @@ namespace Conduit
         {
             Beocat b = new Beocat();
             b.Show();
+        }
+
+        private void Button_Click_4(object sender, RoutedEventArgs e)
+        {
+            
+            SaveFile f = new SaveFile(this);
+            f.Show();
         }
     }
 }

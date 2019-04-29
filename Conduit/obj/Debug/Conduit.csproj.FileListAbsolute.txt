@@ -31,3 +31,4 @@ C:\Users\kbowers\Source\Repos\SeniorProject2\Conduit\bin\Debug\Renci.SshNet.dll
 C:\Users\kbowers\Source\Repos\SeniorProject2\Conduit\bin\Debug\Renci.SshNet.xml
 C:\Users\kbowers\Source\Repos\SeniorProject2\Conduit\obj\Debug\Conduit.Beocat.resources
 C:\Users\kbowers\Source\Repos\SeniorProject2\Conduit\obj\Debug\Conduit.csproj.CopyComplete
+C:\Users\kbowers\source\repos\SeniorProject2\Conduit\obj\Debug\Conduit.SaveFile.resources

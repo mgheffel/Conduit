@@ -139,7 +139,7 @@ namespace Conduit
                 Name = "Node" + (Nodes.Count + 1),
                 IsNew = true,
 
-                                    Size = { Value = new Point(150, 120) },
+                                    Size = { Value = new Point( 102, 100) }, //new Point(150, 120) (100,50) },
                                     ShortName = "N",
                                     Location = { Value = new Point(256, 100) },
                                     Color = Colors.AliceBlue
