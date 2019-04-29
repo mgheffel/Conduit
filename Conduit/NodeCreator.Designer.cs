@@ -28,33 +28,86 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.textBox1 = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.cb = new System.Windows.Forms.ComboBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.inputValue = new System.Windows.Forms.TextBox();
+            this.outputValue = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
-            // 
-            // textBox1
-            // 
-            this.textBox1.Location = new System.Drawing.Point(12, 285);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(100, 20);
-            this.textBox1.TabIndex = 0;
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(133, 282);
+            this.button1.Location = new System.Drawing.Point(685, 388);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(103, 23);
             this.button1.TabIndex = 1;
             this.button1.Text = "Create Fields";
             this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(12, 393);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(145, 13);
+            this.label1.TabIndex = 2;
+            this.label1.Text = "How Many Parameter Fields?";
+            // 
+            // cb
+            // 
+            this.cb.FormattingEnabled = true;
+            this.cb.Location = new System.Drawing.Point(163, 388);
+            this.cb.Name = "cb";
+            this.cb.Size = new System.Drawing.Size(45, 21);
+            this.cb.TabIndex = 3;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(214, 391);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(120, 13);
+            this.label2.TabIndex = 4;
+            this.label2.Text = "How many input snaps?";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(446, 393);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(127, 13);
+            this.label3.TabIndex = 5;
+            this.label3.Text = "How many output snaps?";
+            // 
+            // inputValue
+            // 
+            this.inputValue.Location = new System.Drawing.Point(340, 388);
+            this.inputValue.Name = "inputValue";
+            this.inputValue.Size = new System.Drawing.Size(100, 20);
+            this.inputValue.TabIndex = 6;
+            // 
+            // outputValue
+            // 
+            this.outputValue.Location = new System.Drawing.Point(579, 388);
+            this.outputValue.Name = "outputValue";
+            this.outputValue.Size = new System.Drawing.Size(100, 20);
+            this.outputValue.TabIndex = 7;
             // 
             // NodeCreator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.outputValue);
+            this.Controls.Add(this.inputValue);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.cb);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.button1);
-            this.Controls.Add(this.textBox1);
             this.Name = "NodeCreator";
             this.Text = "Node Creation";
             this.ResumeLayout(false);
@@ -63,8 +116,12 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ComboBox cb;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox inputValue;
+        private System.Windows.Forms.TextBox outputValue;
     }
 }

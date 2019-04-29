@@ -13,19 +13,23 @@ namespace Conduit
     public partial class NodeCreator : Form
     {
         private int n;
+        private int inValue;
+        private int outValue;
+        private int numFields;
 
-        
         private MainWindow v;
         public NodeCreator(int k, MainWindow a)
         {
             InitializeComponent();
             n = k;
             v = a;
-            createFields();
+            string[] range = new string[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" };
+            cb.Items.AddRange(range);
+           // createFields();
             this.AutoSize = true;
         }
 
-        private void createFields()
+        private void createFields(int m)
         {
             Label nodeName = new Label();
             nodeName.Text = String.Format("Node {0}", n);
@@ -34,11 +38,12 @@ namespace Conduit
             this.Controls.Add(nodeName);
 
 
-            for (int i = 1; i <= n; i++)
+            for (int i = 1; i <= m; i++)
             {
                 //Create label
                 Label label = new Label();
-                label.Text = String.Format("Parameter X{0}", i);
+                label.Text = String.Format("Parameter Name {0}", i);
+                label.AutoSize = true;
                 //Position label on screen
                 label.Left = 10;
                 label.Top = (i + 1) * 25;
@@ -52,14 +57,15 @@ namespace Conduit
                 this.Controls.Add(TextBox);
             }
 
-            for (int i = 1; i <= n; i++)
+            for (int i = 1; i <= m; i++)
             {
                 //Create label
                 Label label = new Label();
-                label.Text = String.Format("Parameter Y{0}", i);
+                label.Text = String.Format("Parameter Value {0}", i);
                 //Position label on screen
                 label.Left = 260;
                 label.Top = (i + 1) * 25;
+                label.AutoSize = true;
                 //Create textbox
                 TextBox textBox = new TextBox();
                 //Position textbox on screen
@@ -73,7 +79,7 @@ namespace Conduit
             Button button = new Button();
             button.Text = String.Format("Create Node");
             button.Left = 185;
-            button.Top = (n + 2) * 25;
+            button.Top = (m + 2) * 25;
             this.Controls.Add(button);
             button.Width = 100;
             button.Enabled = true;
@@ -83,13 +89,35 @@ namespace Conduit
         void button_Click(object sender, EventArgs e)
         {
             var vm = v.DataContext as MainViewModel;
-            Node node = vm.CreateNewNode();
+            Node node = vm.CreateNewNode(inValue,outValue,numFields);
             v.updateNodes();
             Close();
             
 
         }
 
-       
+        private void button1_Click(object sender, EventArgs e)
+        {
+            
+            if(cb.SelectedItem == null)
+            {
+                MessageBox.Show("Must Select Number of Fields");
+            }
+            else if(inputValue == null || !int.TryParse(inputValue.Text, out inValue))
+            {
+                MessageBox.Show("Input Snaps must be an integer value");
+            }
+            else if (outputValue == null || !int.TryParse(outputValue.Text, out outValue))
+            {
+                MessageBox.Show("Output Snaps must be an integer value");
+            }
+            else
+            {
+                int.TryParse(inputValue.Text, out inValue);
+                int.TryParse(outputValue.Text, out outValue);
+                int.TryParse(cb.SelectedItem.ToString(), out numFields);
+                createFields(numFields);
+            }
+        }
     }
 }

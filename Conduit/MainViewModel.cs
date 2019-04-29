@@ -124,34 +124,82 @@ namespace Conduit
                 OnPropertyChanged("CreatingNewNode");
 
                 if (value)
-                    CreateNewNode();
+                    CreateNewNode(4,3,5);
                 else
                     RemoveNewObjects();
             }
         }
 
-        public Node CreateNewNode()
+        public Node CreateNewNode(int input, int output, int numFields)
         {
-            int input = 4;
-            int output = 3;
+            double xincrement = .1;
+            double yincrement = .1;
+            double xpoint = 102;
+            double ypoint = 148;
+            switch (numFields)
+            {
+                case 1:
+                    xpoint = 52;
+                    ypoint = 49;
+                    break;
+                case 2:
+                    xpoint = 102;
+                    ypoint = 49;
+                    break;
+                case 3:
+                    xpoint = 153;
+                    ypoint = 49;
+                    break;
+                case 4:
+                    xpoint = 102;
+                    ypoint = 75;
+                    break;
+                case 5:
+                    xpoint = 153;
+                    ypoint = 75;
+                    break;
+                case 6:
+                    xpoint = 102;
+                    ypoint = 99;
+                    break;
+                case 7:
+                    xpoint = 102;
+                    ypoint = 123;
+                    break;
+                case 8:
+                    xpoint = 153;
+                    ypoint = 99;
+                    break;
+                case 9:
+                    xpoint = 153;
+                    ypoint = 123;
+                    break;
+                default:
+                    xpoint = 153;
+                    ypoint = 148; 
+                    break;
+            }
+            xincrement = .9/output;
+            yincrement = .9/input;
+
             var newnode = new Node()
             {
                 Name = "Node" + (Nodes.Count + 1),
                 IsNew = true,
 
-                                    Size = { Value = new Point( 102, 100) }, //new Point(150, 120) (100,50) },
+                                    Size = { Value = new Point( xpoint, ypoint) },
                                     ShortName = "N",
                                     Location = { Value = new Point(256, 100) },
                                     Color = Colors.AliceBlue
             };
-            addSnapPoints(newnode, input, output);
+            addSnapPoints(newnode, input, output, yincrement, xincrement);
             
             Nodes.Add(newnode);
             SelectedObject = newnode;
             return newnode;
         }
 
-        public void addSnapPoints(Node node, int left, int right) {
+        public void addSnapPoints(Node node, int left, int right, double yincrement, double xincrement ) {
             double y = .1;
             for (int i = 0 ; i < left; i++)
             {
@@ -159,17 +207,17 @@ namespace Conduit
                 SnapSpot s = new SnapSpot(node) { Offset = { X = 0, Y = y }, Angle = -90, Name = "InputSnap " + i, LockX = true };
                 node.Snaps.Add(s);
                 Snaps.Add(s);
-                y = y + .25;
+                y = y + yincrement;
 
             }
-            double x = .25;
+            double x = .1;
             for (int j = 0; j < right; j++)
             {
 
                 SnapSpot s = new SnapSpot(node) { Offset = { X = 1, Y = x }, Angle = -90, Name = "OutputSnap " + j, LockX = true };
                 node.Snaps.Add(s);
                 Snaps.Add(s);
-                x = x + .25;
+                x = x + xincrement;
 
             }
             
