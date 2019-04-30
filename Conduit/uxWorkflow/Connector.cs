@@ -31,6 +31,32 @@ namespace Conduit
                                      ((End.Location.Y + Start.Location.Y) / 2));
             }
         }
+        private Node startNode;
+        public Node StartNode
+        {
+            get { return startNode; }
+            set
+            {
+                if (startNode != value)
+                {
+                    startNode = value;
+                    OnPropertyChanged("StartNode");
+                }
+            }
+        }
+        private Node endNode;
+        public Node EndNode
+        {
+            get { return endNode; }
+            set
+            {
+                if (endNode != value)
+                {
+                    endNode = value;
+                    OnPropertyChanged("EndNode");
+                }
+            }
+        }
 
         private BindablePoint _midPoint;
         public BindablePoint MidPoint

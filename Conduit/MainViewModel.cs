@@ -440,11 +440,13 @@ namespace Conduit
                 var connector = new Connector()
                 {
                     Name = "Connector" + (Connectors.Count + 1),
-                    IsNew = true,
+                    //IsNew = true,
                     Start = a.Snaps[input],
                     End = b.Snaps[output],
                     Color = Colors.Red
                 };
+                connector.StartNode = a;
+                connector.EndNode = b;
                 Connectors.Add(connector);
                 SelectedObject = connector;
                 a.Snaps[input].IsConnected = true;
