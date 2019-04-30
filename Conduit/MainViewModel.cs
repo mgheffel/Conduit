@@ -134,49 +134,50 @@ namespace Conduit
         {
             double xincrement = .1;
             double yincrement = .1;
-            double xpoint = 102;
-            double ypoint = 148;
+            double xpoint = 306;
+            double ypoint = 198;
+            //numFields = 7;
             switch (numFields)
             {
                 case 1:
-                    xpoint = 52;
-                    ypoint = 49;
+                    xpoint = 104;
+                    ypoint = 59;
                     break;
                 case 2:
-                    xpoint = 102;
-                    ypoint = 49;
+                    xpoint = 204;
+                    ypoint = 59;
                     break;
                 case 3:
-                    xpoint = 153;
-                    ypoint = 49;
+                    xpoint = 306;
+                    ypoint = 59;
                     break;
                 case 4:
-                    xpoint = 102;
-                    ypoint = 75;
+                    xpoint = 204;
+                    ypoint = 95;
                     break;
                 case 5:
-                    xpoint = 153;
-                    ypoint = 75;
+                    xpoint = 306;
+                    ypoint = 95;
                     break;
                 case 6:
-                    xpoint = 102;
-                    ypoint = 99;
+                    xpoint = 204;
+                    ypoint = 129;
                     break;
                 case 7:
-                    xpoint = 102;
-                    ypoint = 123;
+                    xpoint = 204;
+                    ypoint = 153;
                     break;
                 case 8:
-                    xpoint = 153;
-                    ypoint = 99;
+                    xpoint = 306;
+                    ypoint = 129;
                     break;
                 case 9:
-                    xpoint = 153;
-                    ypoint = 123;
+                    xpoint = 306;
+                    ypoint = 163;
                     break;
                 default:
-                    xpoint = 153;
-                    ypoint = 148; 
+                    xpoint = 306;
+                    ypoint = 198; 
                     break;
             }
             xincrement = .9/output;

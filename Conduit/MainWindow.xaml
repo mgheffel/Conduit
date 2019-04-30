@@ -112,19 +112,32 @@
                                     <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
 
                                 </Grid.ColumnDefinitions>
-
-                                <TextBox  Grid.Row="0" Grid.Column="0" Height="20" Width="45" Margin="2"/>
-                                <TextBox  Grid.Row="1" Grid.Column="0" Height="20" Width="45" Margin="2"/>
-                                <TextBox  Grid.Row="2" Grid.Column="0" Height="20" Width="45" Margin="2"/>
-                                <TextBox  Grid.Row="3" Grid.Column="0" Height="20" Width="45" Margin="2"/>
-                                <TextBox  Grid.Row="4" Grid.Column="0" Height="20" Width="45" Margin="2"/>
-                                <TextBox  Grid.Row="0" Grid.Column="1" Height="20" Width="45" Margin="2"/>
-                                <TextBox  Grid.Row="0" Grid.Column="2" Height="20" Width="45" Margin="2"/>
-                                <TextBox  Grid.Row="1" Grid.Column="1" Height="20" Width="45" Margin="2"/>
-                                <TextBox  Grid.Row="2" Grid.Column="1" Height="20" Width="45" Margin="2"/>
-                                <TextBox  Grid.Row="2" Grid.Column="2" Height="20" Width="45" Margin="2"/>
+                                <Label  Content ="{Binding Path=V1, Mode=TwoWay}" Grid.Row="0" Grid.Column="0" Height="30" Width="45" Margin="2"/>
+                                <Label  Content ="{Binding Path=V2, Mode=TwoWay}" Grid.Row="0" Grid.Column="2" Height="30" Width="45" Margin="2"/>
+                                <Label  Content ="{Binding Path=V3, Mode=TwoWay}" Grid.Row="0" Grid.Column="4" Height="30" Width="45" Margin="2"/>
+                                <Label  Content ="{Binding Path=V4, Mode=TwoWay}" Grid.Row="1" Grid.Column="0" Height="30" Width="45" Margin="2"/>
+                                <Label  Content ="{Binding Path=V5, Mode=TwoWay}" Grid.Row="1" Grid.Column="2" Height="30" Width="45" Margin="2"/>
+                                <Label  Content ="{Binding Path=V6, Mode=TwoWay}" Grid.Row="2" Grid.Column="0" Height="30" Width="45" Margin="2"/>
+                                <Label  Content ="{Binding Path=V7, Mode=TwoWay}" Grid.Row="2" Grid.Column="2" Height="30" Width="45" Margin="2"/>
+                                <Label  Content ="{Binding Path=V8, Mode=TwoWay}" Grid.Row="2" Grid.Column="4" Height="30" Width="45" Margin="2"/>
+                                <Label  Content ="{Binding Path=V9, Mode=TwoWay}" Grid.Row="3" Grid.Column="0" Height="30" Width="45" Margin="2"/>
+                                <Label  Content ="{Binding Path=V10, Mode=TwoWay}" Grid.Row="4" Grid.Column="0" Height="30" Width="45" Margin="2"/>
+        
+                                <TextBox  Text ="{Binding Path=T1, Mode=TwoWay}" Grid.Row="0" Grid.Column="1" Height="20" Width="45" Margin="2"/>
+                                <TextBox  Text ="{Binding Path=T4, Mode=TwoWay}" Grid.Row="1" Grid.Column="1" Height="20" Width="45" Margin="2"/>
+                                <TextBox  Text ="{Binding Path=T6, Mode=TwoWay}" Grid.Row="2" Grid.Column="1" Height="20" Width="45" Margin="2"/>
+                                <TextBox  Text ="{Binding Path=T9, Mode=TwoWay}" Grid.Row="3" Grid.Column="1" Height="20" Width="45" Margin="2"/>
+                                <TextBox  Text ="{Binding Path=T10, Mode=TwoWay}" Grid.Row="4" Grid.Column="1" Height="20" Width="45" Margin="2"/>
+                                <TextBox  Text ="{Binding Path=T2, Mode=TwoWay}" Grid.Row="0" Grid.Column="3" Height="20" Width="45" Margin="2"/>
+                                <TextBox  Text ="{Binding Path=T3, Mode=TwoWay}" Grid.Row="0" Grid.Column="5" Height="20" Width="45" Margin="2"/>
+                                <TextBox  Text ="{Binding Path=T5, Mode=TwoWay}" Grid.Row="1" Grid.Column="3" Height="20" Width="45" Margin="2"/>
+                                <TextBox  Text ="{Binding Path=T7, Mode=TwoWay}" Grid.Row="2" Grid.Column="3" Height="20" Width="45" Margin="2"/>
+                                <TextBox  Text ="{Binding Path=T8, Mode=TwoWay}" Grid.Row="2" Grid.Column="5" Height="20" Width="45" Margin="2"/>
  
                             </Grid>
                         </Grid>
