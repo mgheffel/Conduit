@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Media;
-
+using System;
 
 namespace Conduit
 {
@@ -122,21 +122,23 @@ namespace Conduit
             {
                 _creatingNewNode = value;
                 OnPropertyChanged("CreatingNewNode");
-
+                string[] a = { "name","3", "4","","","","","","","","","","","","","","","","","","","" };
                 if (value)
-                    CreateNewNode(4,3,5);
+                    CreateNewNode(5, a);
                 else
                     RemoveNewObjects();
             }
         }
 
-        public Node CreateNewNode(int input, int output, int numFields)
+        public Node CreateNewNode(int numFields, string [] strings)
         {
+            int input = Convert.ToInt32(strings[2]);
+            int output = Convert.ToInt32(strings[1]);
+  
             double xincrement = .1;
             double yincrement = .1;
             double xpoint = 306;
             double ypoint = 198;
-            //numFields = 7;
             switch (numFields)
             {
                 case 1:
@@ -183,21 +185,157 @@ namespace Conduit
             xincrement = .9/output;
             yincrement = .9/input;
 
-            var newnode = new Node()
+
+
+            var node = new Node()
             {
-                Name = "Node" + (Nodes.Count + 1),
+                Name = strings[0],
                 IsNew = true,
 
                                     Size = { Value = new Point( xpoint, ypoint) },
                                     ShortName = "N",
                                     Location = { Value = new Point(256, 100) },
                                     Color = Colors.AliceBlue
+                                    
             };
-            addSnapPoints(newnode, input, output, yincrement, xincrement);
+            switch (numFields)
+            {
+                case 1:
+                    node.V1 = strings[3];
+                    node.T1 = strings[4];
+                    break;
+                case 2:
+                    node.V1 = strings[3];
+                    node.T1 = strings[5];
+                    node.V2 = strings[4];
+                    node.T2 = strings[6];
+                    break;
+                case 3:
+                    node.V1 = strings[3];
+                    node.T1 = strings[6];
+                    node.V2 = strings[4];
+                    node.T2 = strings[7];
+                    node.V3 = strings[5];
+                    node.T3 = strings[8];
+                    break;
+                case 4:
+                    node.V1 = strings[3];
+                    node.T1 = strings[7];
+                    node.V2 = strings[4];
+                    node.T2 = strings[8];
+                    node.V4 = strings[5];
+                    node.T4 = strings[9];
+                    node.V5 = strings[6];
+                    node.T5 = strings[10];
+                    break;
+                case 5:
+                    node.V1 = strings[3];
+                    node.T1 = strings[8];
+                    node.V2 = strings[4];
+                    node.T2 = strings[9];
+                    node.V3 = strings[5];
+                    node.T3 = strings[10];
+                    node.V4 = strings[6];
+                    node.T4 = strings[11];
+                    node.V5 = strings[7];
+                    node.T5 = strings[12];
+                    break;
+                case 6:
+                    node.V1 = strings[3];
+                    node.T1 = strings[9];
+                    node.V2 = strings[4];
+                    node.T2 = strings[10];
+                    node.V4 = strings[5];
+                    node.T4 = strings[11];
+                    node.V5 = strings[6];
+                    node.T5 = strings[12];
+                    node.V6 = strings[7];
+                    node.T6 = strings[13];
+                    node.V7 = strings[8];
+                    node.T7 = strings[14];
+                    break;
+                case 7:
+                    node.V1 = strings[3];
+                    node.T1 = strings[10];
+                    node.V2 = strings[4];
+                    node.T2 = strings[11];
+                    node.V4 = strings[5];
+                    node.T4 = strings[12];
+                    node.V5 = strings[6];
+                    node.T5 = strings[13];
+                    node.V6 = strings[7];
+                    node.T6 = strings[14];
+                    node.V7 = strings[8];
+                    node.T7 = strings[15];
+                    node.V9 = strings[9];
+                    node.T9 = strings[16];
+                    break;
+                case 8:
+                    node.V1 = strings[3];
+                    node.T1 = strings[11];
+                    node.V2 = strings[4];
+                    node.T2 = strings[12];
+                    node.V3 = strings[5];
+                    node.T3 = strings[13];
+                    node.V4 = strings[6];
+                    node.T4 = strings[14];
+                    node.V5 = strings[7];
+                    node.T5 = strings[15];
+                    node.V6 = strings[8];
+                    node.T6 = strings[16];
+                    node.V7 = strings[9];
+                    node.T7 = strings[17];
+                    node.V8 = strings[10];
+                    node.T8 = strings[18];
+                    break;
+                case 9:
+                    node.V1 = strings[3];
+                    node.T1 = strings[12];
+                    node.V2 = strings[4];
+                    node.T2 = strings[13];
+                    node.V3 = strings[5];
+                    node.T3 = strings[14];
+                    node.V4 = strings[6];
+                    node.T4 = strings[15];
+                    node.V5 = strings[7];
+                    node.T5 = strings[16];
+                    node.V6 = strings[8];
+                    node.T6 = strings[17];
+                    node.V7 = strings[9];
+                    node.T7 = strings[18];
+                    node.V8 = strings[10];
+                    node.T8 = strings[19];
+                    node.V9 = strings[11];
+                    node.T9 = strings[20];
+                    break;
+                default:
+                    node.V1 = strings[3];
+                    node.T1 = strings[13];
+                    node.V2 = strings[4];
+                    node.T2 = strings[14];
+                    node.V3 = strings[5];
+                    node.T3 = strings[15];
+                    node.V4 = strings[6];
+                    node.T4 = strings[16];
+                    node.V5 = strings[7];
+                    node.T5 = strings[17];
+                    node.V6 = strings[8];
+                    node.T6 = strings[18];
+                    node.V7 = strings[9];
+                    node.T7 = strings[19];
+                    node.V8 = strings[10];
+                    node.T8 = strings[20];
+                    node.V9 = strings[11];
+                    node.T9 = strings[21];
+                    node.V10 = strings[12];
+                    node.T10 = strings[22];
+                    break;
+            }
+            addSnapPoints(node, input, output, yincrement, xincrement);
             
-            Nodes.Add(newnode);
-            SelectedObject = newnode;
-            return newnode;
+            Nodes.Add(node);
+            SelectedObject = node;
+            return node;
         }
 
         public void addSnapPoints(Node node, int left, int right, double yincrement, double xincrement ) {

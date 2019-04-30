@@ -12,7 +12,7 @@ namespace Conduit
 {
     public partial class NodeCreator : Form
     {
-        private int n;
+        //private int n;
         private int inValue;
         private int outValue;
         private int numFields;
@@ -20,10 +20,10 @@ namespace Conduit
         
 
         private MainWindow v;
-        public NodeCreator(int k, MainWindow a)
+        public NodeCreator(MainWindow a)
         {
             InitializeComponent();
-            n = k;
+           // n = k;
             v = a;
             string[] range = new string[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" };
             cb.Items.AddRange(range);
@@ -33,8 +33,11 @@ namespace Conduit
 
         private void createFields(int m)
         {
+            var strings = Controls.OfType<TextBox>()
+                      .Select(c => c.Text)
+                      .ToList();
             Label nodeName = new Label();
-            nodeName.Text = String.Format("Node {0}", n);
+            nodeName.Text = String.Format(strings[0]);
             nodeName.Left = 220;
             nodeName.Top = 25;
             this.Controls.Add(nodeName);
@@ -98,141 +101,12 @@ namespace Conduit
             var strings = Controls.OfType<TextBox>()
                       .Select(c => c.Text)
                       .ToList();
-            Node node = vm.CreateNewNode(inValue,outValue,numFields);
-            int fields = numFields;
-            switch (fields)
+            string[] yep = new string[strings.Count];
+            for(int i =0; i< strings.Count; i++)
             {
-                case 1:
-                    node.V1 = strings[2];
-                    node.T1 = strings[3];
-                    break;
-                case 2:
-                    node.V1 = strings[2];
-                    node.T1 = strings[4];
-                    node.V2 = strings[3];
-                    node.T2 = strings[5];
-                    break;
-                case 3:
-                    node.V1 = strings[2];
-                    node.T1 = strings[5];
-                    node.V2 = strings[3];
-                    node.T2 = strings[6];
-                    node.V3 = strings[4];
-                    node.T3 = strings[7];
-                    break;
-                case 4:
-                    node.V1 = strings[2];
-                    node.T1 = strings[6];
-                    node.V2 = strings[3];
-                    node.T2 = strings[7];
-                    node.V4 = strings[4];
-                    node.T4 = strings[8];
-                    node.V5 = strings[5];
-                    node.T5 = strings[9];
-                    break;
-                case 5:
-                    node.V1 = strings[2];
-                    node.T1 = strings[7];
-                    node.V2 = strings[3];
-                    node.T2 = strings[8];
-                    node.V3 = strings[4];
-                    node.T3 = strings[9];
-                    node.V4 = strings[5];
-                    node.T4 = strings[10];
-                    node.V5 = strings[6];
-                    node.T5 = strings[11];
-                    break;
-                case 6:
-                    node.V1 = strings[2];
-                    node.T1 = strings[8];
-                    node.V2 = strings[3];
-                    node.T2 = strings[9];
-                    node.V4 = strings[4];
-                    node.T4 = strings[10];
-                    node.V5 = strings[5];
-                    node.T5 = strings[11];
-                    node.V6= strings[6];
-                    node.T6 = strings[12];
-                    node.V7 = strings[7];
-                    node.T7 = strings[13];
-                    break;
-                case 7:
-                    node.V1 = strings[2];
-                    node.T1 = strings[9];
-                    node.V2 = strings[3];
-                    node.T2 = strings[10];
-                    node.V4 = strings[4];
-                    node.T4 = strings[11];
-                    node.V5 = strings[5];
-                    node.T5 = strings[12];
-                    node.V6 = strings[6];
-                    node.T6 = strings[13];
-                    node.V7 = strings[7];
-                    node.T7 = strings[14];
-                    node.V9 = strings[8];
-                    node.T9 = strings[15];
-                    break;
-                case 8:
-                    node.V1 = strings[2];
-                    node.T1 = strings[10];
-                    node.V2 = strings[3];
-                    node.T2 = strings[11];
-                    node.V3 = strings[4];
-                    node.T3 = strings[12];
-                    node.V4 = strings[5];
-                    node.T4 = strings[13];
-                    node.V5 = strings[6];
-                    node.T5 = strings[14];
-                    node.V6 = strings[7];
-                    node.T6 = strings[15];
-                    node.V7 = strings[8];
-                    node.T7 = strings[16];
-                    node.V8 = strings[9];
-                    node.T8 = strings[17];
-                    break;
-                case 9:
-                    node.V1 = strings[2];
-                    node.T1 = strings[11];
-                    node.V2 = strings[3];
-                    node.T2 = strings[12];
-                    node.V3 = strings[4];
-                    node.T3 = strings[13];
-                    node.V4 = strings[5];
-                    node.T4 = strings[14];
-                    node.V5 = strings[6];
-                    node.T5 = strings[15];
-                    node.V6 = strings[7];
-                    node.T6 = strings[16];
-                    node.V7 = strings[8];
-                    node.T7 = strings[17];
-                    node.V8 = strings[9];
-                    node.T8 = strings[18];
-                    node.V9 = strings[10];
-                    node.T9 = strings[19];
-                    break;
-                default:
-                    node.V1 = strings[2];
-                    node.T1 = strings[12];
-                    node.V2 = strings[3];
-                    node.T2 = strings[13];
-                    node.V3 = strings[4];
-                    node.T3 = strings[14];
-                    node.V4 = strings[5];
-                    node.T4 = strings[15];
-                    node.V5 = strings[6];
-                    node.T5 = strings[16];
-                    node.V6 = strings[7];
-                    node.T6 = strings[17];
-                    node.V7 = strings[8];
-                    node.T7 = strings[18];
-                    node.V8 = strings[9];
-                    node.T8 = strings[19];
-                    node.V9 = strings[10];
-                    node.T9 = strings[20];
-                    node.V10 = strings[11];
-                    node.T10 = strings[21];
-                    break;
+                yep[i] = strings[i];
             }
+            Node node = vm.CreateNewNode(numFields,yep);
             v.updateNodes();
             Close();
             
@@ -253,6 +127,10 @@ namespace Conduit
             else if (outputValue == null || !int.TryParse(outputValue.Text, out outValue))
             {
                 MessageBox.Show("Output Snaps must be an integer value");
+            }
+            else if (name == null)
+            {
+                MessageBox.Show("Node must have a name");
             }
             else
             {

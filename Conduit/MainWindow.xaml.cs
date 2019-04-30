@@ -134,14 +134,15 @@ namespace Conduit
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             var vm = DataContext as MainViewModel;
-            Node node = vm.CreateNewNode(3,4,5);
+            string[] a = { "Node "+(Nodes.Count +1), "3", "4", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "" };
+            Node node = vm.CreateNewNode(5,a);
             updateNodes();
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         { 
             n = Nodes.Count + 1;
-            NodeCreator nc = new NodeCreator(n, this);
+            NodeCreator nc = new NodeCreator(this);
             nc.Show();
             
         }
