@@ -30,6 +30,7 @@ namespace Conduit
         {
             get { return _size ?? (_size = new BindablePoint()); }
         }
+    
 
         private bool _isCollapsed;
         public bool IsCollapsed
@@ -322,6 +323,37 @@ namespace Conduit
             {
                 _shortName = value;
                 OnPropertyChanged("ShortName");
+            }
+        }
+        private int inputSnaps;
+        public int InputSnaps
+        {
+            get { return inputSnaps; }
+            set
+            {
+                inputSnaps = value;
+                OnPropertyChanged("InputSnaps");
+            }
+        }
+        private int outputSnaps;
+        public int OutputSnaps
+        {
+            get { return outputSnaps; }
+            set
+            {
+                outputSnaps = value;
+                OnPropertyChanged("OutputSnaps");
+            }
+        }
+
+        private int fields;
+        public int Fields
+        {
+            get { return fields; }
+            set
+            {
+                fields = value;
+                OnPropertyChanged("Fields");
             }
         }
     }

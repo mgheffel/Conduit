@@ -190,7 +190,7 @@ namespace Conduit
             var node = new Node()
             {
                 Name = strings[0],
-                IsNew = true,
+                //IsNew = true,
 
                                     Size = { Value = new Point( xpoint, ypoint) },
                                     ShortName = "N",
@@ -332,6 +332,9 @@ namespace Conduit
                     break;
             }
             addSnapPoints(node, input, output, yincrement, xincrement);
+            node.InputSnaps = input;
+            node.OutputSnaps = output;
+            node.Fields = numFields;
             
             Nodes.Add(node);
             SelectedObject = node;

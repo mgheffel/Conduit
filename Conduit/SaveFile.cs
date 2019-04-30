@@ -24,140 +24,83 @@ namespace Conduit
 
         private void button1_Click(object sender, EventArgs e)
         {
-         /*if(x.Nodes.Count > 0)
+         if(x.Nodes.Count > 0)
             {
+                string two = "";
+                /*foreach (Connector c in x.Connectors)
+                {
+                    string a = c.Start.Name.ToString();
+                    string b = c.End.Name.ToString();
+                    two = two + a + "," + b;
+                    if(c != x.Connectors.Last())
+                    {
+                        two = two + "+";
+                    }
+                }*/
                 //string one = x.Connectors.ToString();
                 string one = "";
-                foreach (Connector c in x.Connectors)
+                foreach (Node n in x.Nodes)
+                {
+                    one = one + n.Fields.ToString() + "," + n.Name.ToString() + "," + n.OutputSnaps.ToString() + "," + n.InputSnaps.ToString() + "," + n.V1.ToString() + "," + n.V2.ToString() + "," + n.V3.ToString() + "," + n.V4.ToString() + "," + n.V5.ToString() + "," + n.V6.ToString() + "," + n.V7.ToString() + "," + n.V8.ToString() + "," + n.V9.ToString() + "," + n.V10.ToString() + ","
+                        + n.T1.ToString() + "," + n.T2.ToString() + "," + n.T3.ToString() + "," + n.T4.ToString() + "," + n.T5.ToString() + "," + n.T6.ToString() + "," + n.T7.ToString() + "," + n.T8.ToString() + "," + n.T9.ToString() + "," + n.T10.ToString();
+                    if (n != x.Nodes.Last())
+                    {
+                        one= one + "+";
+                    }
+
+                }
+                /*foreach (Connector c in x.Connectors)
                 {
                     one = one + "," + c.ToString();
                     //MessageBox.Show(k);
-                }
-                string two = "\r\n";
-               // string three =  x.Nodes.ToString();
+                }*/
+                // string two = "\r\n";
+                // string three =  x.Nodes.ToString();
                 string three = "";
-                foreach (Node n in x.Nodes)
-                {
-                    three = three + "," + n.ToString();
-                    //MessageBox.Show(k);
-                }
+                
 
                 string save = one + two + three;
 
-                saveFileDialog1.Filter = "XML Files (*.xml)|*.xml";
-                saveFileDialog1.DefaultExt = "xml";
+                saveFileDialog1.Filter = "TXT Files (*.txt)|*.txt";
+                saveFileDialog1.DefaultExt = "txt";
                 saveFileDialog1.AddExtension = true;
 
                 saveFileDialog1.ShowDialog();
-                XmlHelper.ToXmlFile(x.Nodes, saveFileDialog1.FileName);
-                //System.IO.File.WriteAllText(saveFileDialog1.FileName, save);
+                System.IO.File.WriteAllText(saveFileDialog1.FileName, save);
             }
             else
             {
                 MessageBox.Show("Need at least one node to save layout");
-            }*/
+            }
+            Close(); ;
               
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            /*if(openFileDialog1.ShowDialog() == DialogResult.OK)
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 string filename = openFileDialog1.FileName;
                 string[] filelines = File.ReadAllLines(filename);
-                string[] split1 = filelines[0].Split(',');
-                
-                x.Nodes.Add(split1[0] as Node);
-                
-                x.Nodes.Add(Convert.ToNode(split1[1]));
-                //x.Connectors = filelines[0];
-                var list = XmlHelper.FromXmlFile<List<Node>>(filename);
-                x.Nodes = list;
-            }*/
+                string[] nodes = filelines[0].Split('+');
+                for (int i = 0; i < nodes.Length; i++)
+                {
+                    string[] nodeString = nodes[i].Split(',');
+                    string[] strings = new string[(nodeString.Length - 1)];
+                    for(int j =0; j< strings.Length; j++)
+                    {
+                        strings[j] = nodeString[(j + 1)];
+                    }
+                    MessageBox.Show(strings[1].ToString());
+                    var vm = x.DataContext as MainViewModel;
+                    vm.CreateNewNode(Convert.ToInt32(nodeString[0]), strings);
+                    x.updateNodes();
+
+                }
+            }
+            Close();   
 
         }
-        /*public static class XmlHelper
-        {
-            // Specifies whether XML attributes each appear on their own line
-            const bool newLineOnAttributes = false;
-
-            public static bool NewLineOnAttributes { get; set; }
-            /// <summary>
-            /// Serializes an object to an XML string, using the specified namespaces.
-            /// </summary>
-            public static string ToXml(object obj, XmlSerializerNamespaces ns)
-            {
-                Type T = obj.GetType();
-
-                var xs = new XmlSerializer(T);
-                var ws = new XmlWriterSettings { Indent = true, NewLineOnAttributes = newLineOnAttributes, OmitXmlDeclaration = true };
-
-                var sb = new StringBuilder();
-                using (XmlWriter writer = XmlWriter.Create(sb, ws))
-                {
-                    xs.Serialize(writer, obj, ns);
-                }
-                return sb.ToString();
-            }
-
-            /// <summary>
-            /// Serializes an object to an XML string.
-            /// </summary>
-            public static string ToXml(object obj)
-            {
-                var ns = new XmlSerializerNamespaces();
-                ns.Add("", "");
-                return ToXml(obj, ns);
-            }
-
-            /// <summary>
-            /// Deserializes an object from an XML string.
-            /// </summary>
-            public static T FromXml<T>(string xml)
-            {
-                XmlSerializer xs = new XmlSerializer(typeof(T));
-                using (StringReader sr = new StringReader(xml))
-                {
-                    return (T)xs.Deserialize(sr);
-                }
-            }
-
-            /// <summary>
-            /// Serializes an object to an XML file.
-            /// </summary>
-            public static void ToXmlFile(Object obj, string filePath)
-            {
-                var xs = new XmlSerializer(obj.GetType());
-                var ns = new XmlSerializerNamespaces();
-                var ws = new XmlWriterSettings { Indent = true, NewLineOnAttributes = NewLineOnAttributes, OmitXmlDeclaration = true };
-                ns.Add("", "");
-
-                using (XmlWriter writer = XmlWriter.Create(filePath, ws))
-                {
-                    xs.Serialize(writer, obj);
-                }
-            }
-
-            /// <summary>
-            /// Deserializes an object from an XML file.
-            /// </summary>
-            public static T FromXmlFile<T>(string filePath)
-            {
-                StreamReader sr = new StreamReader(filePath);
-                try
-                {
-                    var result = FromXml<T>(sr.ReadToEnd());
-                    return result;
-                }
-                catch (Exception e)
-                {
-                    throw new Exception(e.InnerException.Message);
-                }
-                finally
-                {
-                    sr.Close();
-                }
-            }
-        }*/
+       
     }
 }
