@@ -46,6 +46,7 @@
             <Button Content="Create Connector" Height="27" Margin="10,0,22,0" Click="Button_Click_2"/>
             <Button Content="Sign in to Beocat" Click="Button_Click_3"/>
             <Button Content="Open/Save File" HorizontalAlignment="Left" Height="25" Margin="10,0,0,0" Width="118" Click="Button_Click_4"/>
+            <Button Content="Clear Screen" Click="Button_Click_5"/>
         </StackPanel>
         <Grid Margin="10">
             <Grid.Resources>

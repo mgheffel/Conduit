@@ -175,5 +175,16 @@ namespace Conduit
             SaveFile f = new SaveFile(this);
             f.Show();
         }
+
+        private void Button_Click_5(object sender, RoutedEventArgs e)
+        {
+            var vm = DataContext as MainViewModel;
+            vm.Nodes.ToList().ForEach(x => vm.Nodes.Remove(x));
+            vm.Snaps.ToList().ForEach(x => vm.Snaps.Remove(x));
+            vm.Connectors.ToList().ForEach(x => vm.Connectors.Remove(x));
+            updateNodes();
+
+
+        }
     }
 }
