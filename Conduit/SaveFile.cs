@@ -30,10 +30,10 @@ namespace Conduit
                 foreach (Connector c in x.Connectors)
                 {
                     Node n = c.StartNode;
-                    string a = n.Fields.ToString() + "," + n.Name.ToString() + "," + n.OutputSnaps.ToString() + "," + n.InputSnaps.ToString() + "," + n.V1.ToString() + "," + n.V2.ToString() + "," + n.V3.ToString() + "," + n.V4.ToString() + "," + n.V5.ToString() + "," + n.V6.ToString() + "," + n.V7.ToString() + "," + n.V8.ToString() + "," + n.V9.ToString() + "," + n.V10.ToString() + ","
+                    string a = n.Location.Value.X.ToString() + "," + n.Location.Value.Y.ToString() + "," + n.Fields.ToString() + "," + n.Name.ToString() + "," + n.OutputSnaps.ToString() + "," + n.InputSnaps.ToString() + "," + n.V1.ToString() + "," + n.V2.ToString() + "," + n.V3.ToString() + "," + n.V4.ToString() + "," + n.V5.ToString() + "," + n.V6.ToString() + "," + n.V7.ToString() + "," + n.V8.ToString() + "," + n.V9.ToString() + "," + n.V10.ToString() + ","
                         + n.T1.ToString() + "," + n.T2.ToString() + "," + n.T3.ToString() + "," + n.T4.ToString() + "," + n.T5.ToString() + "," + n.T6.ToString() + "," + n.T7.ToString() + "," + n.T8.ToString() + "," + n.T9.ToString() + "," + n.T10.ToString();
                     n = c.EndNode;
-                    string b = n.Fields.ToString() + "," + n.Name.ToString() + "," + n.OutputSnaps.ToString() + "," + n.InputSnaps.ToString() + "," + n.V1.ToString() + "," + n.V2.ToString() + "," + n.V3.ToString() + "," + n.V4.ToString() + "," + n.V5.ToString() + "," + n.V6.ToString() + "," + n.V7.ToString() + "," + n.V8.ToString() + "," + n.V9.ToString() + "," + n.V10.ToString() + ","
+                    string b = n.Location.Value.X.ToString() + "," + n.Location.Value.Y.ToString() + "," + n.Fields.ToString() + "," + n.Name.ToString() + "," + n.OutputSnaps.ToString() + "," + n.InputSnaps.ToString() + "," + n.V1.ToString() + "," + n.V2.ToString() + "," + n.V3.ToString() + "," + n.V4.ToString() + "," + n.V5.ToString() + "," + n.V6.ToString() + "," + n.V7.ToString() + "," + n.V8.ToString() + "," + n.V9.ToString() + "," + n.V10.ToString() + ","
                         + n.T1.ToString() + "," + n.T2.ToString() + "," + n.T3.ToString() + "," + n.T4.ToString() + "," + n.T5.ToString() + "," + n.T6.ToString() + "," + n.T7.ToString() + "," + n.T8.ToString() + "," + n.T9.ToString() + "," + n.T10.ToString(); ;
                     three = three + a + "&" + b;
                     if(c != x.Connectors.Last())
@@ -43,8 +43,9 @@ namespace Conduit
                 }
                 string one = "";
                 foreach (Node n in x.Nodes)
-                {
-                    one = one + n.Fields.ToString() + "," + n.Name.ToString() + "," + n.OutputSnaps.ToString() + "," + n.InputSnaps.ToString() + "," + n.V1.ToString() + "," + n.V2.ToString() + "," + n.V3.ToString() + "," + n.V4.ToString() + "," + n.V5.ToString() + "," + n.V6.ToString() + "," + n.V7.ToString() + "," + n.V8.ToString() + "," + n.V9.ToString() + "," + n.V10.ToString() + ","
+                { 
+                    
+                    one = one + n.Location.Value.X.ToString() +"," + n.Location.Value.Y.ToString() + "," + n.Fields.ToString() + "," + n.Name.ToString() + "," + n.OutputSnaps.ToString() + "," + n.InputSnaps.ToString() + "," + n.V1.ToString() + "," + n.V2.ToString() + "," + n.V3.ToString() + "," + n.V4.ToString() + "," + n.V5.ToString() + "," + n.V6.ToString() + "," + n.V7.ToString() + "," + n.V8.ToString() + "," + n.V9.ToString() + "," + n.V10.ToString() + ","
                         + n.T1.ToString() + "," + n.T2.ToString() + "," + n.T3.ToString() + "," + n.T4.ToString() + "," + n.T5.ToString() + "," + n.T6.ToString() + "," + n.T7.ToString() + "," + n.T8.ToString() + "," + n.T9.ToString() + "," + n.T10.ToString();
                     if (n != x.Nodes.Last())
                     {
@@ -62,8 +63,12 @@ namespace Conduit
                 saveFileDialog1.DefaultExt = "txt";
                 saveFileDialog1.AddExtension = true;
 
+           
                 saveFileDialog1.ShowDialog();
-                System.IO.File.WriteAllText(saveFileDialog1.FileName, save);
+                if(saveFileDialog1.FileName != null)
+                {
+                    System.IO.File.WriteAllText(saveFileDialog1.FileName, save);
+                } 
             }
             else
             {
@@ -79,68 +84,100 @@ namespace Conduit
             {
                 string filename = openFileDialog1.FileName;
                 string[] filelines = File.ReadAllLines(filename);
-                string[] connectors = filelines[1].Split('+');
-                string[] nodes = filelines[0].Split('+');
+                string[] connectors;
+                string[] nodes;
+                switch (filelines.Count())
+                {
+                    case 1:
+                        nodes = filelines[0].Split('+');
+                        for (int i = 0; i < nodes.Length; i++)
+                        {
+                            string[] nodeString = nodes[i].Split(',');
+                            string[] strings = new string[(nodeString.Length - 3)];
+                            for (int j = 0; j < strings.Length; j++)
+                            {
+                                strings[j] = nodeString[(j + 3)];
+                            }
+                            MessageBox.Show(nodeString[0]);
+                            MessageBox.Show(nodeString[1]);
+                            MessageBox.Show(nodeString[2]);
+                            MessageBox.Show(strings[0]);
+                            MessageBox.Show(strings[1]);
+                            MessageBox.Show(strings[2]);
+                            var vm = x.DataContext as MainViewModel;
+                            Node n = vm.CreateNewNode(Convert.ToInt32(nodeString[2]), strings);
+                            n.Location.Value = new System.Windows.Point(Convert.ToInt32(nodeString[0]), Convert.ToInt32(nodeString[1]));
+                            x.updateNodes();
+
+                        }
+
+                        break;
+                    case 2:
+                        connectors = filelines[1].Split('+');
+                        nodes = filelines[0].Split('+');
+
+                        for (int i = 0; i < nodes.Length; i++)
+                        {
+                            string[] nodeString = nodes[i].Split(',');
+                            string[] strings = new string[(nodeString.Length - 3)];
+                            for (int j = 0; j < strings.Length; j++)
+                            {
+                                strings[j] = nodeString[(j + 3)];
+                            }
+                            
+                            var vm = x.DataContext as MainViewModel;
+                            Node n = vm.CreateNewNode(Convert.ToInt32(nodeString[2]), strings);
+                            n.Location.Value = new System.Windows.Point(Convert.ToInt32(nodeString[0]), Convert.ToInt32(nodeString[1]));
+                            x.updateNodes();
+                        }
+
+
+
+                            for (int i = 0; i < connectors.Length; i++)
+                        {
+                            string[] connectorString = connectors[i].Split('&');
+                            int a = 0;
+                            int b = 0;
+                            var vm = x.DataContext as MainViewModel;
+                            string[] nodeString = connectorString[0].Split(',');
+                            string[] strings = new string[(nodeString.Length - 3)];
+                            for (int j = 0; j < strings.Length; j++)
+                            {
+                                strings[j] = nodeString[(j + 3)];
+                            }
+                            for (int d = 0; d < vm.Nodes.Count; d++)
+                            {
+                                if (vm.Nodes[d].Name.ToString() == strings[0].ToString())
+                                {
+                                    a = d;
+                                    break;
+                                }
+                            }
+
+                            nodeString = connectorString[1].Split(',');
+                            strings = new string[(nodeString.Length - 3)];
+                            for (int j = 0; j < strings.Length; j++)
+                            {
+                                strings[j] = nodeString[(j + 3)];
+                            }
+                            for (int d = 0; d < vm.Nodes.Count; d++)
+                            {
+                                if (vm.Nodes[d].Name.ToString() == strings[0].ToString())
+                                {
+                                    b = d;
+                                    break;
+                                }
+                            }
+
+                            vm.customConnector(vm.Nodes[a], vm.Nodes[b]);
+                            x.updateNodes();
+                            
+                        }
+                        break;
+                }
                 
-                for (int i = 0; i < nodes.Length; i++)
-                {
-                    string[] nodeString = nodes[i].Split(',');
-                    string[] strings = new string[(nodeString.Length - 1)];
-                    for(int j =0; j< strings.Length; j++)
-                    {
-                        strings[j] = nodeString[(j + 1)];
-                    }
-                    var vm = x.DataContext as MainViewModel;
-                    vm.CreateNewNode(Convert.ToInt32(nodeString[0]), strings);
-                    x.updateNodes();
-
-                }
-
-
-                for (int i = 0; i < connectors.Length; i++)
-                {
-                    string[] connectorString = connectors[i].Split('&');
-                    int a =0;
-                    int b =0;
-                    var vm = x.DataContext as MainViewModel;
-                    string[] nodeString = connectorString[0].Split(',');
-                    string[] strings = new string[(nodeString.Length - 1)];
-                    for (int j = 0; j < strings.Length; j++)
-                    {
-                        strings[j] = nodeString[(j + 1)];
-                    }
-                    for(int d = 0; d <vm.Nodes.Count; d++)
-                    {
-                        if (vm.Nodes[d].Name.ToString() == strings[0].ToString())
-                        {
-                            a = d;
-                            break;
-                        }
-                    }
-                    
-                    nodeString = connectorString[1].Split(',');
-                    strings = new string[(nodeString.Length - 1)];
-                    for (int j = 0; j < strings.Length; j++)
-                    {
-                        strings[j] = nodeString[(j + 1)];
-                    }
-                    for (int d = 0; d < vm.Nodes.Count; d++)
-                    {
-                        if (vm.Nodes[d].Name.ToString() == strings[0].ToString())
-                        {
-                            b= d;
-                            break;
-                        }
-                    }
-
-                    MessageBox.Show(a.ToString());
-                    MessageBox.Show(b.ToString());
-                    vm.customConnector(vm.Nodes[a], vm.Nodes[b]);
-                    x.updateNodes();
-                   
-                }
             }
-            Close();   
+            Close();
 
         }
        
