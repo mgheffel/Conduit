@@ -5,7 +5,7 @@
                     xmlns:local2="clr-namespace:Conduit"
                     Title="MainWindow" 
                     MinHeight="300" MinWidth="600"
-                    Height="600" Width="900"
+                    Height="700" Width="900"
                     x:Name="view">
     <Window.Resources>
         <Style TargetType="Control" x:Key="EmptyFocusVisualStyle">
@@ -20,7 +20,7 @@
     </Window.Resources>
     <DockPanel>
         <StackPanel Width="150" DockPanel.Dock="Left" Margin="5,0,0,0">
-            <local2:ButtonsPanel/>
+            <local2:ButtonsPanel Height="61"/>
             <Expander Header="Options" IsExpanded="True"
                       BorderBrush="LightGray" BorderThickness="1">
                 <local2:ParametersEditor/>

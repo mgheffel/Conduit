@@ -25,7 +25,7 @@ namespace Conduit
             InitializeComponent();
            // n = k;
             v = a;
-            string[] range = new string[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" };
+            string[] range = new string[] { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" };
             cb.Items.AddRange(range);
            // createFields();
             this.AutoSize = true;

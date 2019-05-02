@@ -141,6 +141,10 @@ namespace Conduit
             double ypoint = 198;
             switch (numFields)
             {
+                case 0:
+                    xpoint =104;
+                    ypoint =29;
+                    break;
                 case 1:
                     xpoint = 104;
                     ypoint = 59;
@@ -200,6 +204,8 @@ namespace Conduit
             };
             switch (numFields)
             {
+                case 0:
+                    break;
                 case 1:
                     node.V1 = strings[3];
                     node.T1 = strings[4];
