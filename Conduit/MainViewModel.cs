@@ -7,7 +7,7 @@ using System;
 
 namespace Conduit
 {
-    public class MainViewModel: INotifyPropertyChanged
+    public class MainViewModel : INotifyPropertyChanged
     {
         #region Collections
 
@@ -15,6 +15,12 @@ namespace Conduit
         public ObservableCollection<Node> Nodes
         {
             get { return _nodes ?? (_nodes = new ObservableCollection<Node>()); }
+        }
+
+        private ObservableCollection<Node2> _nodes2;
+        public ObservableCollection<Node2> Nodes2
+        {
+            get { return _nodes2 ?? (_nodes2 = new ObservableCollection<Node2>()); }
         }
 
         private ObservableCollection<Connector> _connectors;
@@ -30,13 +36,13 @@ namespace Conduit
         }
 
         private DiagramObject _selectedObject;
-        public DiagramObject SelectedObject 
+        public DiagramObject SelectedObject
         {
             get
             {
                 return _selectedObject;
             }
-            set 
+            set
             {
                 Nodes.ToList().ForEach(x => x.IsHighlighted = false);
 
@@ -92,10 +98,10 @@ namespace Conduit
 
         public MainViewModel()
         {
-           //_nodes = new ObservableCollection<Node>(NodesDataSource.GetRandomNodes());
-           //_connectors = new ObservableCollection<Connector>(NodesDataSource.GetRandomConnectors(Nodes.ToList()));
-           //_snaps = new ObservableCollection<SnapSpot>(Nodes.SelectMany(x => x.Snaps));
-           
+            //_nodes = new ObservableCollection<Node>(NodesDataSource.GetRandomNodes());
+            //_connectors = new ObservableCollection<Connector>(NodesDataSource.GetRandomConnectors(Nodes.ToList()));
+            //_snaps = new ObservableCollection<SnapSpot>(Nodes.SelectMany(x => x.Snaps));
+
         }
 
         #endregion
@@ -122,7 +128,7 @@ namespace Conduit
             {
                 _creatingNewNode = value;
                 OnPropertyChanged("CreatingNewNode");
-                string[] a = { "name","3", "4","","","","","","","","","","","","","","","","","","","" };
+                string[] a = { "name", "3", "4", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "" };
                 if (value)
                     CreateNewNode(5, a);
                 else
@@ -130,11 +136,11 @@ namespace Conduit
             }
         }
 
-        public Node CreateNewNode(int numFields, string [] strings)
+        public Node CreateNewNode(int numFields, string[] strings)
         {
             int input = Convert.ToInt32(strings[2]);
             int output = Convert.ToInt32(strings[1]);
-  
+
             double xincrement = .1;
             double yincrement = .1;
             double xpoint = 306;
@@ -142,52 +148,52 @@ namespace Conduit
             switch (numFields)
             {
                 case 0:
-                    xpoint =104;
-                    ypoint =29;
+                    xpoint = 104;
+                    ypoint = 29;
                     break;
                 case 1:
-                    xpoint = 104;
+                    xpoint = 194;
                     ypoint = 59;
                     break;
                 case 2:
-                    xpoint = 204;
+                    xpoint = 384;
                     ypoint = 59;
                     break;
                 case 3:
-                    xpoint = 306;
+                    xpoint = 576;
                     ypoint = 59;
                     break;
                 case 4:
-                    xpoint = 204;
+                    xpoint = 384;
                     ypoint = 95;
                     break;
                 case 5:
-                    xpoint = 306;
+                    xpoint = 576;
                     ypoint = 95;
                     break;
                 case 6:
-                    xpoint = 204;
+                    xpoint = 384;
                     ypoint = 129;
                     break;
                 case 7:
-                    xpoint = 204;
-                    ypoint = 153;
+                    xpoint = 384;
+                    ypoint = 163;
                     break;
                 case 8:
-                    xpoint = 306;
+                    xpoint = 576;
                     ypoint = 129;
                     break;
                 case 9:
-                    xpoint = 306;
+                    xpoint = 576;
                     ypoint = 163;
                     break;
                 default:
-                    xpoint = 306;
-                    ypoint = 198; 
+                    xpoint = 576;
+                    ypoint = 198;
                     break;
             }
-            xincrement = .9/output;
-            yincrement = .9/input;
+            xincrement = .9 / output;
+            yincrement = .9 / input;
 
 
 
@@ -196,11 +202,11 @@ namespace Conduit
                 Name = strings[0],
                 //IsNew = true,
 
-                                    Size = { Value = new Point( xpoint, ypoint) },
-                                    ShortName = "N",
-                                    Location = { Value = new Point(256, 100) },
-                                    Color = Colors.AliceBlue
-                                    
+                Size = { Value = new Point(xpoint, ypoint) },
+                ShortName = "N",
+                Location = { Value = new Point(100, 100) },
+                Color = Colors.AliceBlue
+
             };
             switch (numFields)
             {
@@ -316,43 +322,81 @@ namespace Conduit
                     break;
                 default:
                     node.V1 = strings[3];
-                    node.T1 = strings[13];
+                    node.T1 = strings[12];
                     node.V2 = strings[4];
-                    node.T2 = strings[14];
+                    node.T2 = strings[13];
                     node.V3 = strings[5];
-                    node.T3 = strings[15];
+                    node.T3 = strings[14];
                     node.V4 = strings[6];
-                    node.T4 = strings[16];
+                    node.T4 = strings[15];
                     node.V5 = strings[7];
-                    node.T5 = strings[17];
+                    node.T5 = strings[16];
                     node.V6 = strings[8];
-                    node.T6 = strings[18];
+                    node.T6 = strings[17];
                     node.V7 = strings[9];
-                    node.T7 = strings[19];
+                    node.T7 = strings[18];
                     node.V8 = strings[10];
-                    node.T8 = strings[20];
+                    node.T8 = strings[19];
                     node.V9 = strings[11];
-                    node.T9 = strings[21];
+                    node.T9 = strings[20];
                     node.V10 = strings[12];
-                    node.T10 = strings[22];
+                    node.T10 = strings[21];
                     break;
             }
             addSnapPoints(node, input, output, yincrement, xincrement);
             node.InputSnaps = input;
             node.OutputSnaps = output;
             node.Fields = numFields;
-            
+
             Nodes.Add(node);
             SelectedObject = node;
             return node;
         }
+
+        public Node2 CreateNewNode2(int numFields, string[] strings)
+        {
+            int input = Convert.ToInt32(strings[3]);
+            int output = Convert.ToInt32(strings[2]); 
+
+            double xincrement = .1;
+            double yincrement = .1;
+            double xpoint = 194;
+            double ypoint = 59;
+            xincrement = .9 / output;
+            yincrement = .9 / input;
+
+            var node = new Node2()
+            {
+                Name = strings[4],
+                //IsNew = true,
+
+                Size = { Value = new Point(xpoint, ypoint) },
+                ShortName = "N",
+                Location = { Value = new Point(200, 100) },
+                Color = Colors.AliceBlue
+
+            };
+            node.V1 = strings[1];
+            node.T1 = strings[0];
+        
+            addSnapPoints2(node, input, output, yincrement, xincrement);
+            node.InputSnaps = input;
+            node.OutputSnaps = output;
+            node.Fields = numFields;
+
+            Nodes2.Add(node);
+            SelectedObject = node;
+            return node;
+        }
+
+
 
         public void addSnapPoints(Node node, int left, int right, double yincrement, double xincrement ) {
             double y = .1;
             for (int i = 0 ; i < left; i++)
             {
                 
-                SnapSpot s = new SnapSpot(node) { Offset = { X = 0, Y = y }, Angle = -90, Name = "InputSnap " + i, LockX = true };
+                SnapSpot s = new SnapSpot(node,null) { Offset = { X = 0, Y = y }, Angle = -90, Name = "InputSnap " + i, LockX = true };
                 node.Snaps.Add(s);
                 Snaps.Add(s);
                 y = y + yincrement;
@@ -362,13 +406,38 @@ namespace Conduit
             for (int j = 0; j < right; j++)
             {
 
-                SnapSpot s = new SnapSpot(node) { Offset = { X = 1, Y = x }, Angle = -90, Name = "OutputSnap " + j, LockX = true };
+                SnapSpot s = new SnapSpot(node,null) { Offset = { X = 1, Y = x }, Angle = -90, Name = "OutputSnap " + j, LockX = true };
                 node.Snaps.Add(s);
                 Snaps.Add(s);
                 x = x + xincrement;
 
             }
             
+        }
+
+        public void addSnapPoints2(Node2 node, int left, int right, double yincrement, double xincrement)
+        {
+            double y = .1;
+            for (int i = 0; i < left; i++)
+            {
+
+                SnapSpot s = new SnapSpot(null,node) { Offset = { X = 0, Y = y }, Angle = -90, Name = "InputSnap " + i, LockX = true };
+                node.Snaps.Add(s);
+                Snaps.Add(s);
+                y = y + yincrement;
+
+            }
+            double x = .1;
+            for (int j = 0; j < right; j++)
+            {
+
+                SnapSpot s = new SnapSpot(null,node) { Offset = { X = 1, Y = x }, Angle = -90, Name = "OutputSnap " + j, LockX = true };
+                node.Snaps.Add(s);
+                Snaps.Add(s);
+                x = x + xincrement;
+
+            }
+
         }
 
         public void RemoveNewObjects()
@@ -405,7 +474,7 @@ namespace Conduit
             SelectedObject = connector;
         }
 
-        public void customConnector(Node a, Node b)
+        public void customConnectorToData(Node a, Node2 b)
         {
             int x = a.Snaps.Count;
             int y = b.Snaps.Count;
@@ -452,7 +521,7 @@ namespace Conduit
                     Color = Colors.Red
                 };
                 connector.StartNode = a;
-                connector.EndNode = b;
+                connector.EndNode2 = b;
                 Connectors.Add(connector);
                 SelectedObject = connector;
                 a.Snaps[input].IsConnected = true;
@@ -462,8 +531,65 @@ namespace Conduit
             
         }
 
-  
-            
+        public void customConnectorFromData(Node2 a, Node b)
+        {
+            int x = a.Snaps.Count;
+            int y = b.Snaps.Count;
+            int input = 0;
+            int output = 0;
+
+            bool make = true;
+            for (int i = x / 2 + 1; i < x; i++)
+            {
+                if (a.Snaps[i].IsConnected == false)
+                {
+                    input = i;
+                    break;
+                }
+            }
+            if (input == 0)
+            {
+                make = false;
+                MessageBox.Show("Not output availability for " + a.Name);
+            }
+
+            for (int k = 0; k <= y / 2; k++)
+            {
+                if (b.Snaps[k].IsConnected == false)
+                {
+                    output = k;
+                    break;
+                }
+            }
+            if (b.Snaps[0].IsConnected == true && output == 0)
+            {
+                make = false;
+                MessageBox.Show("Not input availability for " + b.Name);
+            }
+
+            if (make)
+            {
+                var connector = new Connector()
+                {
+                    Name = "Connector" + (Connectors.Count + 1),
+                    //IsNew = true,
+                    Start = a.Snaps[input],
+                    End = b.Snaps[output],
+                    Color = Colors.Red
+                };
+                connector.StartNode2 = a;
+                connector.EndNode = b;
+                Connectors.Add(connector);
+                SelectedObject = connector;
+                a.Snaps[input].IsConnected = true;
+                b.Snaps[output].IsConnected = true;
+            }
+
+
+        }
+
+
+
 
         #endregion
 

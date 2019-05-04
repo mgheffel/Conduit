@@ -13,6 +13,15 @@ namespace Conduit
                 _parent = value;
             }
         }
+        private Node2 _parent2;
+        public Node2 Parent2
+        {
+            get { return _parent2; }
+            set
+            {
+                _parent2 = value;
+            }
+        }
 
         private BindablePoint _offset;
         public BindablePoint Offset
@@ -42,10 +51,18 @@ namespace Conduit
             }
         }
 
-        public SnapSpot(Node parent)
+        public SnapSpot(Node parent, Node2 parent2)
         {
-            Parent = parent;
-            Offset.ValueChanged = Recalculate;
+            if (parent == null)
+            {
+                Parent2 = parent2;
+                Offset.ValueChanged = Recalculate2;
+            }
+            else
+            {
+                Parent = parent;
+                Offset.ValueChanged = Recalculate;
+            }
         }
 
         private double? _lockX;
@@ -84,6 +101,20 @@ namespace Conduit
                 Offset.Y = 1;
 
             Location.Value = Point.Add(Parent.Location.Value,new Vector((_lockX ?? Offset.X) * Parent.Size.X,(_lockY ?? Offset.Y) * Parent.Size.Y));
+        }
+        public void Recalculate2()
+        {
+            if (Offset.X < 0)
+                Offset.X = 0;
+            if (Offset.X > 1)
+                Offset.X = 1;
+
+            if (Offset.Y < 0)
+                Offset.Y = 0;
+            if (Offset.Y > 1)
+                Offset.Y = 1;
+
+            Location.Value = Point.Add(Parent2.Location.Value, new Vector((_lockX ?? Offset.X) * Parent2.Size.X, (_lockY ?? Offset.Y) * Parent2.Size.Y));
         }
     }
 }

@@ -27,7 +27,15 @@ namespace Conduit
             for (int i = 0; i < n; i++)
             {
                 inputBox.Items.Add(a[i].Name);
-                outputBox.Items.Add(a[i].Name);
+                outputBox2.Items.Add(a[i].Name);
+            }
+
+            List<Node2> b = v.Nodes2.ToList();
+            int m = b.Count;
+            for(int j = 0; j<m; j++)
+            {
+                inputBox2.Items.Add(b[j].Name);
+                outputBox.Items.Add(b[j].Name);
             }
         }
 
@@ -39,10 +47,29 @@ namespace Conduit
             }
             else
             {
-                Node a = v.Nodes[inputBox.SelectedIndex];
+                Node2 a = v.Nodes2[inputBox.SelectedIndex];
                 Node b = v.Nodes[outputBox.SelectedIndex];
                 var vm = v.DataContext as MainViewModel;
-                vm.customConnector(a,b);
+               
+                vm.customConnectorFromData(a,b);
+            }
+            v.updateNodes();
+            Close();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            if (inputBox2.SelectedItem == null || outputBox2.SelectedItem == null)
+            {
+                MessageBox.Show("Must make an input and output selection for connector");
+            }
+            else
+            {
+                Node a = v.Nodes[inputBox2.SelectedIndex];
+                Node2 b = v.Nodes2[outputBox2.SelectedIndex];
+                var vm = v.DataContext as MainViewModel;
+
+                vm.customConnectorToData(a, b);
             }
             v.updateNodes();
             Close();

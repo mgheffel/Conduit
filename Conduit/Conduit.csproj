@@ -67,6 +67,12 @@
     <Compile Include="Beocat.Designer.cs">
       <DependentUpon>Beocat.cs</DependentUpon>
     </Compile>
+    <Compile Include="CreateNode2.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CreateNode2.Designer.cs">
+      <DependentUpon>CreateNode2.cs</DependentUpon>
+    </Compile>
     <Compile Include="SaveFile.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -90,6 +96,7 @@
     <Compile Include="Left Edition Panel\NodePropertyEditor.xaml.cs" />
     <Compile Include="Left Edition Panel\ParametersEditor.xaml.cs" />
     <Compile Include="Left Edition Panel\SnapSpotPropertyEditor.xaml.cs" />
+    <Compile Include="uxWorkflow\Node2.cs" />
     <Compile Include="uxWorkflow\PropertyChangedBase.cs" />
     <Compile Include="uxWorkflow\SnapSpot.cs" />
     <Page Include="Left Edition Panel\ButtonsPanel.xaml">
@@ -152,6 +159,9 @@
     </Compile>
     <EmbeddedResource Include="Beocat.resx">
       <DependentUpon>Beocat.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CreateNode2.resx">
+      <DependentUpon>CreateNode2.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SaveFile.resx">
       <DependentUpon>SaveFile.cs</DependentUpon>

@@ -28,10 +28,10 @@ namespace Conduit
 
             node.Snaps.AddRange(new[]
                                     {
-                                        new SnapSpot(node) {Offset = {X = 0, Y = .5}, Angle = -90, Name = "LeftSnap" + nodenumber, LockX = true},
-                                        new SnapSpot(node) {Offset = {X = .5, Y = 0}, Angle = 0, Name = "TopSnap" + nodenumber, LockY = true},
-                                        new SnapSpot(node) {Offset = {X = 1, Y = .5}, Angle = 90, Name = "RightSnap" + nodenumber, LockX = true},
-                                        new SnapSpot(node) {Offset = {X = .5, Y = 1}, Angle = 180, Name = "BottomSnap" + nodenumber, LockY = true},
+                                        new SnapSpot(node,null) {Offset = {X = 0, Y = .5}, Angle = -90, Name = "LeftSnap" + nodenumber, LockX = true},
+                                        new SnapSpot(node,null) {Offset = {X = .5, Y = 0}, Angle = 0, Name = "TopSnap" + nodenumber, LockY = true},
+                                        new SnapSpot(node,null) {Offset = {X = 1, Y = .5}, Angle = 90, Name = "RightSnap" + nodenumber, LockX = true},
+                                        new SnapSpot(node,null) {Offset = {X = .5, Y = 1}, Angle = 180, Name = "BottomSnap" + nodenumber, LockY = true},
                                     });
             return node;
         }

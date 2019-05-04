@@ -44,6 +44,19 @@ namespace Conduit
                 }
             }
         }
+        private Node2 startNode2;
+        public Node2 StartNode2
+        {
+            get { return startNode2; }
+            set
+            {
+                if (startNode2 != value)
+                {
+                    startNode2 = value;
+                    OnPropertyChanged("StartNode2");
+                }
+            }
+        }
         private Node endNode;
         public Node EndNode
         {
@@ -54,6 +67,19 @@ namespace Conduit
                 {
                     endNode = value;
                     OnPropertyChanged("EndNode");
+                }
+            }
+        }
+        private Node2 endNode2;
+        public Node2 EndNode2
+        {
+            get { return endNode2; }
+            set
+            {
+                if (endNode2 != value)
+                {
+                    endNode2 = value;
+                    OnPropertyChanged("EndNode2");
                 }
             }
         }

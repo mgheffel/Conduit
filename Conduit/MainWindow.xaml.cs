@@ -15,9 +15,10 @@ namespace Conduit
     public partial class MainWindow
     {
         public List<Node> Nodes { get; set; }
+        public List<Node2> Nodes2 { get; set; }
         public List<Connector> Connectors { get; set; }
 
-        private int n = 0;
+        //private int n = 0;
 
         public MainWindow()
         {
@@ -36,10 +37,30 @@ namespace Conduit
             var node = thumb.DataContext as Node;
             if (node == null)
                 return;
-
+            
             node.Location.Value = Point.Add(node.Location.Value, new Vector(e.HorizontalChange, e.VerticalChange));
+            //node.Location.Value = Point.Add(node.Location.Value, new Vector(e.HorizontalChange, e.VerticalChange));
+
+        }
+        private void Thumb_Drag2(object sender, DragDeltaEventArgs e)
+        {
+            var thumb = sender as Thumb;
+            if (thumb == null)
+                return;
+
+            var node2 = thumb.DataContext as Node2;
+            if (node2 == null)
+            {
+                MessageBox.Show("Node2 null");
+                return;
+            }
+            node2.Location.Value = Point.Add(node2.Location.Value, new Vector(e.HorizontalChange, e.VerticalChange));
+
         }
 
+
+
+       
         private void ListBox_PreviewMouseMove(object sender, MouseEventArgs e)
         {
             var listbox = sender as ListBox;
@@ -141,7 +162,6 @@ namespace Conduit
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         { 
-            n = Nodes.Count + 1;
             NodeCreator nc = new NodeCreator(this);
             nc.Show();
             
@@ -152,8 +172,10 @@ namespace Conduit
             var vm = DataContext as MainViewModel;
             List<Node> a = vm.Nodes.ToList();
             List<Connector> b = vm.Connectors.ToList();
+            List<Node2> c = vm.Nodes2.ToList();
             Nodes = a;
             Connectors = b;
+            Nodes2 = c;
 
         }
 
@@ -182,9 +204,16 @@ namespace Conduit
             vm.Nodes.ToList().ForEach(x => vm.Nodes.Remove(x));
             vm.Snaps.ToList().ForEach(x => vm.Snaps.Remove(x));
             vm.Connectors.ToList().ForEach(x => vm.Connectors.Remove(x));
+            vm.Nodes2.ToList().ForEach(x => vm.Nodes2.Remove(x));
             updateNodes();
 
 
+        }
+
+        private void Button_Click_6(object sender, RoutedEventArgs e)
+        {
+            CreateNode2 cn = new CreateNode2(this);
+            cn.Show();
         }
     }
 }

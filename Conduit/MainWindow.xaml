@@ -33,6 +33,9 @@
                     <DataTemplate DataType="{x:Type local2:Node}">
                         <local2:NodePropertyEditor/>
                     </DataTemplate>
+                    <DataTemplate DataType="{x:Type local2:Node2}">
+                        <local2:NodePropertyEditor/>
+                    </DataTemplate>
                     <DataTemplate DataType="{x:Type local2:Connector}">
                         <local2:ConnectorPropertyEditor/>
                     </DataTemplate>
@@ -47,6 +50,7 @@
             <Button Content="Sign in to Beocat" Click="Button_Click_3"/>
             <Button Content="Open/Save File" HorizontalAlignment="Left" Height="25" Margin="10,0,0,0" Width="118" Click="Button_Click_4"/>
             <Button Content="Clear Screen" Click="Button_Click_5"/>
+            <Button Content="New Node" HorizontalAlignment="Left" Height="21" Margin="29,0,0,0" Width="82" Click="Button_Click_6"/>
         </StackPanel>
         <Grid Margin="10">
             <Grid.Resources>
@@ -54,6 +58,7 @@
                 <!-- This CompositeCollection basically Concatenates the Nodes and Connectors in a single one -->
                 <CompositeCollection x:Key="Col">
                     <CollectionContainer Collection="{Binding DataContext.Nodes,Source={x:Reference view}}"/>
+                    <CollectionContainer Collection="{Binding DataContext.Nodes2,Source={x:Reference view}}"/>
                     <CollectionContainer Collection="{Binding DataContext.Connectors,Source={x:Reference view}}"/>
                     <CollectionContainer Collection="{Binding DataContext.Snaps,Source={x:Reference view}}"/>
                     <ListBoxItem Canvas.Left="{Binding SelectedObject.MidPoint.X}" Canvas.Top="{Binding SelectedObject.MidPoint.Y}">
@@ -118,28 +123,85 @@
                                     <ColumnDefinition Width="Auto"/>
 
                                 </Grid.ColumnDefinitions>
-                                <Label  Content ="{Binding Path=V1, Mode=TwoWay}" Grid.Row="0" Grid.Column="0" Height="30" Width="45" Margin="2"/>
-                                <Label  Content ="{Binding Path=V2, Mode=TwoWay}" Grid.Row="0" Grid.Column="2" Height="30" Width="45" Margin="2"/>
-                                <Label  Content ="{Binding Path=V3, Mode=TwoWay}" Grid.Row="0" Grid.Column="4" Height="30" Width="45" Margin="2"/>
-                                <Label  Content ="{Binding Path=V4, Mode=TwoWay}" Grid.Row="1" Grid.Column="0" Height="30" Width="45" Margin="2"/>
-                                <Label  Content ="{Binding Path=V5, Mode=TwoWay}" Grid.Row="1" Grid.Column="2" Height="30" Width="45" Margin="2"/>
-                                <Label  Content ="{Binding Path=V6, Mode=TwoWay}" Grid.Row="2" Grid.Column="0" Height="30" Width="45" Margin="2"/>
-                                <Label  Content ="{Binding Path=V7, Mode=TwoWay}" Grid.Row="2" Grid.Column="2" Height="30" Width="45" Margin="2"/>
-                                <Label  Content ="{Binding Path=V8, Mode=TwoWay}" Grid.Row="2" Grid.Column="4" Height="30" Width="45" Margin="2"/>
-                                <Label  Content ="{Binding Path=V9, Mode=TwoWay}" Grid.Row="3" Grid.Column="0" Height="30" Width="45" Margin="2"/>
-                                <Label  Content ="{Binding Path=V10, Mode=TwoWay}" Grid.Row="4" Grid.Column="0" Height="30" Width="45" Margin="2"/>
+                                <Label  Content ="{Binding Path=V1, Mode=TwoWay}" Grid.Row="0" Grid.Column="0" Height="30" Width="90" Margin="2"/>
+                                <Label  Content ="{Binding Path=V2, Mode=TwoWay}" Grid.Row="0" Grid.Column="2" Height="30" Width="90" Margin="2"/>
+                                <Label  Content ="{Binding Path=V3, Mode=TwoWay}" Grid.Row="0" Grid.Column="4" Height="30" Width="90" Margin="2"/>
+                                <Label  Content ="{Binding Path=V4, Mode=TwoWay}" Grid.Row="1" Grid.Column="0" Height="30" Width="90" Margin="2"/>
+                                <Label  Content ="{Binding Path=V5, Mode=TwoWay}" Grid.Row="1" Grid.Column="2" Height="30" Width="90" Margin="2"/>
+                                <Label  Content ="{Binding Path=V6, Mode=TwoWay}" Grid.Row="2" Grid.Column="0" Height="30" Width="90" Margin="2"/>
+                                <Label  Content ="{Binding Path=V7, Mode=TwoWay}" Grid.Row="2" Grid.Column="2" Height="30" Width="90" Margin="2"/>
+                                <Label  Content ="{Binding Path=V8, Mode=TwoWay}" Grid.Row="2" Grid.Column="4" Height="30" Width="90" Margin="2"/>
+                                <Label  Content ="{Binding Path=V9, Mode=TwoWay}" Grid.Row="3" Grid.Column="0" Height="30" Width="90" Margin="2"/>
+                                <Label  Content ="{Binding Path=V10, Mode=TwoWay}" Grid.Row="4" Grid.Column="0" Height="30" Width="90" Margin="2"/>
         
-                                <TextBox  Text ="{Binding Path=T1, Mode=TwoWay}" Grid.Row="0" Grid.Column="1" Height="20" Width="45" Margin="2"/>
-                                <TextBox  Text ="{Binding Path=T4, Mode=TwoWay}" Grid.Row="1" Grid.Column="1" Height="20" Width="45" Margin="2"/>
-                                <TextBox  Text ="{Binding Path=T6, Mode=TwoWay}" Grid.Row="2" Grid.Column="1" Height="20" Width="45" Margin="2"/>
-                                <TextBox  Text ="{Binding Path=T9, Mode=TwoWay}" Grid.Row="3" Grid.Column="1" Height="20" Width="45" Margin="2"/>
-                                <TextBox  Text ="{Binding Path=T10, Mode=TwoWay}" Grid.Row="4" Grid.Column="1" Height="20" Width="45" Margin="2"/>
-                                <TextBox  Text ="{Binding Path=T2, Mode=TwoWay}" Grid.Row="0" Grid.Column="3" Height="20" Width="45" Margin="2"/>
-                                <TextBox  Text ="{Binding Path=T3, Mode=TwoWay}" Grid.Row="0" Grid.Column="5" Height="20" Width="45" Margin="2"/>
-                                <TextBox  Text ="{Binding Path=T5, Mode=TwoWay}" Grid.Row="1" Grid.Column="3" Height="20" Width="45" Margin="2"/>
-                                <TextBox  Text ="{Binding Path=T7, Mode=TwoWay}" Grid.Row="2" Grid.Column="3" Height="20" Width="45" Margin="2"/>
-                                <TextBox  Text ="{Binding Path=T8, Mode=TwoWay}" Grid.Row="2" Grid.Column="5" Height="20" Width="45" Margin="2"/>
+                                <TextBox  Text ="{Binding Path=T1, Mode=TwoWay}" Grid.Row="0" Grid.Column="1" Height="20" Width="90" Margin="2"/>
+                                <TextBox  Text ="{Binding Path=T4, Mode=TwoWay}" Grid.Row="1" Grid.Column="1" Height="20" Width="90" Margin="2"/>
+                                <TextBox  Text ="{Binding Path=T6, Mode=TwoWay}" Grid.Row="2" Grid.Column="1" Height="20" Width="90" Margin="2"/>
+                                <TextBox  Text ="{Binding Path=T9, Mode=TwoWay}" Grid.Row="3" Grid.Column="1" Height="20" Width="90" Margin="2"/>
+                                <TextBox  Text ="{Binding Path=T10, Mode=TwoWay}" Grid.Row="4" Grid.Column="1" Height="20" Width="90" Margin="2"/>
+                                <TextBox  Text ="{Binding Path=T2, Mode=TwoWay}" Grid.Row="0" Grid.Column="3" Height="20" Width="90" Margin="2"/>
+                                <TextBox  Text ="{Binding Path=T3, Mode=TwoWay}" Grid.Row="0" Grid.Column="5" Height="20" Width="90" Margin="2"/>
+                                <TextBox  Text ="{Binding Path=T5, Mode=TwoWay}" Grid.Row="1" Grid.Column="3" Height="20" Width="90" Margin="2"/>
+                                <TextBox  Text ="{Binding Path=T7, Mode=TwoWay}" Grid.Row="2" Grid.Column="3" Height="20" Width="90" Margin="2"/>
+                                <TextBox  Text ="{Binding Path=T8, Mode=TwoWay}" Grid.Row="2" Grid.Column="5" Height="20" Width="90" Margin="2"/>
  
+                            </Grid>
+                        </Grid>
+                    </Border>
+                    <DataTemplate.Triggers>
+                        <DataTrigger Binding="{Binding IsCollapsed}" Value="True">
+                            <Setter TargetName="Data" Property="Visibility"  Value="Collapsed"/>
+                            <Setter TargetName="Thumb" Property="Grid.RowSpan" Value="2"/>
+                        </DataTrigger>
+                    </DataTemplate.Triggers>
+                </DataTemplate>
+
+                <DataTemplate DataType="{x:Type local2:Node2}">
+                    <Border BorderBrush="LightGray" BorderThickness="1" Padding="1"
+                            Width="{Binding Size.X}"
+                            Height="{Binding Size.Y}" >
+                        <Grid>
+                            <Grid.Background>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                    <GradientStop Color="AliceBlue" Offset="0"/>
+                                    <GradientStop Color="{Binding Color}" Offset=".5"/>
+                                </LinearGradientBrush>
+                            </Grid.Background>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <Thumb DragDelta="Thumb_Drag2"
+                                   IsEnabled="{Binding IsSelected,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBoxItem}}}"
+                                   x:Name="Thumb">
+                                <Thumb.Template>
+                                    <ControlTemplate TargetType="Thumb">
+                                        <Border Background="#02FFFFFF">
+                                            <TextBlock Text="{Binding Name}" 
+                                                       FontSize="16" 
+                                                       VerticalAlignment="Center"
+                                                       x:Name="txt"/>
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <DataTrigger Binding="{Binding IsCollapsed}" Value="True">
+                                                <Setter TargetName="txt" Property="Text" Value="{Binding ShortName}"/>
+                                                <Setter TargetName="txt" Property="TextAlignment" Value="Center"/>
+                                            </DataTrigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Thumb.Template>
+                            </Thumb>
+                            <Grid x:Name="Data" Grid.Row="1">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <Label  Content ="{Binding Path=V1, Mode=TwoWay}" Grid.Row="0" Grid.Column="0" Height="30" Width="90" Margin="2"/>
+                                <TextBox  Text ="{Binding Path=T1, Mode=TwoWay}" Grid.Row="0" Grid.Column="1" Height="20" Width="90" Margin="2"/>
+                                
                             </Grid>
                         </Grid>
                     </Border>

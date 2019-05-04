@@ -169,7 +169,7 @@ namespace Conduit
                                 }
                             }
 
-                            vm.customConnector(vm.Nodes[a], vm.Nodes[b]);
+                            //vm.customConnector(vm.Nodes[a], vm.Nodes[b]);
                             x.updateNodes();
                             
                         }
