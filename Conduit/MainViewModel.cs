@@ -474,29 +474,41 @@ namespace Conduit
             SelectedObject = connector;
         }
 
-        public void customConnectorToData(Node a, Node2 b)
+        public void customConnectorToData(Node a, int d, Node2 b, int c)
         {
+            int inputa = a.InputSnaps;
+            int inputb = b.InputSnaps;
+            int outputa = a.OutputSnaps;
+            int outputb = b.OutputSnaps;
+            
             int x = a.Snaps.Count;
             int y = b.Snaps.Count;
             int input = 0;
             int output = 0;
 
             bool make = true;
-            for(int i = x/2 +1; i<x; i++)
+            if (inputb == 0)
             {
-              if (a.Snaps[i].IsConnected == false)
+
+                MessageBox.Show("Not input availability for " + b.Name);
+            }
+            else
+            {
+                for (int i = inputa; i < x; i++)
                 {
-                    input = i;
-                    break;
+                    if (a.Snaps[i].IsConnected == false)
+                    {
+                        input = i;
+                        break;
+                    }
                 }
-            }
-            if (input == 0)
-            {
-                make = false;
-                MessageBox.Show("Not output availability for "+ a.Name);
-            }
-           
-                for (int k = 0; k <= y / 2; k++)
+                if (a.Snaps[0].IsConnected == true && input == 0)
+                {
+                    make = false;
+                    MessageBox.Show("Not output availability for " + a.Name);
+                }
+
+                for (int k = 0; k < inputb; k++)
                 {
                     if (b.Snaps[k].IsConnected == false)
                     {
@@ -504,42 +516,47 @@ namespace Conduit
                         break;
                     }
                 }
-            if (b.Snaps[0].IsConnected == true && output == 0)
-            {
-                make = false;
-                MessageBox.Show("Not input availability for " + b.Name);
+                if (b.Snaps[0].IsConnected == true && output == 0)
+                {
+                    make = false;
+                    MessageBox.Show("Not input availability for " + b.Name);
+                }
+
+                if (make)
+                {
+                    var connector = new Connector()
+                    {
+                        Name = "Connector" + (Connectors.Count + 1),
+                        //IsNew = true,
+                        Start = a.Snaps[input],
+                        End = b.Snaps[output],
+                        Color = Colors.Red
+                    };
+                    connector.StartNode = a;
+                    connector.EndNode2 = b;
+                    Connectors.Add(connector);
+                    SelectedObject = connector;
+                    a.Snaps[input].IsConnected = true;
+                    b.Snaps[output].IsConnected = true;
+                }
             }
 
-            if (make)
-            {
-                var connector = new Connector()
-                {
-                    Name = "Connector" + (Connectors.Count + 1),
-                    //IsNew = true,
-                    Start = a.Snaps[input],
-                    End = b.Snaps[output],
-                    Color = Colors.Red
-                };
-                connector.StartNode = a;
-                connector.EndNode2 = b;
-                Connectors.Add(connector);
-                SelectedObject = connector;
-                a.Snaps[input].IsConnected = true;
-                b.Snaps[output].IsConnected = true;
-            }
-            
             
         }
 
-        public void customConnectorFromData(Node2 a, Node b)
+        public void customConnectorFromData(Node2 a,int d, Node b, int c)
         {
+            int inputa = a.InputSnaps;
+            int inputb = b.InputSnaps;
+            int outputa = a.OutputSnaps;
+            int outputb = b.OutputSnaps;
             int x = a.Snaps.Count;
-            int y = b.Snaps.Count;
+            //int y = b.Snaps.Count;
             int input = 0;
             int output = 0;
 
             bool make = true;
-            for (int i = x / 2 + 1; i < x; i++)
+            for (int i = inputa; i < x; i++)
             {
                 if (a.Snaps[i].IsConnected == false)
                 {
@@ -547,13 +564,13 @@ namespace Conduit
                     break;
                 }
             }
-            if (input == 0)
+            if (a.Snaps[0].IsConnected == true && input == 0)
             {
                 make = false;
                 MessageBox.Show("Not output availability for " + a.Name);
             }
 
-            for (int k = 0; k <= y / 2; k++)
+            for (int k = 0; k < inputb; k++)
             {
                 if (b.Snaps[k].IsConnected == false)
                 {
@@ -566,7 +583,7 @@ namespace Conduit
                 make = false;
                 MessageBox.Show("Not input availability for " + b.Name);
             }
-
+            
             if (make)
             {
                 var connector = new Connector()

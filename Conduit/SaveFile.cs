@@ -53,11 +53,23 @@ namespace Conduit
                     }
 
                 }
-               
-                 string two = "\r\n";
+                string four = "";
+                foreach (Node2 n in x.Nodes2)
+                {
+
+                    one = one + n.Location.Value.X.ToString() + "," + n.Location.Value.Y.ToString() + "," + n.Fields.ToString() + "," + n.Name.ToString() + "," + n.OutputSnaps.ToString() + "," + n.InputSnaps.ToString() + "," + n.V1.ToString() + ","
+                        + n.T1.ToString();
+                    if (n != x.Nodes2.Last())
+                    {
+                        one = one + "+";
+                    }
+
+                }
+
+                string two = "\r\n";
               
 
-                string save = one + two + three;
+                string save = one + two + three + four;
 
                 saveFileDialog1.Filter = "TXT Files (*.txt)|*.txt";
                 saveFileDialog1.DefaultExt = "txt";
