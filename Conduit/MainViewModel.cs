@@ -137,13 +137,13 @@ namespace Conduit
                 string[] b = { "Output1", "Output2", "Output3" };
                 string [] c = { "Input1", "Input2", "Input3", "Input4" };
                 if (value)
-                    CreateNewNode(5, a,b,c);
+                    CreateNewNode(5,5, a);//,b,c);
                 else
                     RemoveNewObjects();
             }
         }
 
-        public Node CreateNewNode(int numFields, string[] strings, string[] outputs, string[] inputs)
+        public Node CreateNewNode(int numFields,int num, string[] strings)//, string[] outputs, string[] inputs)
         {
             int input = Convert.ToInt32(strings[2]);
             int output = Convert.ToInt32(strings[1]);
@@ -215,7 +215,8 @@ namespace Conduit
                 Color = Colors.AliceBlue
 
             };
-            switch (numFields)
+            
+            switch (num)
             {
                 case 0:
                     break;
@@ -350,7 +351,33 @@ namespace Conduit
                     node.T10 = strings[22];
                     break;
             }
-            addSnapPoints(node, input, output, yincrement, xincrement, inputs,outputs);
+            int total = strings.Count();
+            int nodeCount = total- input - output;
+            int inStop = (input + nodeCount - 1);
+
+
+            string[] yep = new string[nodeCount];
+            string[] yep2 = new string[input];
+            string[] yep3 = new string[output];
+
+
+            for (int i = 0; i < nodeCount; i++)
+            {
+                yep[i] = strings[i];
+            }
+
+            for (int i = 0; i < input; i++)
+            {
+                yep2[i] = strings[i + nodeCount];
+
+            }
+
+            for (int i = 0; i < output; i++)
+            {
+                yep3[i] = strings[i + inStop + 1];
+
+            }
+            addSnapPoints(node, input, output, yincrement, xincrement, yep2,yep3);
             node.InputSnaps = input;
             node.OutputSnaps = output;
             node.Fields = numFields;
@@ -401,7 +428,6 @@ namespace Conduit
 
 
         public void addSnapPoints(Node node, int left, int right, double yincrement, double xincrement, string[] inputs, string[] outputs ) {
-           
 
             double y = .1;
             for (int i = 0 ; i < left; i++)

@@ -37,6 +37,10 @@ namespace Conduit
                         Node n = c.EndNode;
                         string b = n.Location.Value.X.ToString() + "," + n.Location.Value.Y.ToString() + "," + n.Fields.ToString() + "," + n.Name.ToString() + "," + n.OutputSnaps.ToString() + "," + n.InputSnaps.ToString() + "," + n.V1.ToString() + "," + n.V2.ToString() + "," + n.V3.ToString() + "," + n.V4.ToString() + "," + n.V5.ToString() + "," + n.V6.ToString() + "," + n.V7.ToString() + "," + n.V8.ToString() + "," + n.V9.ToString() + "," + n.V10.ToString() + ","
                             + n.T1.ToString() + "," + n.T2.ToString() + "," + n.T3.ToString() + "," + n.T4.ToString() + "," + n.T5.ToString() + "," + n.T6.ToString() + "," + n.T7.ToString() + "," + n.T8.ToString() + "," + n.T9.ToString() + "," + n.T10.ToString(); ;
+                        foreach (SnapSpot s in n.Snaps)
+                        {
+                            b = b + "," + s.Name.ToString();
+                        }
                         three = three + a + "&" + b;
                     }
                     else
@@ -44,6 +48,10 @@ namespace Conduit
                         Node n = c.StartNode;
                         string a = n.Location.Value.X.ToString() + "," + n.Location.Value.Y.ToString() + "," + n.Fields.ToString() + "," + n.Name.ToString() + "," + n.OutputSnaps.ToString() + "," + n.InputSnaps.ToString() + "," + n.V1.ToString() + "," + n.V2.ToString() + "," + n.V3.ToString() + "," + n.V4.ToString() + "," + n.V5.ToString() + "," + n.V6.ToString() + "," + n.V7.ToString() + "," + n.V8.ToString() + "," + n.V9.ToString() + "," + n.V10.ToString() + ","
                             + n.T1.ToString() + "," + n.T2.ToString() + "," + n.T3.ToString() + "," + n.T4.ToString() + "," + n.T5.ToString() + "," + n.T6.ToString() + "," + n.T7.ToString() + "," + n.T8.ToString() + "," + n.T9.ToString() + "," + n.T10.ToString();
+                        foreach (SnapSpot s in n.Snaps)
+                        {
+                            a = a + "," + s.Name.ToString();
+                        }
                         Node2 n2 = c.EndNode2;
                         string b = n2.Location.Value.X.ToString() + "," + n2.Location.Value.Y.ToString() + "," + n2.Fields.ToString() + "," + n2.Name.ToString() + "," + n2.OutputSnaps.ToString() + "," + n2.InputSnaps.ToString() + "," + n2.V1.ToString() + ","
                             + n2.T1.ToString() + ",";
@@ -60,6 +68,10 @@ namespace Conduit
                     
                     one = one + n.Location.Value.X.ToString() +"," + n.Location.Value.Y.ToString() + "," + n.Fields.ToString() + "," + n.Name.ToString() + "," + n.OutputSnaps.ToString() + "," + n.InputSnaps.ToString() + "," + n.V1.ToString() + "," + n.V2.ToString() + "," + n.V3.ToString() + "," + n.V4.ToString() + "," + n.V5.ToString() + "," + n.V6.ToString() + "," + n.V7.ToString() + "," + n.V8.ToString() + "," + n.V9.ToString() + "," + n.V10.ToString() + ","
                         + n.T1.ToString() + "," + n.T2.ToString() + "," + n.T3.ToString() + "," + n.T4.ToString() + "," + n.T5.ToString() + "," + n.T6.ToString() + "," + n.T7.ToString() + "," + n.T8.ToString() + "," + n.T9.ToString() + "," + n.T10.ToString();
+                    foreach (SnapSpot s in n.Snaps)
+                    {
+                        one = one + "," + s.Name.ToString();
+                    }
                     if (n != x.Nodes.Last())
                     {
                         one= one + "+";
@@ -81,9 +93,14 @@ namespace Conduit
                 }
 
                 string two = "\r\n";
-              
-
-                string save = one + two + four + two + three;
+                string save = "";
+                if (four == "")
+                    save = one;
+                else if (three == "")
+                    save = one + two + four;
+                else
+                    save = one + two + four + two + three;
+                
 
                 saveFileDialog1.Filter = "TXT Files (*.txt)|*.txt";
                 saveFileDialog1.DefaultExt = "txt";
@@ -106,13 +123,14 @@ namespace Conduit
 
         private void button2_Click(object sender, EventArgs e)
         {
-            /*if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 string filename = openFileDialog1.FileName;
                 string[] filelines = File.ReadAllLines(filename);
                 string[] connectors;
                 string[] nodes;
                 string[] nodes2;
+                
                 switch (filelines.Count())
                 {
                     case 1:
@@ -127,7 +145,7 @@ namespace Conduit
                             }
 
                             var vm = x.DataContext as MainViewModel;
-                            Node n = vm.CreateNewNode(Convert.ToInt32(nodeString[2]), strings);
+                            Node n = vm.CreateNewNode(Convert.ToInt32(nodeString[2]),10, strings);
                             n.Location.Value = new System.Windows.Point(Convert.ToInt32(nodeString[0]), Convert.ToInt32(nodeString[1]));
                             x.updateNodes();
 
@@ -146,7 +164,7 @@ namespace Conduit
                             }
 
                             var vm = x.DataContext as MainViewModel;
-                            Node n = vm.CreateNewNode(Convert.ToInt32(nodeString[2]), strings);
+                            Node n = vm.CreateNewNode(Convert.ToInt32(nodeString[2]),10, strings);
                             n.Location.Value = new System.Windows.Point(Convert.ToInt32(nodeString[0]), Convert.ToInt32(nodeString[1]));
                             x.updateNodes();
                         }
@@ -172,6 +190,7 @@ namespace Conduit
                         nodes = filelines[0].Split('+');
                         nodes2 = filelines[1].Split('+');
 
+                        
                         for (int i = 0; i < nodes.Length; i++)
                         {
                             string[] nodeString = nodes[i].Split(',');
@@ -180,9 +199,9 @@ namespace Conduit
                             {
                                 strings[j] = nodeString[(j + 3)];
                             }
-                            
+
                             var vm = x.DataContext as MainViewModel;
-                            Node n = vm.CreateNewNode(Convert.ToInt32(nodeString[2]), strings);
+                            Node n = vm.CreateNewNode(Convert.ToInt32(nodeString[2]),10, strings);
                             n.Location.Value = new System.Windows.Point(Convert.ToInt32(nodeString[0]), Convert.ToInt32(nodeString[1]));
                             x.updateNodes();
                         }
@@ -274,7 +293,7 @@ namespace Conduit
                 }
                 
             }
-            Close();*/
+            Close();
 
         }
        

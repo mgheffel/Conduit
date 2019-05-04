@@ -142,23 +142,31 @@ namespace Conduit
             var strings = Controls.OfType<TextBox>()
                       .Select(c => c.Text)
                       .ToList();
+            string[] yep = new string[strings.Count];
+            for (int i = 0; i < strings.Count; i++)
+            {
+                yep[i] = strings[i];
+            }
+
+            /*int nodeCount = strings.Count - inValue - outValue;
+            //int inStop = (inValue + nodeCount - 1);
+
+
+            //string[] yep = new string[nodeCount];
+            //string[] yep2 = new string[inValue];
+            //string[] yep3 = new string[outValue];
+
+            MessageBox.Show(inValue.ToString());
+            MessageBox.Show(outValue.ToString());
+
             
-            int nodeCount = strings.Count - inValue - outValue;
-            int inStop = (inValue + nodeCount - 1);
-
-
-            string[] yep = new string[nodeCount];
-            string[] yep2 = new string[inValue];
-            string[] yep3 = new string[outValue];
-
-            
-            for (int i=0; i< nodeCount; i++)
+            for (int i=0; i< strings.Count; i++)
             {
                 yep[i] = strings[i];
             }
 
             
-                for (int i = 0 ; i < inValue; i++)
+                /*for (int i = 0 ; i < inValue; i++)
                 {
                     yep2[i] = strings[i + nodeCount];
                    
@@ -170,9 +178,10 @@ namespace Conduit
                 {
                     yep3[i] = strings[i + inStop + 1];
                     
-                }
-            
-           Node node = vm.CreateNewNode(numFields,yep, yep3, yep2);
+                }*/
+
+            //Node node = vm.CreateNewNode(numFields,yep, yep3, yep2);
+            Node node = vm.CreateNewNode(numFields, numFields, yep);
             v.updateNodes();
             Close();
             

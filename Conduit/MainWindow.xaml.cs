@@ -158,7 +158,7 @@ namespace Conduit
             string[] a = {"Node" +(Nodes.Count +1), "3", "4", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "" };
             string[] b = { "Output1", "Output2", "Output3" };
             string[] c = { "Input1", "Input2", "Input3", "Input4" };
-            Node node = vm.CreateNewNode(5,a,b,c);
+            Node node = vm.CreateNewNode(5,5, a);//,b,c);
 
             updateNodes();
         }
