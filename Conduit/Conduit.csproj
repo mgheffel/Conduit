@@ -96,6 +96,7 @@
     <Compile Include="Left Edition Panel\NodePropertyEditor.xaml.cs" />
     <Compile Include="Left Edition Panel\ParametersEditor.xaml.cs" />
     <Compile Include="Left Edition Panel\SnapSpotPropertyEditor.xaml.cs" />
+    <Compile Include="ScriptCreator.cs" />
     <Compile Include="uxWorkflow\Node2.cs" />
     <Compile Include="uxWorkflow\PropertyChangedBase.cs" />
     <Compile Include="uxWorkflow\SnapSpot.cs" />
