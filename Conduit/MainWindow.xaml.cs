@@ -141,6 +141,7 @@ namespace Conduit
 
         private void Snap_DragDelta(object sender, DragDeltaEventArgs e)
         {
+            var vm = DataContext as MainViewModel;
             var thumb = sender as Thumb;
             if (thumb == null)
                 return;
@@ -148,7 +149,6 @@ namespace Conduit
             var snap = thumb.DataContext as SnapSpot;
             if (snap == null)
                 return;
-
             snap.Offset.Value = Point.Add(snap.Offset.Value, new Vector(snap.LockX ? 0 : e.HorizontalChange / 1000, snap.LockY ? 0 : e.VerticalChange / 1000));
         }
 
@@ -156,7 +156,10 @@ namespace Conduit
         {
             var vm = DataContext as MainViewModel;
             string[] a = {"Node" +(Nodes.Count +1), "3", "4", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "" };
-            Node node = vm.CreateNewNode(5,a);
+            string[] b = { "Output1", "Output2", "Output3" };
+            string[] c = { "Input1", "Input2", "Input3", "Input4" };
+            Node node = vm.CreateNewNode(5,a,b,c);
+
             updateNodes();
         }
 

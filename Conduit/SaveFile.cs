@@ -106,7 +106,7 @@ namespace Conduit
 
         private void button2_Click(object sender, EventArgs e)
         {
-            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            /*if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 string filename = openFileDialog1.FileName;
                 string[] filelines = File.ReadAllLines(filename);
@@ -274,7 +274,7 @@ namespace Conduit
                 }
                 
             }
-            Close();
+            Close();*/
 
         }
        

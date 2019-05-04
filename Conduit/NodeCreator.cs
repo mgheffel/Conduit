@@ -38,7 +38,7 @@ namespace Conduit
                       .ToList();
             Label nodeName = new Label();
             nodeName.Text = String.Format(strings[0]);
-            nodeName.Left = 240;
+            nodeName.Left = 480;
             nodeName.Top = 25;
             this.Controls.Add(nodeName);
 
@@ -83,18 +83,18 @@ namespace Conduit
                 this.Controls.Add(textBox);
                
             }
-           /* for (int i = 1; i <= inValue; i++)
+            for (int i = 1; i <= inValue; i++)
             {
                 //Create label
                 Label label = new Label();
-                label.Text = String.Format("Input Snap Name {0}", i);
+                label.Text = String.Format("Input Snap {0} Name", i);
                 label.AutoSize = true;
                 //Position label on screen
                 label.Left = 520;
                 label.Top = (i + 1) * 25;
                 //Create textbox
                 TextBox TextBox = new TextBox();
-                TextBox.Name = String.Format("Value {0}", i);
+                TextBox.Name = String.Format("Name {0}", i);
                 //Position Textbox on screen
                 TextBox.Left = 630;
                 TextBox.Top = (i + 1) * 25;
@@ -107,14 +107,14 @@ namespace Conduit
             {
                 //Create label
                 Label label = new Label();
-                label.Text = String.Format("Output Snap Value {0}", i);
+                label.Text = String.Format("Output Snap {0} Name", i);
                 //Position label on screen
                 label.Left = 770;
                 label.Top = (i + 1) * 25;
                 label.AutoSize = true;
                 //Create textbox
                 TextBox textBox = new TextBox();
-                textBox.Name = "Value{0}" + i;
+                textBox.Name = "Name{0}" + i;
                 //Position textbox on screen
                 textBox.Left = 880;
                 textBox.Top = (i + 1) * 25;
@@ -122,13 +122,13 @@ namespace Conduit
                 this.Controls.Add(label);
                 this.Controls.Add(textBox);
 
-            }*/
+            }
 
             Button button = new Button();
             button.Text = String.Format("Create Node");
-            button.Left = 200;
-            //int max = Math.Max(m, Math.Max(inValue, outValue));
-            button.Top = (m + 2) * 25;
+            button.Left = 440;
+            int max = Math.Max(m, Math.Max(inValue, outValue));
+            button.Top = (max + 2) * 25;
             this.Controls.Add(button);
             button.Width = 100;
             button.Enabled = true;
@@ -142,12 +142,37 @@ namespace Conduit
             var strings = Controls.OfType<TextBox>()
                       .Select(c => c.Text)
                       .ToList();
-            string[] yep = new string[strings.Count];
-            for(int i =0; i< strings.Count; i++)
+            
+            int nodeCount = strings.Count - inValue - outValue;
+            int inStop = (inValue + nodeCount - 1);
+
+
+            string[] yep = new string[nodeCount];
+            string[] yep2 = new string[inValue];
+            string[] yep3 = new string[outValue];
+
+            
+            for (int i=0; i< nodeCount; i++)
             {
                 yep[i] = strings[i];
             }
-            Node node = vm.CreateNewNode(numFields,yep);
+
+            
+                for (int i = 0 ; i < inValue; i++)
+                {
+                    yep2[i] = strings[i + nodeCount];
+                   
+                }
+
+
+
+            for (int i = 0; i < outValue; i++)
+                {
+                    yep3[i] = strings[i + inStop + 1];
+                    
+                }
+            
+           Node node = vm.CreateNewNode(numFields,yep, yep3, yep2);
             v.updateNodes();
             Close();
             

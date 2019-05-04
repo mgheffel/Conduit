@@ -61,6 +61,11 @@ namespace Conduit
                     if (connector.End != null)
                         connector.End.IsHighlighted = true;
                 }
+                var snap = value as SnapSpot;
+                if (snap != null)
+                {
+                    MessageBox.Show(snap.Name);
+                }
             }
         }
 
@@ -129,14 +134,16 @@ namespace Conduit
                 _creatingNewNode = value;
                 OnPropertyChanged("CreatingNewNode");
                 string[] a = { "name", "3", "4", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "" };
+                string[] b = { "Output1", "Output2", "Output3" };
+                string [] c = { "Input1", "Input2", "Input3", "Input4" };
                 if (value)
-                    CreateNewNode(5, a);
+                    CreateNewNode(5, a,b,c);
                 else
                     RemoveNewObjects();
             }
         }
 
-        public Node CreateNewNode(int numFields, string[] strings)
+        public Node CreateNewNode(int numFields, string[] strings, string[] outputs, string[] inputs)
         {
             int input = Convert.ToInt32(strings[2]);
             int output = Convert.ToInt32(strings[1]);
@@ -322,28 +329,28 @@ namespace Conduit
                     break;
                 default:
                     node.V1 = strings[3];
-                    node.T1 = strings[12];
+                    node.T1 = strings[13];
                     node.V2 = strings[4];
-                    node.T2 = strings[13];
+                    node.T2 = strings[14];
                     node.V3 = strings[5];
-                    node.T3 = strings[14];
+                    node.T3 = strings[15];
                     node.V4 = strings[6];
-                    node.T4 = strings[15];
+                    node.T4 = strings[16];
                     node.V5 = strings[7];
-                    node.T5 = strings[16];
+                    node.T5 = strings[17];
                     node.V6 = strings[8];
-                    node.T6 = strings[17];
+                    node.T6 = strings[18];
                     node.V7 = strings[9];
-                    node.T7 = strings[18];
+                    node.T7 = strings[19];
                     node.V8 = strings[10];
-                    node.T8 = strings[19];
+                    node.T8 = strings[10];
                     node.V9 = strings[11];
-                    node.T9 = strings[20];
+                    node.T9 = strings[21];
                     node.V10 = strings[12];
-                    node.T10 = strings[21];
+                    node.T10 = strings[22];
                     break;
             }
-            addSnapPoints(node, input, output, yincrement, xincrement);
+            addSnapPoints(node, input, output, yincrement, xincrement, inputs,outputs);
             node.InputSnaps = input;
             node.OutputSnaps = output;
             node.Fields = numFields;
@@ -393,12 +400,14 @@ namespace Conduit
 
 
 
-        public void addSnapPoints(Node node, int left, int right, double yincrement, double xincrement ) {
+        public void addSnapPoints(Node node, int left, int right, double yincrement, double xincrement, string[] inputs, string[] outputs ) {
+           
+
             double y = .1;
             for (int i = 0 ; i < left; i++)
             {
                 
-                SnapSpot s = new SnapSpot(node,null) { Offset = { X = 0, Y = y }, Angle = -90, Name = "InputSnap " + i, LockX = true, LockY = true };
+                SnapSpot s = new SnapSpot(node,null) { Offset = { X = 0, Y = y }, Angle = -90, Name = inputs[i], LockX = true, LockY = true };
                 node.Snaps.Add(s);
                 Snaps.Add(s);
                 y = y + yincrement;
@@ -408,7 +417,7 @@ namespace Conduit
             for (int j = 0; j < right; j++)
             {
 
-                SnapSpot s = new SnapSpot(node,null) { Offset = { X = 1, Y = x }, Angle = -90, Name = "OutputSnap " + j, LockX = true, LockY = true };
+                SnapSpot s = new SnapSpot(node,null) { Offset = { X = 1, Y = x }, Angle = 90, Name = outputs[j], LockX = true, LockY = true };
                 node.Snaps.Add(s);
                 Snaps.Add(s);
                 x = x + xincrement;
@@ -433,7 +442,7 @@ namespace Conduit
             for (int j = 0; j < right; j++)
             {
 
-                SnapSpot s = new SnapSpot(null, node) { Offset = { X = 1, Y = x }, Angle = -90, Name = "OutputSnap " + j, LockX = true, LockY = true };
+                SnapSpot s = new SnapSpot(null, node) { Offset = { X = 1, Y = x }, Angle = 90, Name = "OutputSnap " + j, LockX = true, LockY = true };
                 node.Snaps.Add(s);
                 Snaps.Add(s);
                 x = x + xincrement;
