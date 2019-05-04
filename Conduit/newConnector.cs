@@ -50,7 +50,7 @@ namespace Conduit
                 Node a = v.Nodes[outputBox.SelectedIndex];
                 Node2 b = v.Nodes2[inputBox.SelectedIndex];
                 var vm = v.DataContext as MainViewModel;
-                vm.customConnectorToData(a, a.InputSnaps, b, b.InputSnaps);
+                vm.customConnectorToData(a,b);
             }
             v.updateNodes();
             Close();
@@ -68,7 +68,7 @@ namespace Conduit
                 Node b = v.Nodes[inputBox2.SelectedIndex];
                 var vm = v.DataContext as MainViewModel;
 
-                vm.customConnectorFromData(a,a.InputSnaps, b, b.InputSnaps);
+                vm.customConnectorFromData(a,b);
             }
             v.updateNodes();
             Close();

@@ -355,8 +355,10 @@ namespace Conduit
 
         public Node2 CreateNewNode2(int numFields, string[] strings)
         {
-            int input = Convert.ToInt32(strings[3]);
-            int output = Convert.ToInt32(strings[2]); 
+            int input = Convert.ToInt32(strings[2]);
+            int output = Convert.ToInt32(strings[1]);
+            //int input = Convert.ToInt32(strings[3]);
+           // int output = Convert.ToInt32(strings[2]); 
 
             double xincrement = .1;
             double yincrement = .1;
@@ -367,7 +369,7 @@ namespace Conduit
 
             var node = new Node2()
             {
-                Name = strings[4],
+                Name = strings[0],
                 //IsNew = true,
 
                 Size = { Value = new Point(xpoint, ypoint) },
@@ -376,8 +378,8 @@ namespace Conduit
                 Color = Colors.AliceBlue
 
             };
-            node.V1 = strings[1];
-            node.T1 = strings[0];
+            node.V1 = strings[3];
+            node.T1 = strings[4];
         
             addSnapPoints2(node, input, output, yincrement, xincrement);
             node.InputSnaps = input;
@@ -474,7 +476,7 @@ namespace Conduit
             SelectedObject = connector;
         }
 
-        public void customConnectorToData(Node a, int d, Node2 b, int c)
+        public void customConnectorToData(Node a, Node2 b)
         {
             int inputa = a.InputSnaps;
             int inputb = b.InputSnaps;
@@ -544,7 +546,7 @@ namespace Conduit
             
         }
 
-        public void customConnectorFromData(Node2 a,int d, Node b, int c)
+        public void customConnectorFromData(Node2 a, Node b)
         {
             int inputa = a.InputSnaps;
             int inputb = b.InputSnaps;

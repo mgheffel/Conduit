@@ -51,11 +51,11 @@ namespace Conduit
                           .Select(c => c.Text)
                           .ToList();
                 string[] yep = new string[5];
-                yep[0] = strings[0];
-                yep[1] = "Location";
-                yep[2] = strings[1];
-                yep[3] = inputs.ToString();
-                yep[4] = strings[2];
+                yep[4] = strings[0];
+                yep[3] = "Location";
+                yep[1] = strings[1];
+                yep[2] = inputs.ToString();
+                yep[0] = strings[2];
                 Node2 node = vm.CreateNewNode2(1, yep); 
                 v.updateNodes();
                 Close();
