@@ -38,7 +38,7 @@ namespace Conduit
                       .ToList();
             Label nodeName = new Label();
             nodeName.Text = String.Format(strings[0]);
-            nodeName.Left = 220;
+            nodeName.Left = 240;
             nodeName.Top = 25;
             this.Controls.Add(nodeName);
 
@@ -83,10 +83,51 @@ namespace Conduit
                 this.Controls.Add(textBox);
                
             }
+           /* for (int i = 1; i <= inValue; i++)
+            {
+                //Create label
+                Label label = new Label();
+                label.Text = String.Format("Input Snap Name {0}", i);
+                label.AutoSize = true;
+                //Position label on screen
+                label.Left = 520;
+                label.Top = (i + 1) * 25;
+                //Create textbox
+                TextBox TextBox = new TextBox();
+                TextBox.Name = String.Format("Value {0}", i);
+                //Position Textbox on screen
+                TextBox.Left = 630;
+                TextBox.Top = (i + 1) * 25;
+                //Add controls to form
+                this.Controls.Add(label);
+                this.Controls.Add(TextBox);
+            }
+
+            for (int i = 1; i <= outValue; i++)
+            {
+                //Create label
+                Label label = new Label();
+                label.Text = String.Format("Output Snap Value {0}", i);
+                //Position label on screen
+                label.Left = 770;
+                label.Top = (i + 1) * 25;
+                label.AutoSize = true;
+                //Create textbox
+                TextBox textBox = new TextBox();
+                textBox.Name = "Value{0}" + i;
+                //Position textbox on screen
+                textBox.Left = 880;
+                textBox.Top = (i + 1) * 25;
+                //Add controls to form
+                this.Controls.Add(label);
+                this.Controls.Add(textBox);
+
+            }*/
 
             Button button = new Button();
             button.Text = String.Format("Create Node");
-            button.Left = 185;
+            button.Left = 200;
+            //int max = Math.Max(m, Math.Max(inValue, outValue));
             button.Top = (m + 2) * 25;
             this.Controls.Add(button);
             button.Width = 100;

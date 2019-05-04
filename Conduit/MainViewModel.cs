@@ -398,7 +398,7 @@ namespace Conduit
             for (int i = 0 ; i < left; i++)
             {
                 
-                SnapSpot s = new SnapSpot(node,null) { Offset = { X = 0, Y = y }, Angle = -90, Name = "InputSnap " + i, LockX = true };
+                SnapSpot s = new SnapSpot(node,null) { Offset = { X = 0, Y = y }, Angle = -90, Name = "InputSnap " + i, LockX = true, LockY = true };
                 node.Snaps.Add(s);
                 Snaps.Add(s);
                 y = y + yincrement;
@@ -408,7 +408,7 @@ namespace Conduit
             for (int j = 0; j < right; j++)
             {
 
-                SnapSpot s = new SnapSpot(node,null) { Offset = { X = 1, Y = x }, Angle = -90, Name = "OutputSnap " + j, LockX = true };
+                SnapSpot s = new SnapSpot(node,null) { Offset = { X = 1, Y = x }, Angle = -90, Name = "OutputSnap " + j, LockX = true, LockY = true };
                 node.Snaps.Add(s);
                 Snaps.Add(s);
                 x = x + xincrement;
@@ -423,7 +423,7 @@ namespace Conduit
             for (int i = 0; i < left; i++)
             {
 
-                SnapSpot s = new SnapSpot(null,node) { Offset = { X = 0, Y = y }, Angle = -90, Name = "InputSnap " + i, LockX = true };
+                SnapSpot s = new SnapSpot(null, node) { Offset = { X = 0, Y = y }, Angle = -90, Name = "InputSnap " + i, LockX = true, LockY = true };
                 node.Snaps.Add(s);
                 Snaps.Add(s);
                 y = y + yincrement;
@@ -433,7 +433,7 @@ namespace Conduit
             for (int j = 0; j < right; j++)
             {
 
-                SnapSpot s = new SnapSpot(null,node) { Offset = { X = 1, Y = x }, Angle = -90, Name = "OutputSnap " + j, LockX = true };
+                SnapSpot s = new SnapSpot(null, node) { Offset = { X = 1, Y = x }, Angle = -90, Name = "OutputSnap " + j, LockX = true, LockY = true };
                 node.Snaps.Add(s);
                 Snaps.Add(s);
                 x = x + xincrement;
