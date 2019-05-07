@@ -32,7 +32,7 @@ namespace Conduit
 
             List<Node2> b = v.Nodes2.ToList();
             int m = b.Count;
-            for(int j = 0; j<m; j++)
+            for (int j = 0; j < m; j++)
             {
                 outputBox2.Items.Add(b[j].Name);
                 inputBox.Items.Add(b[j].Name);
@@ -41,7 +41,7 @@ namespace Conduit
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if (outputBox.SelectedItem ==null || inputBox.SelectedItem == null)
+            if (outputBox.SelectedItem == null || inputBox.SelectedItem == null)
             {
                 MessageBox.Show("Must make an input and output selection for connector");
             }
@@ -53,15 +53,15 @@ namespace Conduit
                 int n = a.Snaps.Count;
                 int l = a.InputSnaps;
                 int k = a.OutputSnaps;
-                for (int i = k; i < n; i++)
+                for (int i = l; i < n; i++)
                 {
                     if (a.Snaps[i].IsConnected == false)
                     {
                         ToSnaps.Items.Add(a.Snaps[i].Name);
                     }
-                    
+
                 }
-                
+
                 /*var vm = v.DataContext as MainViewModel;
                 vm.customConnectorToData(a,b);*/
             }
@@ -83,18 +83,18 @@ namespace Conduit
                 int k = b.InputSnaps;
                 for (int i = 0; i < k; i++)
                 {
-                    if(b.Snaps[i].IsConnected == false)
+                    if (b.Snaps[i].IsConnected == false)
                     {
                         FromSnaps.Items.Add(b.Snaps[i].Name);
                     }
-                    
+
 
                 }
                 /*var vm = v.DataContext as MainViewModel;
 
                 vm.customConnectorFromData(a,b);*/
             }
-           // v.updateNodes();
+            // v.updateNodes();
             //Close();
         }
 
@@ -108,7 +108,7 @@ namespace Conduit
             {
                 Node a = v.Nodes[outputBox.SelectedIndex];
                 Node2 b = v.Nodes2[inputBox.SelectedIndex];
-                int k = a.OutputSnaps;
+                int k = a.InputSnaps;
                 SnapSpot x;
                 var vm = v.DataContext as MainViewModel;
                 x = a.Snaps[ToSnaps.SelectedIndex];
@@ -116,11 +116,12 @@ namespace Conduit
                 int pass = ToSnaps.SelectedIndex + a.InputSnaps;
                 for (int i = k; i <= pass; i++)
                 {
-                    if (b.Snaps[i].IsConnected)
+                    if (a.Snaps[i].IsConnected)
                     {
                         add += 1;
                     }
                 }
+                MessageBox.Show(add.ToString());
                 pass += add;
                 MessageBox.Show(pass.ToString());
                 vm.customConnectorToData(a, b, pass);
