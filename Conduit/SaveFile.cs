@@ -31,39 +31,21 @@ namespace Conduit
                 {
                     if (c.StartNode == null)
                     {
-                        Node2 n2 = c.StartNode2;
-                        string a = n2.Location.Value.X.ToString() + "," + n2.Location.Value.Y.ToString() + "," + n2.Fields.ToString() + "," + n2.Name.ToString() + "," + n2.OutputSnaps.ToString() + "," + n2.InputSnaps.ToString() + "," + n2.V1.ToString() + ","
-                            + n2.T1.ToString() + ",";
-                        Node n = c.EndNode;
-                        string b = n.Location.Value.X.ToString() + "," + n.Location.Value.Y.ToString() + "," + n.Fields.ToString() + "," + n.Name.ToString() + "," + n.OutputSnaps.ToString() + "," + n.InputSnaps.ToString() + "," + n.V1.ToString() + "," + n.V2.ToString() + "," + n.V3.ToString() + "," + n.V4.ToString() + "," + n.V5.ToString() + "," + n.V6.ToString() + "," + n.V7.ToString() + "," + n.V8.ToString() + "," + n.V9.ToString() + "," + n.V10.ToString() + ","
-                            + n.T1.ToString() + "," + n.T2.ToString() + "," + n.T3.ToString() + "," + n.T4.ToString() + "," + n.T5.ToString() + "," + n.T6.ToString() + "," + n.T7.ToString() + "," + n.T8.ToString() + "," + n.T9.ToString() + "," + n.T10.ToString(); ;
-                        foreach (var item in n.InSnaps)
-                        {
-                            b = b + "," + item.Value.Name.ToString();
-                        }
-                        foreach (var item in n.OutSnaps)
-                        {
-                            b = b + "," + item.Value.Name.ToString();
-                        }
-                        three = three + a + "&" + b;
+                        string conString = "N2,";
+                        conString += c.StartNode2.Name+',';
+                        conString += "0,";
+                        conString += c.EndNode.Name + ',';
+                        conString += c.End.Name;
+                        three +=conString;
                     }
                     else
                     {
-                        Node n = c.StartNode;
-                        string a = n.Location.Value.X.ToString() + "," + n.Location.Value.Y.ToString() + "," + n.Fields.ToString() + "," + n.Name.ToString() + "," + n.OutputSnaps.ToString() + "," + n.InputSnaps.ToString() + "," + n.V1.ToString() + "," + n.V2.ToString() + "," + n.V3.ToString() + "," + n.V4.ToString() + "," + n.V5.ToString() + "," + n.V6.ToString() + "," + n.V7.ToString() + "," + n.V8.ToString() + "," + n.V9.ToString() + "," + n.V10.ToString() + ","
-                            + n.T1.ToString() + "," + n.T2.ToString() + "," + n.T3.ToString() + "," + n.T4.ToString() + "," + n.T5.ToString() + "," + n.T6.ToString() + "," + n.T7.ToString() + "," + n.T8.ToString() + "," + n.T9.ToString() + "," + n.T10.ToString();
-                        foreach (var item in n.InSnaps)
-                        {
-                            a = a + "," + item.Value.Name.ToString();
-                        }
-                        foreach (var item in n.OutSnaps)
-                        {
-                            a = a + "," + item.Value.Name.ToString();
-                        }
-                        Node2 n2 = c.EndNode2;
-                        string b = n2.Location.Value.X.ToString() + "," + n2.Location.Value.Y.ToString() + "," + n2.Fields.ToString() + "," + n2.Name.ToString() + "," + n2.OutputSnaps.ToString() + "," + n2.InputSnaps.ToString() + "," + n2.V1.ToString() + ","
-                            + n2.T1.ToString() + ",";
-                        three = three + a + "&" + b;
+                        string conString = "N1,";
+                        conString += c.StartNode.Name + ',';
+                        conString += c.Start.Name + ',';
+                        conString += c.EndNode2.Name + ',';
+                        conString += "0";
+                        three +=conString;
                     }
                     if (c != x.Connectors.Last())
                     {
@@ -237,71 +219,59 @@ namespace Conduit
                         }
 
 
-
                         for (int i = 0; i < connectors.Length; i++)
                         {
-                            string[] connectorString = connectors[i].Split('&');
-                            int a = 0;
-                            int b = 0;
-                            bool type2 = false;
                             var vm = x.DataContext as MainViewModel;
-                            string[] nodeString = connectorString[0].Split(',');
-                            string[] strings = new string[(nodeString.Length - 3)];
-                            for (int j = 0; j < strings.Length; j++)
+                            string[] conSplit = connectors[i].Split(',');
+                            if (conSplit[0] == "N2")
                             {
-                                strings[j] = nodeString[(j + 3)];
-                            }
-                            for (int d = 0; d < vm.Nodes.Count; d++)
-                            {
-                                if (vm.Nodes[d].Name.ToString() == strings[0].ToString())
+                                Node2 n2=vm.Nodes2[0];
+                                for (int n = 0; n < vm.Nodes2.Count; n++)
                                 {
-                                    a = d;
-                                    type2 = false;
-                                    break;
+                                    if (vm.Nodes2[n].Name == conSplit[1])
+                                    {
+                                        n2 = vm.Nodes2[n];
+                                        break;
+                                    }
                                 }
-                            }
-
-                            for (int d = 0; d < vm.Nodes2.Count; d++)
-                            {
-                                if (vm.Nodes2[d].Name.ToString() == strings[0].ToString())
+                                SnapSpot snapA = n2.Snaps[0];
+                                Node n1 = vm.Nodes[0];
+                                for (int n = 0; n < vm.Nodes.Count; n++)
                                 {
-                                    a = d;
-                                    type2 = true;
-                                    break;
+                                    if (vm.Nodes[n].Name == conSplit[3])
+                                    {
+                                        n1 = vm.Nodes[n];
+                                        break;
+                                    }
                                 }
-                            }
-
-                            nodeString = connectorString[1].Split(',');
-                            strings = new string[(nodeString.Length - 3)];
-                            for (int j = 0; j < strings.Length; j++)
-                            {
-                                strings[j] = nodeString[(j + 3)];
-                            }
-                            for (int d = 0; d < vm.Nodes.Count; d++)
-                            {
-                                if (vm.Nodes[d].Name.ToString() == strings[0].ToString())
-                                {
-                                    b = d;
-                                    break;
-                                }
-                            }
-                            for (int d = 0; d < vm.Nodes2.Count; d++)
-                            {
-                                if (vm.Nodes2[d].Name.ToString() == strings[0].ToString())
-                                {
-                                    b = d;
-                                    break;
-                                }
-                            }
-                            if (type2)
-                            {
-                                //vm.customConnectorFromData(vm.Nodes2[a], vm.Nodes[b]);
+                                SnapSpot snapB = n1.InSnaps[conSplit[4]];
+                                vm.customConnectorFromData(snapA, snapB);
                             }
                             else
                             {
-                                // vm.customConnectorToData(vm.Nodes[a], vm.Nodes2[b]);
+                                
+                                Node n1 = vm.Nodes[0];
+                                for (int n = 0; n < vm.Nodes.Count; n++)
+                                {
+                                    if (vm.Nodes[n].Name == conSplit[1])
+                                    {
+                                        n1 = vm.Nodes[n];
+                                        break;
+                                    }
+                                }
+                                SnapSpot snapA = n1.OutSnaps[conSplit[2]];
+                                Node2 n2 = vm.Nodes2[0];
+                                for (int n = 0; n < vm.Nodes2.Count; n++)
+                                {
+                                    if (vm.Nodes2[n].Name == conSplit[3])
+                                    {
+                                        n2 = vm.Nodes2[n];
+                                        break;
+                                    }
+                                }
+                                SnapSpot snapB = n2.Snaps[0];
+                                vm.customConnectorToData(snapA, snapB);
                             }
-
                             x.updateNodes();
 
                         }
