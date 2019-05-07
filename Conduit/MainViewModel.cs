@@ -366,7 +366,6 @@ namespace Conduit
             string[] yep2 = new string[input];
             string[] yep3 = new string[output];
 
-
             for (int i = 0; i < nodeCount; i++)
             {
                 yep[i] = strings[i];
@@ -396,9 +395,17 @@ namespace Conduit
         public void viewNodes(Node n)
         {
             Nodes.Add(n);
-            foreach( SnapSpot s in n.Snaps)
+            /*foreach( SnapSpot s in n.Snaps)
             {
                 Snaps.Add(s);
+            }*/
+            foreach (var item in n.InSnaps)
+            {
+                Snaps.Add(item.Value);
+            }
+            foreach (var item in n.OutSnaps)
+            {
+                Snaps.Add(item.Value);
             }
         }
 
@@ -450,7 +457,7 @@ namespace Conduit
             {
                 
                 SnapSpot s = new SnapSpot(node,null) { Offset = { X = 0, Y = y }, Angle = -90, Name = inputs[i], LockX = true, LockY = true };
-                node.Snaps.Add(s);
+                node.InSnaps.Add(inputs[i],s);
                 //Snaps.Add(s);
                 y = y + yincrement;
 
@@ -460,7 +467,7 @@ namespace Conduit
             {
 
                 SnapSpot s = new SnapSpot(node,null) { Offset = { X = 1, Y = x }, Angle = 90, Name = outputs[j], LockX = true, LockY = true };
-                node.Snaps.Add(s);
+                node.OutSnaps.Add(outputs[j],s);
                 //Snaps.Add(s);
                 x = x + xincrement;
 
@@ -527,135 +534,63 @@ namespace Conduit
             SelectedObject = connector;
         }
 
-        public void customConnectorToData(Node a, Node2 b, int z)
+        public void customConnectorToData(SnapSpot a, SnapSpot b)
         {
-            int inputa = a.InputSnaps;
-            int inputb = b.InputSnaps;
-            int outputa = a.OutputSnaps;
-            int outputb = b.OutputSnaps;
-            
-            int x = a.Snaps.Count;
-            int y = b.Snaps.Count;
-            int input = 0;
-            int output = 0;
 
             bool make = true;
-            /*if (inputb == 0)
+            
+            if (a.IsConnected || b.IsConnected)
             {
-
-                MessageBox.Show("Not input availability for " + b.Name);
+                MessageBox.Show("Not output availability for " + a.Name);
+                make = false;
             }
-            else
-            {
-                input = z;
-                /*for (int i = inputa; i < x; i++)
-                {
-                    if (a.Snaps[i].IsConnected == false)
-                    {
-                        input = i;
-                        break;
-                    }
-                }*/
-            input = z;
-                /*if (a.Snaps[0].IsConnected == true && input == 0)
-                {
-                    make = false;
-                    MessageBox.Show("Not output availability for " + a.Name);
-                }*/
-
-                for (int k = 0; k < inputb; k++)
-                {
-                    if (b.Snaps[k].IsConnected == false)
-                    {
-                        output = k;
-                        break;
-                    }
-                }
-                if (b.Snaps[0].IsConnected == true && output == 0)
-                {
-                    make = false;
-                    MessageBox.Show("Not input availability for " + b.Name);
-                }
-
-                if (make)
+            if (make)
                 {
                     var connector = new Connector()
                     {
                         Name = "Connector" + (Connectors.Count + 1),
                         //IsNew = true,
-                        Start = a.Snaps[input],
-                        End = b.Snaps[output],
+                        Start = a,
+                        End = b,
                         Color = Colors.Red
                     };
-                    connector.StartNode = a;
-                    connector.EndNode2 = b;
+                    connector.StartNode = a.Parent;
+                    connector.EndNode2 = b.Parent2;
                     Connectors.Add(connector);
                     SelectedObject = connector;
-                    a.Snaps[input].IsConnected = true;
-                    b.Snaps[output].IsConnected = true;
+                    a.IsConnected = true;
+                    b.IsConnected = true;
                 }
-           // }
 
             
         }
 
-        public void customConnectorFromData(Node2 a, Node b, int z)
+        public void customConnectorFromData(SnapSpot a,SnapSpot b)
         {
-            int inputa = a.InputSnaps;
-            int inputb = b.InputSnaps;
-            int outputa = a.OutputSnaps;
-            int outputb = b.OutputSnaps;
-            int x = a.Snaps.Count;
-            //int y = b.Snaps.Count;
-            int input = 0;
-            int output = 0;
-
             bool make = true;
-            for (int i = inputa; i < x; i++)
+            if (a.IsConnected || b.IsConnected)
             {
-                if (a.Snaps[i].IsConnected == false)
-                {
-                    input = i;
-                    break;
-                }
-            }
-            if (a.Snaps[0].IsConnected == true && input == 0)
-            {
-                make = false;
                 MessageBox.Show("Not output availability for " + a.Name);
+                make = false;
             }
 
-            /*for (int k = 0; k < inputb; k++)
-            {
-                if (b.Snaps[k].IsConnected == false)
-                {
-                    output = k;
-                    break;
-                }
-            }*/
-            output = z;
-            /*if (b.Snaps[0].IsConnected == true && output == 0)
-            {
-                make = false;
-                MessageBox.Show("Not input availability for " + b.Name);
-            }*/
-            
             if (make)
             {
                 var connector = new Connector()
                 {
                     Name = "Connector" + (Connectors.Count + 1),
                     //IsNew = true,
-                    Start = a.Snaps[input],
-                    End = b.Snaps[output],
+                    Start = a,
+                    End = b,
                     Color = Colors.Red
                 };
-                connector.StartNode2 = a;
-                connector.EndNode = b;
+                MessageBox.Show(a.Parent2.Name);
+                connector.StartNode2 = a.Parent2;
+                connector.EndNode = b.Parent;
                 Connectors.Add(connector);
                 SelectedObject = connector;
-                a.Snaps[input].IsConnected = true;
-                b.Snaps[output].IsConnected = true;
+                a.IsConnected = true;
+                b.IsConnected = true;
             }
 
 

@@ -13,16 +13,35 @@ namespace Conduit
             
         }
 
-        private void RecalculateSnaps()
+        public void RecalculateSnaps()
         {
-            Snaps.ForEach(x => x.Recalculate());
+            //Snaps.ForEach(x => x.Recalculate());
+            foreach(var item in InSnaps)
+            {
+                item.Value.Recalculate();
+            }
+            foreach (var item in OutSnaps)
+            {
+                item.Value.Recalculate();
+            }
         }
 
-        private List<SnapSpot> _snaps;
-        public List<SnapSpot> Snaps
+        private Dictionary<string, SnapSpot> _inSnaps;
+        public Dictionary<string, SnapSpot> InSnaps
         {
-            get { return _snaps ?? (_snaps = new List<SnapSpot>()); }
+            get { return _inSnaps ?? (_inSnaps = new Dictionary<string, SnapSpot>()); }
         }
+        private Dictionary<string, SnapSpot> _outSnaps;
+        public Dictionary<string, SnapSpot> OutSnaps
+        {
+            get { return _outSnaps ?? (_outSnaps = new Dictionary<string, SnapSpot>()); }
+        }
+        /* private List<SnapSpot> _snaps;
+         public List<SnapSpot> Snaps
+         {
+             get { return _snaps ?? (_snaps = new List<SnapSpot>()); }
+         }
+         */
 
         private Point originalSize;
         private BindablePoint _size;

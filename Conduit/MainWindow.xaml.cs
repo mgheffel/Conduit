@@ -317,11 +317,19 @@ namespace Conduit
             string one = "";
                 one = one + n.Location.Value.X.ToString() + "," + n.Location.Value.Y.ToString() + "," + n.Fields.ToString() + "," + n.Name.ToString() + "," + n.OutputSnaps.ToString() + "," + n.InputSnaps.ToString() + "," + n.V1.ToString() + "," + n.V2.ToString() + "," + n.V3.ToString() + "," + n.V4.ToString() + "," + n.V5.ToString() + "," + n.V6.ToString() + "," + n.V7.ToString() + "," + n.V8.ToString() + "," + n.V9.ToString() + "," + n.V10.ToString() + ","
                     + n.T1.ToString() + "," + n.T2.ToString() + "," + n.T3.ToString() + "," + n.T4.ToString() + "," + n.T5.ToString() + "," + n.T6.ToString() + "," + n.T7.ToString() + "," + n.T8.ToString() + "," + n.T9.ToString() + "," + n.T10.ToString();
-                foreach (SnapSpot s in n.Snaps)
-                {
-                    one = one + "," + s.Name.ToString();
-                }
-           
+            /*foreach (SnapSpot s in n.Snaps)
+            {
+                one = one + "," + s.Name.ToString();
+            }*/
+            foreach (var item in n.InSnaps)
+            {
+                one = one + "," + item.Value.Name.ToString();
+            }
+            foreach (var item in n.OutSnaps)
+            {
+                one = one + "," + item.Value.Name.ToString();
+            }
+
             using (StreamWriter sw = File.AppendText(loadDataDir))
             {
                 sw.WriteLine(one);
