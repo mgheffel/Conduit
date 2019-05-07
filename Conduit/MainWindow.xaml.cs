@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Linq; // added
+using System.IO;
 using Conduit;
 
 namespace Conduit
@@ -219,6 +220,27 @@ namespace Conduit
             cn.Show();
         }
 
-        
+        private void Button_Click_X(object sender, RoutedEventArgs e)
+        {
+            string cwd = Directory.GetCurrentDirectory();
+            string[] cwdsplit = cwd.Split('\\');
+            string loadDataDir = "";
+            for (int i = 0; i < cwdsplit.Length - 2; i++)
+            {
+                loadDataDir += cwdsplit[i] + '\\';
+            }
+            loadDataDir += "data\\";
+            string masterLoc = loadDataDir + "SeqPurgeM.txt";
+            string parLoc = loadDataDir + "SeqPurgeP.txt";
+
+            string inTups = "adapterFile,$HERE/dependencies/illumina_adapters.fa;readsInput,/bulk/mgheffel/data/SDP/raw";
+            string pTups = "#runTime,00-02:00:00;#memPerCPU,32G";
+            ScriptCreator sc = new ScriptCreator(masterLoc, parLoc, pTups, inTups);
+            //MessageBox.Show(sc.compileMasterScript());
+            //MessageBox.Show(sc.compileParallelScript());
+
+            File.WriteAllText(loadDataDir + "SeqPurgeM.sh", sc.compileMasterScript());
+            File.WriteAllText(loadDataDir + "SeqPurgeP.sh", sc.compileParallelScript());
+        }
     }
 }
