@@ -50,7 +50,7 @@ namespace Conduit
                 Node a = v.Nodes[outputBox.SelectedIndex];
                 Node2 b = v.Nodes2[inputBox.SelectedIndex];
 
-                int n = a.Snaps.Count;
+                /*int n = a.Snaps.Count;
                 int l = a.InputSnaps;
                 int k = a.OutputSnaps;
                 for (int i = l; i < n; i++)
@@ -60,7 +60,19 @@ namespace Conduit
                         ToSnaps.Items.Add(a.Snaps[i].Name);
                     }
 
+                }*/
+                foreach (var item in a.OutSnaps)
+                {
+                    if (item.Value.IsConnected == false)
+                    {
+                        ToSnaps.Items.Add(item.Value.Name);
+                    }
                 }
+                /*foreach (var item in a.Snaps)
+                {
+                    item.Value.Recalculate();
+                }*/
+                a.RecalculateSnaps();
 
                 /*var vm = v.DataContext as MainViewModel;
                 vm.customConnectorToData(a,b);*/
@@ -79,7 +91,7 @@ namespace Conduit
             {
                 Node2 a = v.Nodes2[outputBox2.SelectedIndex];
                 Node b = v.Nodes[inputBox2.SelectedIndex];
-                int n = b.Snaps.Count;
+                /*int n = b.Snaps.Count;
                 int k = b.InputSnaps;
                 for (int i = 0; i < k; i++)
                 {
@@ -89,6 +101,13 @@ namespace Conduit
                     }
 
 
+                }*/
+                foreach (var item in b.InSnaps)
+                {
+                    if (item.Value.IsConnected == false)
+                    {
+                        FromSnaps.Items.Add(item.Value.Name);
+                    }
                 }
                 /*var vm = v.DataContext as MainViewModel;
 
@@ -108,23 +127,11 @@ namespace Conduit
             {
                 Node a = v.Nodes[outputBox.SelectedIndex];
                 Node2 b = v.Nodes2[inputBox.SelectedIndex];
-                int k = a.InputSnaps;
-                SnapSpot x;
                 var vm = v.DataContext as MainViewModel;
-                x = a.Snaps[ToSnaps.SelectedIndex];
-                int add = 0;
-                int pass = ToSnaps.SelectedIndex + a.InputSnaps;
-                for (int i = k; i <= pass; i++)
-                {
-                    if (a.Snaps[i].IsConnected)
-                    {
-                        add += 1;
-                    }
-                }
-                MessageBox.Show(add.ToString());
-                pass += add;
-                MessageBox.Show(pass.ToString());
-                vm.customConnectorToData(a, b, pass);
+                SnapSpot snapA = a.OutSnaps[ToSnaps.SelectedItem.ToString()];
+                SnapSpot snapB = b.Snaps[0];
+                
+                vm.customConnectorToData(snapA, snapB);
             }
             v.updateNodes();
             Close();
@@ -141,29 +148,12 @@ namespace Conduit
             {
                 Node2 a = v.Nodes2[outputBox2.SelectedIndex];
                 Node b = v.Nodes[inputBox2.SelectedIndex];
-                SnapSpot x;
-                int k = b.InputSnaps;
+                SnapSpot snapA = a.Snaps[1];
+                SnapSpot snapB = b.InSnaps[FromSnaps.SelectedItem.ToString()];
                 var vm = v.DataContext as MainViewModel;
-                x = b.Snaps[FromSnaps.SelectedIndex];
-                int pass = 0;
-                int add = 0;
 
-                for (int i = 0; i < k; i++)
-                {
-                    if (b.Snaps[i].IsConnected)
-                    {
-                        add += 1;
-                    }
-                    if (x.Name == b.Snaps[i].Name)
-                    {
-                        pass = i;
-                        break;
-                    }
-                }
-                pass += add;
+                vm.customConnectorFromData(snapA, snapB);
 
-
-                vm.customConnectorFromData(a, b, pass);
             }
             v.updateNodes();
             Close();
