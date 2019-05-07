@@ -145,24 +145,22 @@ namespace Conduit
                 x = b.Snaps[FromSnaps.SelectedIndex];
                 int pass = 0;
                 int add = 0;
-                
-                //BROKEN HERE
+
                 for (int i = 0; i <k; i++)
                 {
+                    if (b.Snaps[i].IsConnected)
+                    {
+                        add += 1;
+                    }
                     if (x.Name == b.Snaps[i].Name)
                     {
                         pass = i;
                         break;
                     }
-                    else if (b.Snaps[i].IsConnected)
-                    {
-                        add += 1;
-                    }
                 }
                 pass += add;
                 
 
-                MessageBox.Show(pass.ToString());
                 vm.customConnectorFromData(a, b, pass);
             }
             v.updateNodes();
