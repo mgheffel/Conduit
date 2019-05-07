@@ -148,7 +148,7 @@ namespace Conduit
 
             Node node = vm.CreateNewNode(numFields, numFields, yep);
             v.writeNode(node);
-            //v.updateNodes();
+            v.updateNodes();
             Close();
             
 

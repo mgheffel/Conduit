@@ -266,11 +266,13 @@ namespace Conduit
         }
         public void populateAvailableNodes()
         {
-            foreach (Node n in NodesThatExist)
+            var vm = DataContext as MainViewModel;
+            foreach (Node n in vm.NodesThatExist)
             {
                 ListOfNodes.Items.Remove(n.Name);
             }
             
+
             string cwd = Directory.GetCurrentDirectory();
             string[] cwdsplit = cwd.Split('\\');
             string loadDataDir = "";
@@ -291,7 +293,7 @@ namespace Conduit
                     strings[j] = nodeString[(j + 3)];
                 }
 
-                var vm = DataContext as MainViewModel;
+                
                 Node n = vm.CreateNewNode(Convert.ToInt32(nodeString[2]), 10, strings);
                 n.Location.Value = new System.Windows.Point(Convert.ToInt32(nodeString[0]), Convert.ToInt32(nodeString[1]));
                 updateNodes();
@@ -324,7 +326,8 @@ namespace Conduit
             {
                 sw.WriteLine(one);
             }
-            updateNodes();
+            ListOfNodes.Items.Add(n.Name);
+            
         }
         
     }

@@ -147,6 +147,7 @@ namespace Conduit
                             var vm = x.DataContext as MainViewModel;
                             Node n = vm.CreateNewNode(Convert.ToInt32(nodeString[2]),10, strings);
                             n.Location.Value = new System.Windows.Point(Convert.ToInt32(nodeString[0]), Convert.ToInt32(nodeString[1]));
+                            vm.viewNodes(n);
                             x.updateNodes();
 
                         }
@@ -166,6 +167,7 @@ namespace Conduit
                             var vm = x.DataContext as MainViewModel;
                             Node n = vm.CreateNewNode(Convert.ToInt32(nodeString[2]),10, strings);
                             n.Location.Value = new System.Windows.Point(Convert.ToInt32(nodeString[0]), Convert.ToInt32(nodeString[1]));
+                            vm.viewNodes(n);
                             x.updateNodes();
                         }
                         nodes2 = filelines[1].Split('+');
@@ -203,6 +205,7 @@ namespace Conduit
                             var vm = x.DataContext as MainViewModel;
                             Node n = vm.CreateNewNode(Convert.ToInt32(nodeString[2]),10, strings);
                             n.Location.Value = new System.Windows.Point(Convert.ToInt32(nodeString[0]), Convert.ToInt32(nodeString[1]));
+                            vm.viewNodes(n);
                             x.updateNodes();
                         }
                         for (int i = 0; i < nodes2.Length; i++)
