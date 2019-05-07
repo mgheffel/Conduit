@@ -402,6 +402,7 @@ namespace Conduit
             }
         }
 
+
         public Node2 CreateNewNode2(int numFields, string[] strings)
         {
             int input = Convert.ToInt32(strings[2]);

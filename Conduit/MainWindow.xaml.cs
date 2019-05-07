@@ -316,7 +316,7 @@ namespace Conduit
             {
                 sw.WriteLine(one);
             }
-            populateAvailableNodes();
+            updateNodes();
         }
         
     }
