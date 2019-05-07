@@ -40,6 +40,10 @@
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.button2 = new System.Windows.Forms.Button();
+            this.ToSnaps = new System.Windows.Forms.ListBox();
+            this.FromSnaps = new System.Windows.Forms.ListBox();
+            this.createToConnector = new System.Windows.Forms.Button();
+            this.createFromConnector = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label1
@@ -78,11 +82,11 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(12, 289);
+            this.button1.Location = new System.Drawing.Point(12, 281);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(120, 23);
             this.button1.TabIndex = 4;
-            this.button1.Text = "Create Connector";
+            this.button1.Text = "Set Nodes";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
@@ -140,19 +144,59 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(244, 289);
+            this.button2.Location = new System.Drawing.Point(244, 281);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(120, 23);
             this.button2.TabIndex = 11;
-            this.button2.Text = "Create Connector";
+            this.button2.Text = "Set Nodes";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
+            // ToSnaps
+            // 
+            this.ToSnaps.FormattingEnabled = true;
+            this.ToSnaps.Location = new System.Drawing.Point(12, 331);
+            this.ToSnaps.Name = "ToSnaps";
+            this.ToSnaps.Size = new System.Drawing.Size(120, 95);
+            this.ToSnaps.TabIndex = 12;
+            // 
+            // FromSnaps
+            // 
+            this.FromSnaps.FormattingEnabled = true;
+            this.FromSnaps.Location = new System.Drawing.Point(244, 331);
+            this.FromSnaps.Name = "FromSnaps";
+            this.FromSnaps.Size = new System.Drawing.Size(120, 95);
+            this.FromSnaps.TabIndex = 13;
+            // 
+            // createToConnector
+            // 
+            this.createToConnector.Location = new System.Drawing.Point(12, 432);
+            this.createToConnector.Name = "createToConnector";
+            this.createToConnector.Size = new System.Drawing.Size(120, 23);
+            this.createToConnector.TabIndex = 14;
+            this.createToConnector.Text = "Create Connector";
+            this.createToConnector.UseVisualStyleBackColor = true;
+            this.createToConnector.Click += new System.EventHandler(this.createToConnector_Click);
+            // 
+            // createFromConnector
+            // 
+            this.createFromConnector.Location = new System.Drawing.Point(244, 432);
+            this.createFromConnector.Name = "createFromConnector";
+            this.createFromConnector.Size = new System.Drawing.Size(120, 23);
+            this.createFromConnector.TabIndex = 15;
+            this.createFromConnector.Text = "Create Connector";
+            this.createFromConnector.UseVisualStyleBackColor = true;
+            this.createFromConnector.Click += new System.EventHandler(this.createFromConnector_Click);
             // 
             // newConnector
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(456, 362);
+            this.ClientSize = new System.Drawing.Size(455, 486);
+            this.Controls.Add(this.createFromConnector);
+            this.Controls.Add(this.createToConnector);
+            this.Controls.Add(this.FromSnaps);
+            this.Controls.Add(this.ToSnaps);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.label5);
@@ -186,5 +230,9 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.ListBox ToSnaps;
+        private System.Windows.Forms.ListBox FromSnaps;
+        private System.Windows.Forms.Button createToConnector;
+        private System.Windows.Forms.Button createFromConnector;
     }
 }

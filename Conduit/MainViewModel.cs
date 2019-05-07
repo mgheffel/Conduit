@@ -511,7 +511,7 @@ namespace Conduit
             SelectedObject = connector;
         }
 
-        public void customConnectorToData(Node a, Node2 b)
+        public void customConnectorToData(Node a, Node2 b, int z)
         {
             int inputa = a.InputSnaps;
             int inputb = b.InputSnaps;
@@ -524,21 +524,23 @@ namespace Conduit
             int output = 0;
 
             bool make = true;
-            if (inputb == 0)
+            /*if (inputb == 0)
             {
 
                 MessageBox.Show("Not input availability for " + b.Name);
             }
             else
             {
-                for (int i = inputa; i < x; i++)
+                input = z;
+                /*for (int i = inputa; i < x; i++)
                 {
                     if (a.Snaps[i].IsConnected == false)
                     {
                         input = i;
                         break;
                     }
-                }
+                }*/
+            input = z;
                 if (a.Snaps[0].IsConnected == true && input == 0)
                 {
                     make = false;
@@ -576,12 +578,12 @@ namespace Conduit
                     a.Snaps[input].IsConnected = true;
                     b.Snaps[output].IsConnected = true;
                 }
-            }
+           // }
 
             
         }
 
-        public void customConnectorFromData(Node2 a, Node b)
+        public void customConnectorFromData(Node2 a, Node b, int z)
         {
             int inputa = a.InputSnaps;
             int inputb = b.InputSnaps;
@@ -607,19 +609,21 @@ namespace Conduit
                 MessageBox.Show("Not output availability for " + a.Name);
             }
 
-            for (int k = 0; k < inputb; k++)
+            /*for (int k = 0; k < inputb; k++)
             {
                 if (b.Snaps[k].IsConnected == false)
                 {
                     output = k;
                     break;
                 }
-            }
-            if (b.Snaps[0].IsConnected == true && output == 0)
+            }*/
+            output = z;
+            MessageBox.Show(output.ToString());
+            /*if (b.Snaps[0].IsConnected == true && output == 0)
             {
                 make = false;
                 MessageBox.Show("Not input availability for " + b.Name);
-            }
+            }*/
             
             if (make)
             {

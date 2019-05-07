@@ -4,19 +4,23 @@
                     xmlns:local="clr-namespace:Conduit"
                     xmlns:local2="clr-namespace:Conduit"
                     Title="MainWindow" 
+        
                     MinHeight="300" MinWidth="600"
                     Height="700" Width="900"
                     x:Name="view">
+    
+    
     <Window.Resources>
         <Style TargetType="Control" x:Key="EmptyFocusVisualStyle">
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate>
-
+                        
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
+        
     </Window.Resources>
     <DockPanel>
         <StackPanel Width="150" DockPanel.Dock="Left" Margin="5,0,0,0">
@@ -112,7 +116,7 @@
                                     <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="Auto"/>
-                                    
+
                                 </Grid.RowDefinitions>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto"/>
@@ -133,7 +137,7 @@
                                 <Label  Content ="{Binding Path=V8, Mode=TwoWay}" Grid.Row="2" Grid.Column="4" Height="30" Width="90" Margin="2"/>
                                 <Label  Content ="{Binding Path=V9, Mode=TwoWay}" Grid.Row="3" Grid.Column="0" Height="30" Width="90" Margin="2"/>
                                 <Label  Content ="{Binding Path=V10, Mode=TwoWay}" Grid.Row="4" Grid.Column="0" Height="30" Width="90" Margin="2"/>
-        
+
                                 <TextBox  Text ="{Binding Path=T1, Mode=TwoWay}" Grid.Row="0" Grid.Column="1" Height="20" Width="90" Margin="2"/>
                                 <TextBox  Text ="{Binding Path=T4, Mode=TwoWay}" Grid.Row="1" Grid.Column="1" Height="20" Width="90" Margin="2"/>
                                 <TextBox  Text ="{Binding Path=T6, Mode=TwoWay}" Grid.Row="2" Grid.Column="1" Height="20" Width="90" Margin="2"/>
@@ -144,7 +148,7 @@
                                 <TextBox  Text ="{Binding Path=T5, Mode=TwoWay}" Grid.Row="1" Grid.Column="3" Height="20" Width="90" Margin="2"/>
                                 <TextBox  Text ="{Binding Path=T7, Mode=TwoWay}" Grid.Row="2" Grid.Column="3" Height="20" Width="90" Margin="2"/>
                                 <TextBox  Text ="{Binding Path=T8, Mode=TwoWay}" Grid.Row="2" Grid.Column="5" Height="20" Width="90" Margin="2"/>
- 
+
                             </Grid>
                         </Grid>
                     </Border>
@@ -201,7 +205,7 @@
                                 </Grid.ColumnDefinitions>
                                 <Label  Content ="{Binding Path=V1, Mode=TwoWay}" Grid.Row="0" Grid.Column="0" Height="30" Width="90" Margin="2"/>
                                 <TextBox  Text ="{Binding Path=T1, Mode=TwoWay}" Grid.Row="0" Grid.Column="1" Height="20" Width="90" Margin="2"/>
-                                
+
                             </Grid>
                         </Grid>
                     </Border>
@@ -292,7 +296,9 @@
                                 </LinearGradientBrush>
                             </Border.Background>
 
-                            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+
+
+                            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" CanContentScroll="True">
                                 <ItemsPresenter/>
                             </ScrollViewer>
                         </Border>

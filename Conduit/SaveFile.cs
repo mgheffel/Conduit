@@ -279,11 +279,11 @@ namespace Conduit
                             }
                             if (type2)
                             {
-                                vm.customConnectorFromData(vm.Nodes2[a], vm.Nodes[b]);
+                                //vm.customConnectorFromData(vm.Nodes2[a], vm.Nodes[b]);
                             }
                             else
                             {
-                                vm.customConnectorToData(vm.Nodes[a], vm.Nodes2[b]);
+                               // vm.customConnectorToData(vm.Nodes[a], vm.Nodes2[b]);
                             }
                             
                             x.updateNodes();
