@@ -16,10 +16,8 @@ namespace Conduit
         private int inValue;
         private int outValue;
         private int numFields;
-
-        
-
         private MainWindow v;
+
         public NodeCreator(MainWindow a)
         {
             InitializeComponent();
@@ -148,41 +146,9 @@ namespace Conduit
                 yep[i] = strings[i];
             }
 
-            /*int nodeCount = strings.Count - inValue - outValue;
-            //int inStop = (inValue + nodeCount - 1);
-
-
-            //string[] yep = new string[nodeCount];
-            //string[] yep2 = new string[inValue];
-            //string[] yep3 = new string[outValue];
-
-            MessageBox.Show(inValue.ToString());
-            MessageBox.Show(outValue.ToString());
-
-            
-            for (int i=0; i< strings.Count; i++)
-            {
-                yep[i] = strings[i];
-            }
-
-            
-                /*for (int i = 0 ; i < inValue; i++)
-                {
-                    yep2[i] = strings[i + nodeCount];
-                   
-                }
-
-
-
-            for (int i = 0; i < outValue; i++)
-                {
-                    yep3[i] = strings[i + inStop + 1];
-                    
-                }*/
-
-            //Node node = vm.CreateNewNode(numFields,yep, yep3, yep2);
             Node node = vm.CreateNewNode(numFields, numFields, yep);
-            v.updateNodes();
+            v.writeNode(node);
+            //v.updateNodes();
             Close();
             
 

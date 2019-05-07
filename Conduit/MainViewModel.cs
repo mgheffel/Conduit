@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Media;
 using System;
+using System.Collections.Generic;
 
 namespace Conduit
 {
@@ -15,6 +16,11 @@ namespace Conduit
         public ObservableCollection<Node> Nodes
         {
             get { return _nodes ?? (_nodes = new ObservableCollection<Node>()); }
+        }
+        private List<Node> _nodesThatExist;
+        public List<Node> NodesThatExist
+        {
+            get { return _nodesThatExist ?? (_nodesThatExist = new List<Node>()); }
         }
 
         private ObservableCollection<Node2> _nodes2;
@@ -382,9 +388,18 @@ namespace Conduit
             node.OutputSnaps = output;
             node.Fields = numFields;
 
-            Nodes.Add(node);
+            NodesThatExist.Add(node);
+            //Nodes.Add(node);
             SelectedObject = node;
             return node;
+        }
+        public void viewNodes(Node n)
+        {
+            Nodes.Add(n);
+            foreach( SnapSpot s in n.Snaps)
+            {
+                Snaps.Add(s);
+            }
         }
 
         public Node2 CreateNewNode2(int numFields, string[] strings)
@@ -435,7 +450,7 @@ namespace Conduit
                 
                 SnapSpot s = new SnapSpot(node,null) { Offset = { X = 0, Y = y }, Angle = -90, Name = inputs[i], LockX = true, LockY = true };
                 node.Snaps.Add(s);
-                Snaps.Add(s);
+                //Snaps.Add(s);
                 y = y + yincrement;
 
             }
@@ -445,7 +460,7 @@ namespace Conduit
 
                 SnapSpot s = new SnapSpot(node,null) { Offset = { X = 1, Y = x }, Angle = 90, Name = outputs[j], LockX = true, LockY = true };
                 node.Snaps.Add(s);
-                Snaps.Add(s);
+                //Snaps.Add(s);
                 x = x + xincrement;
 
             }
@@ -541,11 +556,11 @@ namespace Conduit
                     }
                 }*/
             input = z;
-                if (a.Snaps[0].IsConnected == true && input == 0)
+                /*if (a.Snaps[0].IsConnected == true && input == 0)
                 {
                     make = false;
                     MessageBox.Show("Not output availability for " + a.Name);
-                }
+                }*/
 
                 for (int k = 0; k < inputb; k++)
                 {
@@ -618,7 +633,6 @@ namespace Conduit
                 }
             }*/
             output = z;
-            MessageBox.Show(output.ToString());
             /*if (b.Snaps[0].IsConnected == true && output == 0)
             {
                 make = false;

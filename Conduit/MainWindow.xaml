@@ -8,19 +8,19 @@
                     MinHeight="300" MinWidth="600"
                     Height="700" Width="900"
                     x:Name="view">
-    
-    
+
+
     <Window.Resources>
         <Style TargetType="Control" x:Key="EmptyFocusVisualStyle">
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate>
-                        
+
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
-        
+
     </Window.Resources>
     <DockPanel>
         <StackPanel Width="150" DockPanel.Dock="Left" Margin="5,0,0,0">
@@ -56,6 +56,8 @@
             <Button Content="Clear Screen" Click="Button_Click_5"/>
             <Button Content="New Node" HorizontalAlignment="Left" Height="21" Margin="29,0,0,0" Width="82" Click="Button_Click_6"/>
             <Button Content="complileScript" Click="Button_Click_X"/>
+            <ComboBox x:Name="ListOfNodes" HorizontalAlignment="Left" Height="29" Margin="10,0,0,0" Width="118"/>
+            <Button Content="Add Node" HorizontalAlignment="Left" Height="34" Margin="32,0,0,0" Width="79" Click="Button_Click_7"/>
         </StackPanel>
         <Grid Margin="10">
             <Grid.Resources>

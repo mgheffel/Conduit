@@ -113,15 +113,22 @@ namespace Conduit
                 var vm = v.DataContext as MainViewModel;
                 x = a.Snaps[ToSnaps.SelectedIndex];
                 int pass = 0;
+                int add = 0;
+
                 for (int i = k; i < a.Snaps.Count; i++)
                 {
-                    if (x == a.Snaps[i])
+                    if (a.Snaps[i].IsConnected)
+                    {
+                        add += 1;
+                    }
+                    if (x.Name == a.Snaps[i].Name)
                     {
                         pass = i;
                         break;
                     }
                 }
-                MessageBox.Show(pass.ToString());
+                pass += add;
+                
                 vm.customConnectorToData(a, b, pass);
             }
         v.updateNodes();

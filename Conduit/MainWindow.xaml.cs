@@ -7,6 +7,7 @@ using System.Windows.Input;
 using System.Linq; // added
 using System.IO;
 using Conduit;
+using System;
 
 namespace Conduit
 {
@@ -18,6 +19,7 @@ namespace Conduit
         public List<Node> Nodes { get; set; }
         public List<Node2> Nodes2 { get; set; }
         public List<Connector> Connectors { get; set; }
+        public List<Node> NodesThatExist { get; set; }
 
         //private int n = 0;
 
@@ -26,6 +28,7 @@ namespace Conduit
             InitializeComponent();
             DataContext = new MainViewModel();
             updateNodes();
+            populateAvailableNodes();
             
         }
 
@@ -177,6 +180,7 @@ namespace Conduit
             List<Node> a = vm.Nodes.ToList();
             List<Connector> b = vm.Connectors.ToList();
             List<Node2> c = vm.Nodes2.ToList();
+            NodesThatExist = vm.NodesThatExist;
             Nodes = a;
             Connectors = b;
             Nodes2 = c;
@@ -242,5 +246,78 @@ namespace Conduit
             File.WriteAllText(loadDataDir + "SeqPurgeM.sh", sc.compileMasterScript());
             File.WriteAllText(loadDataDir + "SeqPurgeP.sh", sc.compileParallelScript());
         }
+
+        private void Button_Click_7(object sender, RoutedEventArgs e)
+        {
+            var vm = DataContext as MainViewModel;
+            
+            Node n = NodesThatExist[ListOfNodes.SelectedIndex];
+            Nodes.Add(n);
+            vm.viewNodes(n);
+            updateNodes();
+        }
+        public void populateAvailableNodes()
+        {
+            foreach (Node n in NodesThatExist)
+            {
+                ListOfNodes.Items.Remove(n.Name);
+            }
+            
+            string cwd = Directory.GetCurrentDirectory();
+            string[] cwdsplit = cwd.Split('\\');
+            string loadDataDir = "";
+            for (int i = 0; i < cwdsplit.Length - 2; i++)
+            {
+                loadDataDir += cwdsplit[i] + '\\';
+            }
+            loadDataDir += "data\\ExistingNodes\\ExistingNodes.txt";
+
+            string[] filelines = File.ReadAllLines(loadDataDir);
+
+            for (int k = 1; k < filelines.Length; k++)
+            {
+                string[] nodeString = filelines[k].Split(',');
+                string[] strings = new string[(nodeString.Length - 3)];
+                for (int j = 0; j < strings.Length; j++)
+                {
+                    strings[j] = nodeString[(j + 3)];
+                }
+
+                var vm = DataContext as MainViewModel;
+                Node n = vm.CreateNewNode(Convert.ToInt32(nodeString[2]), 10, strings);
+                n.Location.Value = new System.Windows.Point(Convert.ToInt32(nodeString[0]), Convert.ToInt32(nodeString[1]));
+                updateNodes();
+            }
+            foreach (Node n in NodesThatExist)
+            {
+                ListOfNodes.Items.Add(n.Name);
+            }
+        }
+        public void writeNode(Node n)
+        {
+            string cwd = Directory.GetCurrentDirectory();
+            string[] cwdsplit = cwd.Split('\\');
+            string loadDataDir = "";
+            for (int i = 0; i < cwdsplit.Length - 2; i++)
+            {
+                loadDataDir += cwdsplit[i] + '\\';
+            }
+            loadDataDir += "data\\ExistingNodes\\ExistingNodes.txt";
+
+            string one = "";
+                one = one + n.Location.Value.X.ToString() + "," + n.Location.Value.Y.ToString() + "," + n.Fields.ToString() + "," + n.Name.ToString() + "," + n.OutputSnaps.ToString() + "," + n.InputSnaps.ToString() + "," + n.V1.ToString() + "," + n.V2.ToString() + "," + n.V3.ToString() + "," + n.V4.ToString() + "," + n.V5.ToString() + "," + n.V6.ToString() + "," + n.V7.ToString() + "," + n.V8.ToString() + "," + n.V9.ToString() + "," + n.V10.ToString() + ","
+                    + n.T1.ToString() + "," + n.T2.ToString() + "," + n.T3.ToString() + "," + n.T4.ToString() + "," + n.T5.ToString() + "," + n.T6.ToString() + "," + n.T7.ToString() + "," + n.T8.ToString() + "," + n.T9.ToString() + "," + n.T10.ToString();
+                foreach (SnapSpot s in n.Snaps)
+                {
+                    one = one + "," + s.Name.ToString();
+                }
+           
+            using (StreamWriter sw = File.AppendText(loadDataDir))
+            {
+                sw.WriteLine(one);
+            }
+            populateAvailableNodes();
+        }
+        
     }
 }
