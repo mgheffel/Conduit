@@ -190,12 +190,13 @@ namespace Conduit
             {
                 Node2 a = v.Nodes2[outputBox2.SelectedIndex];
                 Node b = v.Nodes[inputBox2.SelectedIndex];
-                SnapSpot snapA = a.Snaps[1];
+                SnapSpot snapA = a.Snaps[0];
                 for (int s = a.InputSnaps; s < a.Snaps.Count; s++)
                 {
                     if (a.Snaps[s].IsConnected == false)
                     {
                         snapA = a.Snaps[s];
+                        break;
                     }
                 }
 

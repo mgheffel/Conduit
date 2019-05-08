@@ -626,7 +626,7 @@ namespace Conduit
 
         #region Scrolling support
 
-        private double _areaHeight = 500;
+        private double _areaHeight = 10000;
         public double AreaHeight
         {
             get { return _areaHeight; }
@@ -637,7 +637,7 @@ namespace Conduit
             }
         }
 
-        private double _areaWidth = 1000;
+        private double _areaWidth = 10000;
         public double AreaWidth
         {
             get { return _areaWidth; }

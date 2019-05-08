@@ -114,7 +114,7 @@ namespace Conduit
                 TextBox textBox = new TextBox();
                 textBox.Name = "Name{0}" + i;
                 //Position textbox on screen
-                textBox.Left = 880;
+                textBox.Left = 890;
                 textBox.Top = (i + 1) * 25;
                 //Add controls to form
                 this.Controls.Add(label);
