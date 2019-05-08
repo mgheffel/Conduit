@@ -270,6 +270,14 @@ namespace Conduit
                                     }
                                 }
                                 SnapSpot snapB = n2.Snaps[0];
+                                for (int s = n2.InputSnaps; s < n2.Snaps.Count; s++)
+                                {
+                                    if (n2.Snaps[s].IsConnected == false)
+                                    {
+                                        snapB = n2.Snaps[s];
+                                    }
+                                }
+                                
                                 vm.customConnectorToData(snapA, snapB);
                             }
                             x.updateNodes();

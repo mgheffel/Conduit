@@ -149,6 +149,15 @@ namespace Conduit
                 Node2 a = v.Nodes2[outputBox2.SelectedIndex];
                 Node b = v.Nodes[inputBox2.SelectedIndex];
                 SnapSpot snapA = a.Snaps[1];
+                for (int s = a.InputSnaps; s < a.Snaps.Count; s++)
+                {
+                    if (a.Snaps[s].IsConnected == false)
+                    {
+                        snapA = a.Snaps[s];
+                    }
+                }
+
+                
                 SnapSpot snapB = b.InSnaps[FromSnaps.SelectedItem.ToString()];
                 var vm = v.DataContext as MainViewModel;
 
