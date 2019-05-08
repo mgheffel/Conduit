@@ -637,7 +637,7 @@ namespace Conduit
             }
         }
 
-        private double _areaWidth = 500;
+        private double _areaWidth = 1000;
         public double AreaWidth
         {
             get { return _areaWidth; }
