@@ -26,16 +26,58 @@ namespace Conduit
             int n = a.Count;
             for (int i = 0; i < n; i++)
             {
-                outputBox.Items.Add(a[i].Name);
-                inputBox2.Items.Add(a[i].Name);
+                bool flagOut = false;
+                foreach (var item in a[i].OutSnaps)
+                {
+                    if (item.Value.IsConnected == false)
+                    {
+                        flagOut = true;
+                        break;
+                    }
+                }
+                if (flagOut)
+                {
+                    outputBox.Items.Add(a[i].Name);
+                }
+                bool flagIn = false;
+                foreach (var item in a[i].InSnaps)
+                {
+                    if (item.Value.IsConnected == false)
+                    {
+                        flagIn = true;
+                        break;
+                    }
+                }
+                if (flagIn)
+                {
+                    inputBox2.Items.Add(a[i].Name);
+                }
+                
             }
 
             List<Node2> b = v.Nodes2.ToList();
             int m = b.Count;
             for (int j = 0; j < m; j++)
             {
-                outputBox2.Items.Add(b[j].Name);
-                inputBox.Items.Add(b[j].Name);
+                bool flag = false;
+                for (int s = b[j].InputSnaps; s < b[j].Snaps.Count; s++)
+                {
+                    if (b[j].Snaps[s].IsConnected == false)
+                    {
+                        flag = true;
+                        break;
+                    }
+                }
+                if (flag)
+                {
+                    outputBox2.Items.Add(b[j].Name);
+                }
+                
+                if (b[j].InputSnaps==1 && b[j].Snaps[0].IsConnected == false)
+                {
+                    inputBox.Items.Add(b[j].Name);
+                }
+                
             }
         }
 
