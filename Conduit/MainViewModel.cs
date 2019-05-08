@@ -584,7 +584,6 @@ namespace Conduit
                     End = b,
                     Color = Colors.Red
                 };
-                MessageBox.Show(a.Parent2.Name);
                 connector.StartNode2 = a.Parent2;
                 connector.EndNode = b.Parent;
                 Connectors.Add(connector);

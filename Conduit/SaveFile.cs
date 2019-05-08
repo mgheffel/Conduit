@@ -235,6 +235,14 @@ namespace Conduit
                                     }
                                 }
                                 SnapSpot snapA = n2.Snaps[0];
+                                for (int s = n2.InputSnaps; s < n2.Snaps.Count; s++)
+                                {
+                                    if (n2.Snaps[s].IsConnected == false)
+                                    {
+                                        snapA = n2.Snaps[s];
+                                        break;
+                                    }
+                                }
                                 Node n1 = vm.Nodes[0];
                                 for (int n = 0; n < vm.Nodes.Count; n++)
                                 {
@@ -270,13 +278,6 @@ namespace Conduit
                                     }
                                 }
                                 SnapSpot snapB = n2.Snaps[0];
-                                for (int s = n2.InputSnaps; s < n2.Snaps.Count; s++)
-                                {
-                                    if (n2.Snaps[s].IsConnected == false)
-                                    {
-                                        snapB = n2.Snaps[s];
-                                    }
-                                }
                                 
                                 vm.customConnectorToData(snapA, snapB);
                             }
