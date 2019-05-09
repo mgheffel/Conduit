@@ -21,8 +21,8 @@ namespace Conduit
         public List<Connector> Connectors { get; set; }
         public List<Node> NodesThatExist { get; set; }
 
-        public string user = "";
-        public string password = "";
+        private string User = "";
+        private string Password = "";
 
         //private int n = 0;
 
@@ -453,6 +453,30 @@ namespace Conduit
         {
             FTP ftp = new FTP(this);
             ftp.Show();
+        }
+        public string password
+        {
+            get { return Password; }
+            set
+            {
+                if (Password != value)
+                {
+                    Password = value;
+                    
+                }
+            }
+        }
+        public string user
+        {
+            get { return User; }
+            set
+            {
+                if (User!= value)
+                {
+                    User = value;
+
+                }
+            }
         }
     }
 }
