@@ -59,24 +59,9 @@ namespace Conduit
             int m = b.Count;
             for (int j = 0; j < m; j++)
             {
-                bool flag = false;
-                for (int s = b[j].InputSnaps; s < b[j].Snaps.Count; s++)
-                {
-                    if (b[j].Snaps[s].IsConnected == false)
-                    {
-                        flag = true;
-                        break;
-                    }
-                }
-                if (flag)
-                {
-                    outputBox2.Items.Add(b[j].Name);
-                }
+                outputBox2.Items.Add(b[j].Name);
                 
-                if (b[j].InputSnaps==1 && b[j].Snaps[0].IsConnected == false)
-                {
-                    inputBox.Items.Add(b[j].Name);
-                }
+                inputBox.Items.Add(b[j].Name);
                 
             }
         }
@@ -270,15 +255,8 @@ namespace Conduit
                         break;
                     }
                 }
-                SnapSpot snapA = n2.Snaps[0];
-                for (int s = n2.InputSnaps; s < n2.Snaps.Count; s++)
-                {
-                    if (n2.Snaps[s].IsConnected == false)
-                    {
-                        snapA = n2.Snaps[s];
-                        break;
-                    }
-                }
+                SnapSpot snapA = n2.Snaps[1];
+                
 
                 
                 SnapSpot snapB = n1.InSnaps[FromSnaps.SelectedItem.ToString()];
