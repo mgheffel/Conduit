@@ -20,8 +20,8 @@ namespace Conduit
         {
             InitializeComponent();
             v = a;
-            string[] range = new string[] { "0", "1" };
-            inputSnaps.Items.AddRange(range);
+            //string[] range = new string[] { "0", "1" };
+            //inputSnaps.Items.AddRange(range);
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -53,8 +53,8 @@ namespace Conduit
                 string[] yep = new string[5];
                 yep[4] = strings[0];
                 yep[3] = "Location";
-                yep[1] = strings[1];
-                yep[2] = inputs.ToString();
+                yep[1] = "1";
+                yep[2] = "1";
                 yep[0] = strings[2];
 
                 bool createNewNode2 = true;

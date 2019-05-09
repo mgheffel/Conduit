@@ -138,3 +138,6 @@ C:\Users\kbowers\Source\Repos\SeniorProject4\Conduit\obj\Debug\Conduit.csproj.Co
 C:\Users\kbowers\Source\Repos\SeniorProject4\Conduit\obj\Debug\Conduit.csproj.CopyComplete
 C:\Users\kbowers\Source\Repos\SeniorProject4\Conduit\obj\Debug\Conduit.exe
 C:\Users\kbowers\Source\Repos\SeniorProject4\Conduit\obj\Debug\Conduit.pdb
+C:\Users\kbowers\Source\Repos\SeniorProject4\Conduit\obj\Debug\Conduit.FTP.resources
+C:\Users\kbowers\Source\Repos\SeniorProject4\Conduit\bin\Debug\FluentFTP.dll
+C:\Users\kbowers\Source\Repos\SeniorProject4\Conduit\bin\Debug\FluentFTP.xml

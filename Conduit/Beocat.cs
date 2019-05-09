@@ -48,7 +48,7 @@ namespace Conduit
                             MessageBox.Show("Wrong Password");
                         }
 
-                        ssh.Dispose();
+                        ssh.Disconnect();
                     }
                 }
                

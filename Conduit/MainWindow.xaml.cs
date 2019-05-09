@@ -21,8 +21,8 @@ namespace Conduit
         public List<Connector> Connectors { get; set; }
         public List<Node> NodesThatExist { get; set; }
 
-        private string User = "";
-        private string Password = "";
+        private string User = "kbowers";
+        private string Password = "KENmad1464!";
 
         //private int n = 0;
 
