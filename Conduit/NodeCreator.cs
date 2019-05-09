@@ -147,7 +147,8 @@ namespace Conduit
             }
 
             Node node = vm.CreateNewNode(numFields, numFields, yep);
-            v.writeNode(node);
+            vm.NodeSkeletons.Add(node.Name, v.writeNode(node).Split(','));
+            vm.Nodes.Remove(node);
             v.updateNodes();
             Close();
             

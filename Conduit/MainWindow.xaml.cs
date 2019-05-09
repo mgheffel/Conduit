@@ -411,7 +411,7 @@ namespace Conduit
                 ListOfNodes.Items.Add(n.Name);
             }*/
         }
-        public void writeNode(Node n)
+        public string writeNode(Node n)
         {
             string cwd = Directory.GetCurrentDirectory();
             string[] cwdsplit = cwd.Split('\\');
@@ -443,7 +443,7 @@ namespace Conduit
                 sw.WriteLine(one);
             }
             ListOfNodes.Items.Add(n.Name);
-            
+            return one;
         }
         
     }
