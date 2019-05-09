@@ -444,8 +444,6 @@ namespace Conduit
             node.T1 = strings[4];
         
             addSnapPoints2(node, input, output, yincrement, xincrement);
-            node.InputSnaps = input;
-            node.OutputSnaps = output;
             node.Fields = numFields;
 
             Nodes2.Add(node);
@@ -544,7 +542,7 @@ namespace Conduit
 
             bool make = true;
             
-            if (a.IsConnected || b.IsConnected)
+            if (a.IsConnected)
             {
                 MessageBox.Show("Not output availability for " + a.Name);
                 make = false;
@@ -573,7 +571,7 @@ namespace Conduit
         public void customConnectorFromData(SnapSpot a,SnapSpot b)
         {
             bool make = true;
-            if (a.IsConnected || b.IsConnected)
+            if (b.IsConnected)
             {
                 MessageBox.Show("Not output availability for " + a.Name);
                 make = false;

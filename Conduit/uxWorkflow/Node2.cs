@@ -23,6 +23,8 @@ namespace Conduit
             get { return _snaps ?? (_snaps = new List<SnapSpot>()); }
         }
 
+        
+
         private Point originalSize;
         private BindablePoint _size;
         public BindablePoint Size
@@ -90,26 +92,7 @@ namespace Conduit
                 OnPropertyChanged("ShortName");
             }
         }
-        private int inputSnaps;
-        public int InputSnaps
-        {
-            get { return inputSnaps; }
-            set
-            {
-                inputSnaps = value;
-                OnPropertyChanged("InputSnaps");
-            }
-        }
-        private int outputSnaps;
-        public int OutputSnaps
-        {
-            get { return outputSnaps; }
-            set
-            {
-                outputSnaps = value;
-                OnPropertyChanged("OutputSnaps");
-            }
-        }
+        
 
         private int fields;
         public int Fields

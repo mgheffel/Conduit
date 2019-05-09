@@ -78,7 +78,7 @@ namespace Conduit
                 foreach (Node2 n in x.Nodes2)
                 {
 
-                    four = four + n.Location.Value.X.ToString() + "," + n.Location.Value.Y.ToString() + "," + n.Fields.ToString() + "," + n.Name.ToString() + "," + n.OutputSnaps.ToString() + "," + n.InputSnaps.ToString() + "," + n.V1.ToString() + ","
+                    four = four + n.Location.Value.X.ToString() + "," + n.Location.Value.Y.ToString() + "," + n.Fields.ToString() + "," + n.Name.ToString() + "," + "1" + "," + "1" + "," + n.V1.ToString() + ","
                         + n.T1.ToString();
                     if (n != x.Nodes2.Last())
                     {
@@ -234,15 +234,7 @@ namespace Conduit
                                         break;
                                     }
                                 }
-                                SnapSpot snapA = n2.Snaps[0];
-                                for (int s = n2.InputSnaps; s < n2.Snaps.Count; s++)
-                                {
-                                    if (n2.Snaps[s].IsConnected == false)
-                                    {
-                                        snapA = n2.Snaps[s];
-                                        break;
-                                    }
-                                }
+                                SnapSpot snapA = n2.Snaps[1];
                                 Node n1 = vm.Nodes[0];
                                 for (int n = 0; n < vm.Nodes.Count; n++)
                                 {
