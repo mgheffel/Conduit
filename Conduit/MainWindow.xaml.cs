@@ -357,7 +357,6 @@ namespace Conduit
                 flag = false;
                 for (int i = 0; i < vm.Nodes.Count; i++)
                 {
-                    //MessageBox.Show(vm.Nodes[i].Name + name);
                     if (vm.Nodes[i].Name == name)
                     {
                         flag = true;
