@@ -20,13 +20,13 @@ namespace Conduit
         {
             InitializeComponent();
             v = a;
-            //string[] range = new string[] { "0", "1" };
-            //inputSnaps.Items.AddRange(range);
+            /*string[] range = new string[] { "0", "1" };
+            inputSnaps.Items.AddRange(range);*/
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if (inputSnaps.SelectedItem == null)
+            /*if (inputSnaps.SelectedItem == null)
             {
                 MessageBox.Show("Must Select number of Input Snaps");
             }
@@ -34,16 +34,16 @@ namespace Conduit
             {
                 MessageBox.Show("Output Snaps must be an integer value");
             }
-            else if (nodeName == null)
+            else*/ if (nodeName == null)
             {
                 MessageBox.Show("Node must have a name");
             }
            
             else
             {
-                int.TryParse(inputSnaps.Text, out inValue);
-                int.TryParse(outputSnaps.Text, out outValue);
-                int.TryParse(inputSnaps.SelectedItem.ToString(), out inputs);
+                //int.TryParse(inputSnaps.Text, out inValue);
+               // int.TryParse(outputSnaps.Text, out outValue);
+                //int.TryParse(inputSnaps.SelectedItem.ToString(), out inputs);
 
                 var vm = v.DataContext as MainViewModel;
 
@@ -55,7 +55,7 @@ namespace Conduit
                 yep[3] = "Location";
                 yep[1] = "1";
                 yep[2] = "1";
-                yep[0] = strings[2];
+                yep[0] = strings[1];
 
                 bool createNewNode2 = true;
                 foreach (Node2 n2 in vm.Nodes2)

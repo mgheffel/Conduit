@@ -23,28 +23,29 @@ namespace Conduit
             m = v;
         }
 
-        public void Send(string fileName, string path)
+        public void Send(string fileName)
         {
-            /*using (FtpClient conn = new FtpClient())
+            using (FtpClient conn = new FtpClient())
             {
                 conn.Host = "headnode.beocat.ksu.edu";
                 conn.Credentials = new NetworkCredential(m.user, m.password);
-                conn.Connect();
+                //conn.Connect();
 
                //conn.RetryAttempts = 3;
-                //conn.UploadFile(@path, "/homes/kbowers/", FtpExists.Overwrite, false, FtpVerify.Retry); // /homes/kbowers
+                //conn.UploadFile(fileName, "/homes/kbowers/", FtpExists.Overwrite, false, FtpVerify.Retry); // /homes/kbowers
                 conn.CreateDirectory("/homes/kbowers/SeniorDesign");
-            }*/
+            }
 
         }
         private void button1_Click(object sender, EventArgs e)
         {
-            /*OpenFileDialog fd = new OpenFileDialog();
+            OpenFileDialog fd = new OpenFileDialog();
             fd.ShowDialog();
-            string path =  Path.GetDirectoryName(fd.FileName);
-            path += fd.FileName;
-            MessageBox.Show(path);
-            Send(fd.FileName, path);     */
+           /*string path =  Path.GetDirectoryName(fd.FileName);
+            path += fd.FileName;*/
+            //MessageBox.Show(path);
+            MessageBox.Show(fd.FileName);
+            Send(fd.FileName);     
         }
        
     }
