@@ -17,6 +17,7 @@ namespace Conduit
         public Beocat()
         {
             InitializeComponent();
+            
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -34,13 +35,15 @@ namespace Conduit
                         ssh.Connect();
                         var result = ssh.RunCommand("df -h");
                         MessageBox.Show("Successful Login");
+                       
+
                     }
                     catch (Renci.SshNet.Common.SshAuthenticationException)
                     {
                         MessageBox.Show("Wrong Password");
                     }
                     
-                    //ssh.Disconnect();
+                    ssh.Dispose();
                 }
                
             }
@@ -70,6 +73,45 @@ namespace Conduit
             {
                 ssh = new SshClient("headnode.beocat.ksu.edu", userName.Text, password.Text);
             }
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            setClient();
+            //MessageBox.Show(ssh.ToString());
+            if (ssh != null)
+            {
+                using (ssh)
+                {
+                    ssh.Connect();
+                    var command = ssh.CreateCommand("ls");
+                    var results = command.Execute();
+                    command.Execute();
+                    CommandOutput.Text = (results);
+                }
+            }
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            setClient();
+            //MessageBox.Show(ssh.ToString());
+            if (ssh != null)
+            {
+                using (ssh)
+                {
+                    ssh.Connect();
+                    var command = ssh.CreateCommand("cd /bulk ; ls");
+                    var results = command.Execute();
+                    command.Execute();
+                    CommandOutput.Text = (results);
+                }
+            }
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            CommandOutput.Text = "";
         }
     }
 }
