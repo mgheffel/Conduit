@@ -56,7 +56,20 @@ namespace Conduit
                 yep[1] = strings[1];
                 yep[2] = inputs.ToString();
                 yep[0] = strings[2];
-                Node2 node = vm.CreateNewNode2(1, yep); 
+
+                bool createNewNode2 = true;
+                foreach (Node2 n2 in vm.Nodes2)
+                {
+                    if (yep[0] == n2.Name)
+                    {
+                        createNewNode2 = false;
+                        MessageBox.Show("Cannot have data nodes with the same name");
+                    }
+                }
+                if (createNewNode2)
+                {
+                    vm.CreateNewNode2(1, yep);
+                }
                 v.updateNodes();
                 Close();
             }
