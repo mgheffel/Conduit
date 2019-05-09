@@ -207,11 +207,31 @@ namespace Conduit
             }
             else
             {
-                Node a = v.Nodes[outputBox.SelectedIndex];
-                Node2 b = v.Nodes2[inputBox.SelectedIndex];
+                //Node a = v.Nodes[outputBox.SelectedIndex];
+                //Node2 b = v.Nodes2[inputBox.SelectedIndex];
+                string n1name = outputBox.SelectedItem.ToString();
+                Node n1 = v.Nodes[0];
+                for (int i = 0; i < v.Nodes.Count; i++)
+                {
+                    if (v.Nodes[i].Name == n1name)
+                    {
+                        n1 = v.Nodes[i];
+                        break;
+                    }
+                }
+                string n2name = inputBox.SelectedItem.ToString();
+                Node2 n2 = v.Nodes2[0];
+                for (int i = 0; i < v.Nodes2.Count; i++)
+                {
+                    if (v.Nodes2[i].Name == n2name)
+                    {
+                        n2 = v.Nodes2[i];
+                        break;
+                    }
+                }
                 var vm = v.DataContext as MainViewModel;
-                SnapSpot snapA = a.OutSnaps[ToSnaps.SelectedItem.ToString()];
-                SnapSpot snapB = b.Snaps[0];
+                SnapSpot snapA = n1.OutSnaps[ToSnaps.SelectedItem.ToString()];
+                SnapSpot snapB = n2.Snaps[0];
                 
                 vm.customConnectorToData(snapA, snapB);
             }
@@ -228,20 +248,40 @@ namespace Conduit
             }
             else
             {
-                Node2 a = v.Nodes2[outputBox2.SelectedIndex];
-                Node b = v.Nodes[inputBox2.SelectedIndex];
-                SnapSpot snapA = a.Snaps[0];
-                for (int s = a.InputSnaps; s < a.Snaps.Count; s++)
+                //Node2 a = v.Nodes2[outputBox2.SelectedIndex];
+                //Node b = v.Nodes[inputBox2.SelectedIndex];
+                string n1name = inputBox2.SelectedItem.ToString();
+                Node n1 = v.Nodes[0];
+                for (int i = 0; i < v.Nodes.Count; i++)
                 {
-                    if (a.Snaps[s].IsConnected == false)
+                    if (v.Nodes[i].Name == n1name)
                     {
-                        snapA = a.Snaps[s];
+                        n1 = v.Nodes[i];
+                        break;
+                    }
+                }
+                string n2name = outputBox2.SelectedItem.ToString();
+                Node2 n2 = v.Nodes2[0];
+                for (int i = 0; i < v.Nodes2.Count; i++)
+                {
+                    if (v.Nodes2[i].Name == n2name)
+                    {
+                        n2 = v.Nodes2[i];
+                        break;
+                    }
+                }
+                SnapSpot snapA = n2.Snaps[0];
+                for (int s = n2.InputSnaps; s < n2.Snaps.Count; s++)
+                {
+                    if (n2.Snaps[s].IsConnected == false)
+                    {
+                        snapA = n2.Snaps[s];
                         break;
                     }
                 }
 
                 
-                SnapSpot snapB = b.InSnaps[FromSnaps.SelectedItem.ToString()];
+                SnapSpot snapB = n1.InSnaps[FromSnaps.SelectedItem.ToString()];
                 var vm = v.DataContext as MainViewModel;
 
                 vm.customConnectorFromData(snapA, snapB);
