@@ -146,9 +146,23 @@ namespace Conduit
                 yep[i] = strings[i];
             }
 
-            Node node = vm.CreateNewNode(numFields, numFields, yep);
-            vm.NodeSkeletons.Add(node.Name, v.writeNode(node).Split(','));
-            vm.Nodes.Remove(node);
+            
+            bool addToDictionary = true;
+            foreach (var item in vm.NodeSkeletons)
+            {
+                if (item.Key== yep[0])
+                {
+                    addToDictionary = false;
+                    MessageBox.Show("Cannot create a node with the same name as a previously created node");
+                    break;
+                }
+            }
+            if (addToDictionary)
+            {
+                Node node = vm.CreateNewNode(numFields, numFields, yep);
+                vm.NodeSkeletons.Add(node.Name, v.writeNode(node).Split(','));
+            }
+            //vm.Nodes.Remove(node);
             v.updateNodes();
             Close();
             
@@ -157,12 +171,12 @@ namespace Conduit
 
         private void button1_Click(object sender, EventArgs e)
         {
-            
-            if(cb.SelectedItem == null)
+
+            if (cb.SelectedItem == null)
             {
                 MessageBox.Show("Must Select Number of Fields");
             }
-            else if(inputValue == null || !int.TryParse(inputValue.Text, out inValue))
+            else if (inputValue == null || !int.TryParse(inputValue.Text, out inValue))
             {
                 MessageBox.Show("Input Snaps must be an integer value");
             }
@@ -170,9 +184,9 @@ namespace Conduit
             {
                 MessageBox.Show("Output Snaps must be an integer value");
             }
-            else if (name == null)
+            else if (name == null || name.Text.Contains('-') == true) 
             {
-                MessageBox.Show("Node must have a name");
+                MessageBox.Show("Node must have a name without hypens");
             }
             else
             {

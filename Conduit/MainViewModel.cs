@@ -392,7 +392,7 @@ namespace Conduit
             node.OutputSnaps = output;
             node.Fields = numFields;
 
-            NodesThatExist.Add(node);
+            //NodesThatExist.Add(node);
             //Nodes.Add(node);
             SelectedObject = node;
             return node;
