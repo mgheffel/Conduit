@@ -48,7 +48,7 @@
                     </DataTemplate>
                 </Expander.Resources>
             </Expander>
-            <Button Content="Button" Click="Button_Click"/>
+            <Button Content="Delete Selected Element" Click="Button_Click"/>
             <Button Content="Custom Node" HorizontalAlignment="Left" Height="28" Margin="29,0,0,0" Width="82" Click="Button_Click_1"/>
             <Button Content="Create Connector" Height="27" Margin="10,0,22,0" Click="Button_Click_2"/>
             <Button Content="Sign in to Beocat" Click="Button_Click_3"/>

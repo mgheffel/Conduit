@@ -158,13 +158,92 @@ namespace Conduit
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            /*var vm = DataContext as MainViewModel;
-            string[] a = {"Node" +(Nodes.Count +1), "3", "4", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "" };
-            string[] b = { "Output1", "Output2", "Output3" };
-            string[] c = { "Input1", "Input2", "Input3", "Input4" };
-            Node node = vm.CreateNewNode(5,5, a);//,b,c);
+            var vm = DataContext as MainViewModel;
+            Node n = vm.SelectedObject as Node;
+            List<Connector> connectors = vm.Connectors.ToList();
+            if (n == null)
+            {
+            }
+            else
+            {
+                foreach (SnapSpot s in n.InSnaps.Values)
+                {
+                    if (s.IsConnected)
+                    {
+                       foreach(Connector connector in connectors)
+                        {
+                            if (connector.End == s)
+                            {
+                                deleteConnector(connector);
+                            }
+                        }
+                    }
+                    vm.Snaps.Remove(s);
+                    
+                }
+                connectors = vm.Connectors.ToList();
+                foreach (SnapSpot s in n.OutSnaps.Values)
+                {
+                    if (s.IsConnected)
+                    {
+                        foreach (Connector connector in connectors)
+                        {
+                            if (connector.Start == s)
+                            {
+                                deleteConnector(connector);
+                            }
+                        }
+                    }
+                    vm.Snaps.Remove(s);
+                }
+                vm.Nodes.Remove(n);
+                updateNodes();
+            }
+            Node2 n2 = vm.SelectedObject as Node2;
+            if(n2 == null)
+            {
+            }
+            else
+            {
+                foreach (SnapSpot s in n2.Snaps)
+                {
+                    if (s.IsConnected)
+                    {
+                        foreach (Connector connector in connectors)
+                        {
+                            if (connector.Start == s || connector.End ==s)
+                            {
+                                deleteConnector(connector);
+                            }
+                        }
+                    }
 
-            updateNodes(); */
+                    vm.Snaps.Remove(s);
+                }
+               
+                vm.Nodes2.Remove(n2);
+            }
+
+            Connector c = vm.SelectedObject as Connector;
+            if (c == null)
+            {
+            }
+            else
+            {
+                deleteConnector(c);
+            }
+            updateNodes();
+           
+        }
+        public void deleteConnector(Connector c)
+        {
+            var vm = DataContext as MainViewModel;
+
+ 
+                c.End.IsConnected = false;
+            c.Start.IsConnected = false;
+                vm.Connectors.Remove(c);
+            updateNodes();
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
@@ -210,6 +289,11 @@ namespace Conduit
         {
             var vm = DataContext as MainViewModel;
             vm.Nodes.ToList().ForEach(x => vm.Nodes.Remove(x));
+            List<SnapSpot> snaps = vm.Snaps.ToList();
+            foreach(SnapSpot s in snaps)
+            {
+                s.IsConnected = false;
+            }
             vm.Snaps.ToList().ForEach(x => vm.Snaps.Remove(x));
             vm.Connectors.ToList().ForEach(x => vm.Connectors.Remove(x));
             vm.Nodes2.ToList().ForEach(x => vm.Nodes2.Remove(x));

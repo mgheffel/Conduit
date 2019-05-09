@@ -362,27 +362,27 @@ namespace Conduit
             int inStop = (input + nodeCount - 1);
 
 
-            string[] yep = new string[nodeCount];
-            string[] yep2 = new string[input];
-            string[] yep3 = new string[output];
+            string[] nodeCreationSting = new string[nodeCount];
+            string[] stringOfInputs = new string[input];
+            string[] stringOfOutputs = new string[output];
 
             for (int i = 0; i < nodeCount; i++)
             {
-                yep[i] = strings[i];
+                nodeCreationSting[i] = strings[i];
             }
 
             for (int i = 0; i < input; i++)
             {
-                yep2[i] = strings[i + nodeCount];
+                stringOfInputs[i] = strings[i + nodeCount];
 
             }
 
             for (int i = 0; i < output; i++)
             {
-                yep3[i] = strings[i + inStop + 1];
+                stringOfOutputs[i] = strings[i + inStop + 1];
 
             }
-            addSnapPoints(node, input, output, yincrement, xincrement, yep2,yep3);
+            addSnapPoints(node, input, output, yincrement, xincrement, stringOfInputs,stringOfOutputs);
             node.InputSnaps = input;
             node.OutputSnaps = output;
             node.Fields = numFields;
