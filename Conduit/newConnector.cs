@@ -90,9 +90,28 @@ namespace Conduit
             }
             else
             {
-                Node a = v.Nodes[outputBox.SelectedIndex];
-                Node2 b = v.Nodes2[inputBox.SelectedIndex];
-
+                //Node a = v.Nodes[outputBox.SelectedIndex];
+                //Node2 b = v.Nodes2[inputBox.SelectedIndex];
+                string n1name = outputBox.SelectedItem.ToString();
+                Node n1 = v.Nodes[0];
+                for (int i = 0; i < v.Nodes.Count; i++)
+                {
+                    if (v.Nodes[i].Name == n1name)
+                    {
+                        n1 = v.Nodes[i];
+                        break;
+                    }
+                }
+                string n2name = inputBox.SelectedItem.ToString();
+                Node2 n2 = v.Nodes2[0];
+                for (int i=0; i < v.Nodes2.Count; i++)
+                {
+                    if (v.Nodes2[i].Name == n2name)
+                    {
+                        n2 = v.Nodes2[i];
+                        break;
+                    }
+                }
                 /*int n = a.Snaps.Count;
                 int l = a.InputSnaps;
                 int k = a.OutputSnaps;
@@ -104,7 +123,7 @@ namespace Conduit
                     }
 
                 }*/
-                foreach (var item in a.OutSnaps)
+                foreach (var item in n1.OutSnaps)
                 {
                     if (item.Value.IsConnected == false)
                     {
@@ -115,7 +134,7 @@ namespace Conduit
                 {
                     item.Value.Recalculate();
                 }*/
-                a.RecalculateSnaps();
+                n1.RecalculateSnaps();
 
                 /*var vm = v.DataContext as MainViewModel;
                 vm.customConnectorToData(a,b);*/
@@ -133,8 +152,27 @@ namespace Conduit
             }
             else
             {
-                Node2 a = v.Nodes2[outputBox2.SelectedIndex];
-                Node b = v.Nodes[inputBox2.SelectedIndex];
+                string n2name = outputBox2.SelectedItem.ToString();
+                Node2 n2 = v.Nodes2[0];
+                for (int i = 0; i < v.Nodes2.Count; i++)
+                {
+                    if (v.Nodes2[i].Name == n2name)
+                    {
+                        n2 = v.Nodes2[i];
+                        break;
+                    }
+                }
+                //Node b = v.Nodes[inputBox2.SelectedIndex];
+                string n1name = inputBox2.SelectedItem.ToString();
+                Node n1 = v.Nodes[0];
+                for (int i = 0; i < v.Nodes.Count; i++)
+                {
+                    if (v.Nodes[i].Name == n1name)
+                    {
+                        n1 = v.Nodes[i];
+                        break;
+                    }
+                }
                 /*int n = b.Snaps.Count;
                 int k = b.InputSnaps;
                 for (int i = 0; i < k; i++)
@@ -146,7 +184,7 @@ namespace Conduit
 
 
                 }*/
-                foreach (var item in b.InSnaps)
+                foreach (var item in n1.InSnaps)
                 {
                     if (item.Value.IsConnected == false)
                     {
