@@ -14,36 +14,42 @@ namespace Conduit
     public partial class Beocat : Form
     {
         private SshClient ssh;
-        public Beocat()
+        private MainWindow m;
+        public Beocat(MainWindow v)
         {
             InitializeComponent();
+            m = v;
             
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            setClient();
-            if (ssh != null)
-                
-           
-            {
-                using (ssh)
+            if (userName.Text == string.Empty || password.Text == string.Empty)
+                MessageBox.Show("Login Failed. Must enter username and password.");
+            else { 
+                setClient(userName.Text, password.Text);
+                if (ssh != null)
                 {
-
-                    try
+                    using (ssh)
                     {
-                        ssh.Connect();
-                        var result = ssh.RunCommand("df -h");
-                        MessageBox.Show("Successful Login");
-                       
 
+                        try
+                        {
+                            ssh.Connect();
+                            var result = ssh.RunCommand("df -h");
+                            MessageBox.Show("Successful Login");
+                            m.user = userName.Text;
+                            m.password = password.Text;
+                            userName.Text = "";
+                            password.Text = "";
                     }
-                    catch (Renci.SshNet.Common.SshAuthenticationException)
-                    {
-                        MessageBox.Show("Wrong Password");
+                        catch (Renci.SshNet.Common.SshAuthenticationException)
+                        {
+                            MessageBox.Show("Wrong Password");
+                        }
+
+                        ssh.Dispose();
                     }
-                    
-                    ssh.Dispose();
                 }
                
             }
@@ -52,7 +58,7 @@ namespace Conduit
 
         private void button2_Click(object sender, EventArgs e)
         {
-            setClient();
+            setClient(m.user, m.password);
             if (ssh != null)
             {
                 using (ssh)
@@ -65,19 +71,17 @@ namespace Conduit
 
         }
 
-        public void setClient()
+        public void setClient(string username, string pword)
         {
-            if (userName.Text == string.Empty || password.Text == string.Empty)
-                MessageBox.Show("Login Failed. Must enter username and password.");
-            else
-            {
-                ssh = new SshClient("headnode.beocat.ksu.edu", userName.Text, password.Text);
-            }
+            
+            
+                ssh = new SshClient("headnode.beocat.ksu.edu", username, pword);
+            
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-            setClient();
+            setClient(m.user, m.password);
             //MessageBox.Show(ssh.ToString());
             if (ssh != null)
             {
@@ -86,7 +90,7 @@ namespace Conduit
                     ssh.Connect();
                     var command = ssh.CreateCommand("ls");
                     var results = command.Execute();
-                    command.Execute();
+                    //command.Execute();
                     CommandOutput.Text = (results);
                 }
             }
@@ -94,7 +98,7 @@ namespace Conduit
 
         private void button4_Click(object sender, EventArgs e)
         {
-            setClient();
+            setClient(m.user,m.password);
             //MessageBox.Show(ssh.ToString());
             if (ssh != null)
             {
@@ -103,7 +107,6 @@ namespace Conduit
                     ssh.Connect();
                     var command = ssh.CreateCommand("cd /bulk ; ls");
                     var results = command.Execute();
-                    command.Execute();
                     CommandOutput.Text = (results);
                 }
             }
@@ -112,6 +115,23 @@ namespace Conduit
         private void button5_Click(object sender, EventArgs e)
         {
             CommandOutput.Text = "";
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            setClient(m.user, m.password);
+            
+            if (ssh != null)
+            {
+                using (ssh)
+                {
+                    ssh.Connect();
+                    var command = ssh.CreateCommand("kstat --me");
+                    var results = command.Execute();
+                    
+                    CommandOutput.Text = (results);
+                }
+            }
         }
     }
 }

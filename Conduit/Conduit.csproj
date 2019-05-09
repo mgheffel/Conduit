@@ -73,6 +73,12 @@
     <Compile Include="CreateNode2.Designer.cs">
       <DependentUpon>CreateNode2.cs</DependentUpon>
     </Compile>
+    <Compile Include="FTP.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FTP.Designer.cs">
+      <DependentUpon>FTP.cs</DependentUpon>
+    </Compile>
     <Compile Include="SaveFile.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -178,6 +184,7 @@
     </EmbeddedResource>
     <None Include="app.config" />
     <None Include="ClassDiagram1.cd" />
+    <None Include="ClassDiagram2.cd" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

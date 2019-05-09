@@ -21,6 +21,9 @@ namespace Conduit
         public List<Connector> Connectors { get; set; }
         public List<Node> NodesThatExist { get; set; }
 
+        public string user = "";
+        public string password = "";
+
         //private int n = 0;
 
         public MainWindow()
@@ -274,7 +277,7 @@ namespace Conduit
 
         private void Button_Click_3(object sender, RoutedEventArgs e)
         {
-            Beocat b = new Beocat();
+            Beocat b = new Beocat(this);
             b.Show();
         }
 
@@ -445,6 +448,11 @@ namespace Conduit
             ListOfNodes.Items.Add(n.Name);
             return one;
         }
-        
+
+        private void Button_Click_8(object sender, RoutedEventArgs e)
+        {
+            FTP ftp = new FTP(this);
+            ftp.Show();
+        }
     }
 }
