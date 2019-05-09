@@ -22,6 +22,11 @@ namespace Conduit
         {
             get { return _nodesThatExist ?? (_nodesThatExist = new List<Node>()); }
         }
+        private Dictionary<string, string[]> _nodeSkeletons;
+        public Dictionary<string, string[]> NodeSkeletons
+        {
+            get { return _nodeSkeletons ?? (_nodeSkeletons = new Dictionary<string, string[]>()); }
+        }
 
         private ObservableCollection<Node2> _nodes2;
         public ObservableCollection<Node2> Nodes2

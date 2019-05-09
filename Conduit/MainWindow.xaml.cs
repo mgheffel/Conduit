@@ -342,8 +342,36 @@ namespace Conduit
         private void Button_Click_7(object sender, RoutedEventArgs e)
         {
             var vm = DataContext as MainViewModel;
-            
-            Node n = NodesThatExist[ListOfNodes.SelectedIndex];
+            string[] skeleton = vm.NodeSkeletons[ListOfNodes.SelectedItem.ToString()];
+            string[] strings = new string[(skeleton.Length - 3)];
+            for (int j = 0; j < strings.Length; j++)
+            {
+                strings[j] = skeleton[(j + 3)];
+            }
+
+            string name = strings[0];
+            int nameCount = 0;
+            bool flag = false;
+            do
+            {
+                flag = false;
+                for (int i = 0; i < vm.Nodes.Count; i++)
+                {
+                    MessageBox.Show(vm.Nodes[i].Name + name);
+                    if (vm.Nodes[i].Name == name)
+                    {
+                        flag = true;
+                        nameCount += 1;
+                        name = name.Split('-')[0];
+                        name = name + '-' + nameCount.ToString();
+                        break;
+                    }
+                }
+            } while (flag);
+            strings[0] = name;
+
+            Node n = vm.CreateNewNode(Convert.ToInt32(skeleton[2]), 10, strings);
+            n.Location.Value = new System.Windows.Point(Convert.ToInt32(skeleton[0]), Convert.ToInt32(skeleton[1]));
             Nodes.Add(n);
             vm.viewNodes(n);
             updateNodes();
@@ -351,10 +379,7 @@ namespace Conduit
         public void populateAvailableNodes()
         {
             var vm = DataContext as MainViewModel;
-            foreach (Node n in vm.NodesThatExist)
-            {
-                ListOfNodes.Items.Remove(n.Name);
-            }
+            ListOfNodes.Items.Clear();
             
 
             string cwd = Directory.GetCurrentDirectory();
@@ -376,16 +401,16 @@ namespace Conduit
                 {
                     strings[j] = nodeString[(j + 3)];
                 }
-
-                
-                Node n = vm.CreateNewNode(Convert.ToInt32(nodeString[2]), 10, strings);
-                n.Location.Value = new System.Windows.Point(Convert.ToInt32(nodeString[0]), Convert.ToInt32(nodeString[1]));
-                updateNodes();
+                vm.NodeSkeletons.Add(nodeString[3], nodeString);
+                ListOfNodes.Items.Add(nodeString[3]);
+                //Node n = vm.CreateNewNode(Convert.ToInt32(nodeString[2]), 10, strings);
+                //n.Location.Value = new System.Windows.Point(Convert.ToInt32(nodeString[0]), Convert.ToInt32(nodeString[1]));
+                //updateNodes();
             }
-            foreach (Node n in NodesThatExist)
+            /*foreach (Node n in NodesThatExist)
             {
                 ListOfNodes.Items.Add(n.Name);
-            }
+            }*/
         }
         public void writeNode(Node n)
         {
