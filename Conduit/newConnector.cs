@@ -83,6 +83,7 @@ namespace Conduit
 
         private void button1_Click(object sender, EventArgs e)
         {
+            ToSnaps.Items.Clear();
             if (outputBox.SelectedItem == null || inputBox.SelectedItem == null)
             {
                 MessageBox.Show("Must make an input and output selection for connector");
@@ -125,6 +126,7 @@ namespace Conduit
 
         private void button2_Click(object sender, EventArgs e)
         {
+            FromSnaps.Items.Clear();
             if (outputBox2.SelectedItem == null || inputBox2.SelectedItem == null)
             {
                 MessageBox.Show("Must make an input and output selection for connector");
