@@ -241,11 +241,24 @@ namespace Conduit
         public void deleteConnector(Connector c)
         {
             var vm = DataContext as MainViewModel;
+            SnapSpot end = c.End;
+            SnapSpot start = c.Start;
 
- 
+                
                 c.End.IsConnected = false;
-            c.Start.IsConnected = false;
+                c.Start.IsConnected = false;
                 vm.Connectors.Remove(c);
+            foreach(Connector x in vm.Connectors)
+            {
+                if(x.Start == start)
+                {
+                    x.Start.IsConnected = true;
+                }
+                if (x.End == end)
+                {
+                    x.End.IsConnected = true;
+                }
+            }
             updateNodes();
         }
 

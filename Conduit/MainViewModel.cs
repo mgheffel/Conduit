@@ -76,6 +76,7 @@ namespace Conduit
                 if (snap != null)
                 {
                     MessageBox.Show(snap.Name);
+                    MessageBox.Show(snap.IsConnected.ToString());
                 }
             }
         }
