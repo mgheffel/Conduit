@@ -11,6 +11,8 @@ using Renci.SshNet;
 using FluentFTP;
 using System.Net;
 using System.IO;
+using Renci.SshNet.Sftp;
+
 
 namespace Conduit
 {
@@ -23,31 +25,76 @@ namespace Conduit
             m = v;
         }
 
-        public void Send(string fileName)
-        {
-            using (FtpClient conn = new FtpClient())
-            {
-                conn.Host = "headnode.beocat.ksu.edu";
-                conn.Credentials = new NetworkCredential(m.user, m.password);
-                //conn.Connect();
-
-               //conn.RetryAttempts = 3;
-                //conn.UploadFile(fileName, "/homes/kbowers/", FtpExists.Overwrite, false, FtpVerify.Retry); // /homes/kbowers
-                conn.CreateDirectory("/homes/kbowers/SeniorDesign");
-            }
-
-        }
+        
+        
         private void button1_Click(object sender, EventArgs e)
         {
-            OpenFileDialog fd = new OpenFileDialog();
-            fd.ShowDialog();
-           /*string path =  Path.GetDirectoryName(fd.FileName);
-            path += fd.FileName;*/
-            //MessageBox.Show(path);
-            MessageBox.Show(fd.FileName);
-            Send(fd.FileName);     
+            OpenFileDialog ofd = new OpenFileDialog();
+            string filename = "";
+            if (ofd.ShowDialog() == DialogResult.OK)
+            {
+                filename = ofd.FileName;
+            }
+            //MessageBox.Show(filename);
+                //MessageBox.Show("Create client Object");
+            using (SftpClient sftpClient = new SftpClient(getSftpConnection("headnode.beocat.ksu.edu", m.user, 22,m.password)))
+            {
+                //MessageBox.Show("Connect to server");
+                sftpClient.Connect();
+                //MessageBox.Show("Creating FileStream object to stream a file");
+                using (FileStream fs = new FileStream(filename, FileMode.Open))
+                {
+                    sftpClient.BufferSize = 1024;
+                    sftpClient.UploadFile(fs, Path.GetFileName(filename));
+                }
+                sftpClient.Dispose();
+            }
+            MessageBox.Show("File successfully added");
         }
-       
+
+        public static ConnectionInfo getSftpConnection(string host, string username, int port, string password)
+        {
+            return new PasswordConnectionInfo(host, port, username, password);
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            /// <summary>
+            /// Downloads a file in the desktop synchronously
+            /// </summary>
+            
+                
+                string username = m.user;
+                string password = m.password;
+
+                // Path to file on SFTP server
+                string pathRemoteFile = "homes/kbowers/Beocat.txt";
+                // Path where the file should be saved once downloaded (locally)
+                
+                string pathLocalFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "Download_Beocat.txt" );
+
+                using (SftpClient sftp = new SftpClient("headnode.beocat.ksu.edu", username, password))
+                {
+                    try
+                    {
+                        sftp.Connect();
+
+                        Console.WriteLine("Downloading {0}", pathRemoteFile);
+
+                        using (Stream fileStream = File.OpenWrite(pathLocalFile))
+                        {
+                            sftp.DownloadFile(pathRemoteFile, fileStream);
+                        }
+
+                        sftp.Disconnect();
+                    }
+                    catch (Exception er)
+                    {
+                        Console.WriteLine("An exception has been caught " + er.ToString());
+                    }
+                }
+            MessageBox.Show("File Successfully Downloaded");
+        }
     }
 
 }
