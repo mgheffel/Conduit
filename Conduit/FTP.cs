@@ -77,72 +77,29 @@ namespace Conduit
             return new PasswordConnectionInfo(host, port, username, password);
         }
 
-        private void button2_Click(object sender, EventArgs e)
+       
+
+        private void button4_Click(object sender, EventArgs e)
         {
-            /// <summary>
-            /// Downloads a file in the desktop synchronously
-            /// </summary>
+            string startPath = @"c:\example\start";
+            string zipPath = @"c:\example\result.zip";
 
+            
 
-            string username = m.user;
-            string password = m.password;
-            string locationToWrite = "";
-
-            // Path to file on SFTP server
-            string pathRemoteFile = fileToDownload.Text;//"homes/kbowers/Beocat.txt";
             SaveFileDialog sfd = new SaveFileDialog();
-            sfd.Filter = "TXT Files (*.txt)|*.txt";
-            sfd.DefaultExt = "txt";
+            sfd.Filter = "ZIP Files (*.zip)|*.zip";
+            sfd.DefaultExt = "zip";
             sfd.AddExtension = true;
 
 
             sfd.ShowDialog();
             if (sfd.FileName != null)
             {
-                locationToWrite = sfd.FileName;
+               zipPath = sfd.FileName;
             }
-            // Path where the file should be saved once downloaded (locally)
-            string pathLocalFile = locationToWrite;//Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "Download_Beocat.txt" );
-            fileToDownload.Text = "";
-            using (SftpClient sftp = new SftpClient("headnode.beocat.ksu.edu", username, password))
-            {
-                try
-                {
-                    sftp.Connect();
+            startPath = fileToZip.Text;
 
-                    MessageBox.Show("Downloading {0}", pathRemoteFile);
-
-                    using (Stream fileStream = File.OpenWrite(pathLocalFile))
-                    {
-                        sftp.DownloadFile(pathRemoteFile, fileStream);
-                       
-                    }
-                    
-                    sftp.Disconnect();
-                }
-                catch (Exception er)
-                {
-                    MessageBox.Show("An exception has been caught " + er.ToString());
-                }
-            }
-            MessageBox.Show("File Successfully Downloaded");
-        }
-
-        private void button4_Click(object sender, EventArgs e)
-        {
-            string zipPath = @"c:\example\result.zip";
-            string extractPath = @"c:\example\extract";
-
-            OpenFileDialog ofd = new OpenFileDialog();
-            
-
-            if (ofd.ShowDialog() == DialogResult.OK)
-            {
-                zipPath = ofd.FileName;
-            }
-            extractPath = unZip.SelectedText;
-
-            ZipFile.ExtractToDirectory(zipPath, extractPath);
+            ZipFile.CreateFromDirectory(startPath, zipPath);
         }
     }
 
