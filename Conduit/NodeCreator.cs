@@ -162,7 +162,6 @@ namespace Conduit
                 Node node = vm.CreateNewNode(numFields, numFields, yep);
                 vm.NodeSkeletons.Add(node.Name, v.writeNode(node).Split(','));
             }
-            //vm.Nodes.Remove(node);
             v.updateNodes();
             Close();
             
@@ -184,9 +183,9 @@ namespace Conduit
             {
                 MessageBox.Show("Output Snaps must be an integer value");
             }
-            else if (name == null || name.Text.Contains('-') == true) 
+            else if (name == null || name.Text.Contains('-') == true || name.Text.Contains(' ')) 
             {
-                MessageBox.Show("Node must have a name without hypens");
+                MessageBox.Show("Node must have a name without hypens or spaces");
             }
             else
             {

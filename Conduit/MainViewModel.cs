@@ -162,53 +162,42 @@ namespace Conduit
 
             double xincrement = .1;
             double yincrement = .1;
-            double xpoint = 306;
+            double xpoint = 194;
             double ypoint = 198;
             switch (numFields)
             {
                 case 0:
-                    xpoint = 104;
                     ypoint = 29;
                     break;
                 case 1:
-                    xpoint = 194;
                     ypoint = 59;
                     break;
                 case 2:
-                    xpoint = 384;
-                    ypoint = 59;
+                    ypoint = 95;
                     break;
                 case 3:
-                    xpoint = 576;
-                    ypoint = 59;
+                    ypoint = 129;
                     break;
                 case 4:
-                    xpoint = 384;
-                    ypoint = 95;
+                    ypoint = 163;
                     break;
                 case 5:
-                    xpoint = 576;
-                    ypoint = 95;
+                    ypoint = 198;
                     break;
                 case 6:
-                    xpoint = 384;
-                    ypoint = 129;
+                    ypoint = 233;
                     break;
                 case 7:
-                    xpoint = 384;
-                    ypoint = 163;
+                    ypoint = 268;
                     break;
                 case 8:
-                    xpoint = 576;
-                    ypoint = 129;
+                    ypoint = 303;
                     break;
                 case 9:
-                    xpoint = 576;
-                    ypoint = 163;
+                    ypoint = 338;
                     break;
                 default:
-                    xpoint = 576;
-                    ypoint = 198;
+                    ypoint = 373;
                     break;
             }
             xincrement = .9 / output;
@@ -255,10 +244,10 @@ namespace Conduit
                     node.T1 = strings[7];
                     node.V2 = strings[4];
                     node.T2 = strings[8];
-                    node.V4 = strings[5];
-                    node.T4 = strings[9];
-                    node.V5 = strings[6];
-                    node.T5 = strings[10];
+                    node.V3 = strings[5];
+                    node.T3 = strings[9];
+                    node.V4 = strings[6];
+                    node.T4 = strings[10];
                     break;
                 case 5:
                     node.V1 = strings[3];
@@ -277,30 +266,30 @@ namespace Conduit
                     node.T1 = strings[9];
                     node.V2 = strings[4];
                     node.T2 = strings[10];
-                    node.V4 = strings[5];
-                    node.T4 = strings[11];
-                    node.V5 = strings[6];
-                    node.T5 = strings[12];
-                    node.V6 = strings[7];
-                    node.T6 = strings[13];
-                    node.V7 = strings[8];
-                    node.T7 = strings[14];
+                    node.V3 = strings[5];
+                    node.T3 = strings[11];
+                    node.V4 = strings[6];
+                    node.T4 = strings[12];
+                    node.V5 = strings[7];
+                    node.T5 = strings[13];
+                    node.V6 = strings[8];
+                    node.T6 = strings[14];
                     break;
                 case 7:
                     node.V1 = strings[3];
                     node.T1 = strings[10];
                     node.V2 = strings[4];
                     node.T2 = strings[11];
-                    node.V4 = strings[5];
-                    node.T4 = strings[12];
-                    node.V5 = strings[6];
-                    node.T5 = strings[13];
-                    node.V6 = strings[7];
-                    node.T6 = strings[14];
-                    node.V7 = strings[8];
-                    node.T7 = strings[15];
-                    node.V9 = strings[9];
-                    node.T9 = strings[16];
+                    node.V3 = strings[5];
+                    node.T3 = strings[12];
+                    node.V4 = strings[6];
+                    node.T4 = strings[13];
+                    node.V5 = strings[7];
+                    node.T5 = strings[14];
+                    node.V6 = strings[8];
+                    node.T6 = strings[15];
+                    node.V7 = strings[9];
+                    node.T7 = strings[16];
                     break;
                 case 8:
                     node.V1 = strings[3];
