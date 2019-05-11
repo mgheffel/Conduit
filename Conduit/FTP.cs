@@ -12,6 +12,7 @@ using FluentFTP;
 using System.Net;
 using System.IO;
 using Renci.SshNet.Sftp;
+using System.IO.Compression;
 
 
 namespace Conduit
@@ -31,12 +32,13 @@ namespace Conduit
         {
             OpenFileDialog ofd = new OpenFileDialog();
             string filename = "";
+            string justName = "";
 
             if (ofd.ShowDialog() == DialogResult.OK)
             {
                 filename = ofd.FileName;
             }
-            //MessageBox.Show(filename);
+            justName = Path.GetFileNameWithoutExtension(filename);
             //MessageBox.Show("Create client Object");
             using (SftpClient sftpClient = new SftpClient(getSftpConnection("headnode.beocat.ksu.edu", m.user, 22, m.password)))
             {
@@ -47,10 +49,27 @@ namespace Conduit
                 {
                     sftpClient.BufferSize = 1024;
                     sftpClient.UploadFile(fs, Path.GetFileName(filename));
+                                                             /* string directory = sftpClient.WorkingDirectory;
+                                                              directory += "/results.zip";
+                                                              MessageBox.Show(directory);
+                                                              ZipFile.ExtractToDirectory(directory, justName);*/
                 }
+
                 sftpClient.Dispose();
             }
             MessageBox.Show("File successfully added");
+
+            SshClient ssh = new SshClient("headnode.beocat.ksu.edu", m.user, m.password);
+            if (ssh != null)
+            {
+                using (ssh)
+                {
+                    ssh.Connect();
+                    string file2upzip = "unzip " + justName + ".zip";
+                    var command = ssh.CreateCommand("unzip " + justName +".zip");
+                    command.Execute();
+                }
+            }
         }
 
         public static ConnectionInfo getSftpConnection(string host, string username, int port, string password)
@@ -96,8 +115,9 @@ namespace Conduit
                     using (Stream fileStream = File.OpenWrite(pathLocalFile))
                     {
                         sftp.DownloadFile(pathRemoteFile, fileStream);
+                       
                     }
-
+                    
                     sftp.Disconnect();
                 }
                 catch (Exception er)
@@ -106,6 +126,23 @@ namespace Conduit
                 }
             }
             MessageBox.Show("File Successfully Downloaded");
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            string zipPath = @"c:\example\result.zip";
+            string extractPath = @"c:\example\extract";
+
+            OpenFileDialog ofd = new OpenFileDialog();
+            
+
+            if (ofd.ShowDialog() == DialogResult.OK)
+            {
+                zipPath = ofd.FileName;
+            }
+            extractPath = unZip.SelectedText;
+
+            ZipFile.ExtractToDirectory(zipPath, extractPath);
         }
     }
 
