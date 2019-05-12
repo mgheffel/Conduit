@@ -491,5 +491,11 @@ namespace Conduit
                 }
             }
         }
+
+        private void Button_Click_9(object sender, RoutedEventArgs e)
+        {
+            CheckProgress cp = new CheckProgress(this);
+            cp.Show();
+        }
     }
 }

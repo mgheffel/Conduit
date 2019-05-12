@@ -104,6 +104,7 @@
             this.CommandOutput.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.CommandOutput.Size = new System.Drawing.Size(734, 283);
             this.CommandOutput.TabIndex = 7;
+            this.CommandOutput.WordWrap = false;
             // 
             // button3
             // 

@@ -72,6 +72,12 @@
     <Compile Include="Beocat.Designer.cs">
       <DependentUpon>Beocat.cs</DependentUpon>
     </Compile>
+    <Compile Include="CheckProgress.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CheckProgress.Designer.cs">
+      <DependentUpon>CheckProgress.cs</DependentUpon>
+    </Compile>
     <Compile Include="CreateNode2.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -170,6 +176,9 @@
     </Compile>
     <EmbeddedResource Include="Beocat.resx">
       <DependentUpon>Beocat.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CheckProgress.resx">
+      <DependentUpon>CheckProgress.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="CreateNode2.resx">
       <DependentUpon>CreateNode2.cs</DependentUpon>

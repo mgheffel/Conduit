@@ -130,6 +130,18 @@ namespace Conduit
                     var results = command.Execute();
                     
                     CommandOutput.Text = (results);
+
+                    SaveFileDialog sfd = new SaveFileDialog();
+                    sfd.Filter = "TXT Files (*.txt)|*.txt";
+                    sfd.DefaultExt = "txt";
+                    sfd.AddExtension = true;
+
+
+                    sfd.ShowDialog();
+                    if (sfd.FileName != null)
+                    {
+                        System.IO.File.WriteAllText(sfd.FileName, results);
+                    }
                 }
             }
         }
