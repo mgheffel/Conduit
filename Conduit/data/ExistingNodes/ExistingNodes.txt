@@ -7,3 +7,4 @@ List of Nodes
 100,100,2,a5,1,1,#runTime,#memPerCPU,,,,,,,,,24,12,,,,,,,,,readsToAssemble,contigs
 100,100,2,Ray,1,1,#runTime,#memPerCPU,,,,,,,,,12,10,,,,,,,,,readsToAssemble,contigs
 100,100,2,IVA,1,1,#runTime,#memPerCPU,,,,,,,,,12,24,,,,,,,,,readsToAssemble,contigs
+100,100,0,testNode,1,1,,,,,,,,,,,,,,,,,,,,,in,out
