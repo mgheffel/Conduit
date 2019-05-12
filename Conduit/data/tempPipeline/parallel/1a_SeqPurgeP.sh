@@ -8,6 +8,7 @@
 #SBATCH --time=4
 #SBATCH --mem-per-cpu=8
 
+
 #SBATCH --job-name=SeqPurge
 export PATH="/homes/mgheffel/miniconda3/bin:$PATH"
 

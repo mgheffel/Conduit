@@ -121,7 +121,14 @@ namespace Conduit
             //_nodes = new ObservableCollection<Node>(NodesDataSource.GetRandomNodes());
             //_connectors = new ObservableCollection<Connector>(NodesDataSource.GetRandomConnectors(Nodes.ToList()));
             //_snaps = new ObservableCollection<SnapSpot>(Nodes.SelectMany(x => x.Snaps));
-
+            string cwd = Directory.GetCurrentDirectory();
+            string[] cwdsplit = cwd.Split('\\');
+            string loadDataDir = "";
+            for (int i = 0; i < cwdsplit.Length - 2; i++)
+            {
+                loadDataDir += cwdsplit[i] + '\\';
+            }
+            conduitLocation = loadDataDir;
         }
 
         #endregion
@@ -769,7 +776,7 @@ namespace Conduit
             runallFile += "\t\t\tstepflag=false";
             runallFile += "\t\tfi\n";
 
-            int mainStage = 1;
+            int mainStage = 2;
             Node pastNode = headNode;
             //do the complex thing
             bool endPipelineFlag = false;
@@ -811,7 +818,10 @@ namespace Conduit
                 curNode = possibleCurNodes[0];
                 if (possibleCurNodes.Count > 1)
                 {
-                    string[] followNodes = getAllFollowingNodes(curNode).Split(',');
+                    foreach(Node n in possibleCurNodes)
+                    {
+                        string[] followNodes = getAllFollowingNodes(n).Split(',');
+                    }
                 }
 
 
@@ -821,7 +831,7 @@ namespace Conduit
 
                 runallFile += "\t\tif ( ! $stepflag ) ; then\n";
                 runallFile += "\t\t\tsbatch " + mainStage.ToString() + curNode.Name + ".sh\n";
-                runallFile += "\t\t\tstepflaf=true\n";
+                runallFile += "\t\t\tstepflag=true\n";
                 runallFile += "\t\telif [ -e " + mainStage.ToString() + ".done ] ; then\n";
                 runallFile += "\t\t\tstepflag=false\n";
                 runallFile += "\t\t\tstages[0]=${stages[0]}+1\n";

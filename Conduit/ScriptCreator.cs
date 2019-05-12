@@ -108,10 +108,11 @@ namespace Conduit
                 }
             }
             string[] fileSplit = baseFileText.Split(new String[] { "*&%@pTag" }, StringSplitOptions.None);
-
+            MessageBox.Show(paramTups);
             string parallelFileText = "";
             for (int i = 0; i < fileSplit.Length - 1; i++)
             {
+                MessageBox.Show(softwareParams[i]);
                 string[] inputSplit = softwareParams[i].Split(',');
                 parallelFileText += fileSplit[i] + inputSplit[0] + '=' + inputSplit[1];
             }

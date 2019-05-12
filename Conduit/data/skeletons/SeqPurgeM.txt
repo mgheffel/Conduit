@@ -4,13 +4,13 @@ declare filePaths
 declare fileNames
 
 #HERE="/homes/mgheffel/SDP"
-pipelinePath=/homes/mgheffel/SDP
-parentDir=/bulk/mgheffel/data/SDP
-runSoftware=$HERE/parallel/SeqPurgeP.sh
-readsInput=/bulk/mgheffel/data/SDP/raw
-adapters=#adapters.fa
+pipelinePath=*&%@pipelinePathTag
+parentDir=*&%@parentDirTag
+runSoftware=$pipelinePath/parallel/SeqPurgeP.sh
+readsInput=*&%@readsInputTag
+adapters=*&%@adaptersFileTag
 chain=${HERE}/.other/chain.sh
-cleanedReadsDir=/bulk/mgheffel/data/raw_cleaned
+cleanedReadsDir=*&%@cleanedReadsDirTag
 
 
 # Create cleaned diretory
