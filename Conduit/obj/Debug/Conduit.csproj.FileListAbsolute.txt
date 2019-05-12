@@ -142,3 +142,7 @@ C:\Users\kbowers\Source\Repos\SeniorProject4\Conduit\obj\Debug\Conduit.FTP.resou
 C:\Users\kbowers\Source\Repos\SeniorProject4\Conduit\bin\Debug\FluentFTP.dll
 C:\Users\kbowers\Source\Repos\SeniorProject4\Conduit\bin\Debug\FluentFTP.xml
 C:\Users\kbowers\Source\Repos\SeniorProject4\Conduit\obj\Debug\Conduit.CheckProgress.resources
+C:\Users\Heffel\Documents\GitHub\Conduit\Conduit\bin\Debug\FluentFTP.dll
+C:\Users\Heffel\Documents\GitHub\Conduit\Conduit\bin\Debug\FluentFTP.xml
+C:\Users\Heffel\Documents\GitHub\Conduit\Conduit\obj\Debug\Conduit.CheckProgress.resources
+C:\Users\Heffel\Documents\GitHub\Conduit\Conduit\obj\Debug\Conduit.FTP.resources

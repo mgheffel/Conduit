@@ -5,11 +5,14 @@ using System.Windows;
 using System.Windows.Media;
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace Conduit
 {
+
     public class MainViewModel : INotifyPropertyChanged
     {
+        string conduitLocation;
         #region Collections
 
         private ObservableCollection<Node> _nodes;
@@ -641,5 +644,221 @@ namespace Conduit
         }
 
         #endregion
+
+        public void compilePipeline()
+        {
+            string tempPipelinePath = conduitLocation + "\\data\\tempPipeline";
+            if (Directory.Exists(tempPipelinePath))
+                Directory.Delete(tempPipelinePath, true);
+            Directory.CreateDirectory(tempPipelinePath);
+            System.Threading.Thread.Sleep(100);
+            Directory.CreateDirectory(tempPipelinePath + "\\parallel");
+            Directory.CreateDirectory(tempPipelinePath + "\\pyscripts");
+            string pipelinePath = "/homes/mgheffel/SDP";
+            string dataParentDir = "/bulk/mgheffel/data/SDP";
+            List<string> nodeNames = new List<string>();
+            for (int i = 0; i < Nodes.Count; i++)
+            {
+                nodeNames.Add(Nodes[i].Name);
+                foreach (var item in Nodes[i].InSnaps)
+                {
+                    if (item.Value.IsConnected == false)
+                    {
+                        MessageBox.Show("Snap " + item.Key + " from node " + Nodes[i].Name + " is not connected");
+                    }
+                }
+                foreach (var item in Nodes[i].OutSnaps)
+                {
+                    if (item.Value.IsConnected == false)
+                    {
+                        MessageBox.Show("Snap " + item.Key + " from node " + Nodes[i].Name + " is not connected");
+                    }
+                }
+            }
+            List<string> node2names = new List<string>();
+            List<Node2> potentialHeadNodes = new List<Node2>();
+            for (int i = 0; i < Nodes2.Count; i++)
+            {
+                node2names.Add(Nodes2[i].Name);
+                if (Nodes2[i].Snaps[0].IsConnected == false)
+                {
+                    if (Nodes2[i].Snaps[1].IsConnected == false)
+                    {
+                        MessageBox.Show("Unconnected datanode: " + Nodes2[i].Name);
+                    }
+                    potentialHeadNodes.Add(Nodes2[i]);
+                }
+            }
+            Node headNode = Nodes[0];
+            for (int i = 0; i < Nodes.Count; i++)
+            {
+                bool headFlag = true;
+                for (int c = 0; c < Connectors.Count; c++)
+                {
+                    if (Connectors[c].EndNode == null)
+                    {
+                        continue;
+                    }
+                    if (Connectors[c].EndNode.Name == Nodes[i].Name)
+                    {
+                        if (Connectors[c].StartNode2.Snaps[0].IsConnected)
+                        {
+                            headFlag = false;
+                        }
+                    }
+                }
+                if (headFlag)
+                {
+                    headNode = Nodes[i];
+                    break;
+                }
+            }
+            MessageBox.Show(headNode.Name);
+            List<Node> linearPipe = new List<Node>();
+            linearPipe.Add(headNode);
+
+
+            //get input and output dirs
+            string inDirs = "";
+            foreach (var item in headNode.InSnaps)
+            {
+                for (int c = 0; c < Connectors.Count; c++)
+                {
+                    if (Connectors[c].EndNode == null)
+                        continue;
+                    if (Connectors[c].EndNode == headNode && Connectors[c].End.Name == item.Value.Name)
+                    {
+                        inDirs += item.Value.Name + ',' + Connectors[c].StartNode2.T1.ToString() + ';';
+                        break;
+                    }
+                }
+            }
+            inDirs = inDirs.Substring(0, inDirs.Length - 1);
+            string outDirs = "";
+            foreach (var item in headNode.OutSnaps)
+            {
+                for (int c = 0; c < Connectors.Count; c++)
+                {
+                    if (Connectors[c].StartNode == null)
+                        continue;
+                    if (Connectors[c].StartNode == headNode && Connectors[c].Start.Name == item.Value.Name)
+                    {
+                        outDirs += item.Value.Name + ',' + Connectors[c].EndNode2.T1.ToString() + ';';
+                        break;
+                    }
+                }
+            }
+            outDirs = outDirs.Substring(0, outDirs.Length - 1);
+            ScriptCreator sc = new ScriptCreator(headNode, inDirs, conduitLocation, pipelinePath, dataParentDir);
+            sc.compileMasterScript(tempPipelinePath + "\\1a_" + headNode.Name.Split('-')[0] + "M.sh", outDirs);
+            sc.compileParallelScript(tempPipelinePath + "\\parallel\\1a_" + headNode.Name.Split('-')[0] + "P.sh");
+
+            //temp vars that will be imported later
+            int runTime = 48;
+            string runallFile = "#!/bin/bash\n#SBATCH --nodes=1\n#SBATCH --time=" + runTime.ToString() + ":00:00\n";
+            runallFile += "pipePath=" + pipelinePath + "\n";
+            runallFile += "dataParentDir=" + dataParentDir + "\n";
+            runallFile += "doneflag=false\nstepflag=false\nstages=(0)\nwhile ( ! $doneflag )\n\tdo\n";
+            //add headnode to runall
+            runallFile += "\tif (( ${stages[0]} == 0 )) ; then\n";
+            runallFile += "\t\tif ( ! $stepflag ) ; then\n";
+            runallFile += "\t\t\tsbatch " + pipelinePath + "/1a_" + headNode.Name.Split('-')[0] + "M.sh\n";
+            runallFile += "\t\t\tstepflag=true\n";
+            runallFile += "\t\telif [ -e $dataParentDir/1a.done ] ; then\n";
+            runallFile += "\t\t\tstages[0]=${stages[0]}+1\n";
+            runallFile += "\t\t\tstepflag=false";
+            runallFile += "\t\tfi\n";
+
+            int mainStage = 1;
+            Node pastNode = headNode;
+            //do the complex thing
+            bool endPipelineFlag = false;
+            while (!endPipelineFlag)
+            {
+                List<Node> possibleCurNodes = new List<Node>();
+                Node curNode = new Node();
+                Node2 inDataNode = new Node2();
+                SnapSpot pastOut = new SnapSpot(null, null);
+                foreach (var item in pastNode.OutSnaps)
+                {
+                    pastOut = item.Value;
+                }
+                for (int c = 0; c < Connectors.Count; c++)
+                {
+                    if (Connectors[c].StartNode == null)
+                        continue;
+                    if (Connectors[c].Start == pastOut)
+                    {
+                        inDataNode = Connectors[c].EndNode2;
+                    }
+                }
+                SnapSpot dnOut = inDataNode.Snaps[1];
+                if (dnOut.IsConnected == false)
+                {
+                    endPipelineFlag = true;
+                    break;
+                }
+                for (int c = 0; c < Connectors.Count; c++)
+                {
+                    if (Connectors[c].EndNode == null)
+                        continue;
+                    if (Connectors[c].Start == dnOut)
+                    {
+                        possibleCurNodes.Add(Connectors[c].EndNode);
+                        //curNode = Connectors[c].EndNode;
+                    }
+                }
+                curNode = possibleCurNodes[0];
+                if (possibleCurNodes.Count > 1)
+                {
+                    string[] followNodes = getAllFollowingNodes(curNode).Split(',');
+                }
+
+
+                MessageBox.Show(curNode.Name);
+                MessageBox.Show(getAllFollowingNodes(curNode));
+                runallFile += "\telif (( ${stages[0]} == " + mainStage.ToString() + " )) ; then\n";
+
+                runallFile += "\t\tif ( ! $stepflag ) ; then\n";
+                runallFile += "\t\t\tsbatch " + mainStage.ToString() + curNode.Name + ".sh\n";
+                runallFile += "\t\t\tstepflaf=true\n";
+                runallFile += "\t\telif [ -e " + mainStage.ToString() + ".done ] ; then\n";
+                runallFile += "\t\t\tstepflag=false\n";
+                runallFile += "\t\t\tstages[0]=${stages[0]}+1\n";
+                runallFile += "\t\tfi\n";
+
+                mainStage += 1;
+                runallFile += "\tfi\n";
+                pastNode = curNode;
+            }
+
+            runallFile += "done";
+            File.WriteAllText(tempPipelinePath + "\\0_runall.sh", runallFile);
+        }
+        public string getAllFollowingNodes(Node n)
+        {
+            string nodeNames = n.Name;
+            foreach (var item in n.OutSnaps)
+            {
+
+                SnapSpot n2outSnap = new SnapSpot(null, null);
+                foreach (Connector c in Connectors)
+                {
+                    if (c.Start == item.Value)
+                    {
+                        n2outSnap = c.EndNode2.Snaps[1];
+                        foreach (Connector c2 in Connectors)
+                        {
+                            if (c2.Start == n2outSnap)
+                            {
+                                nodeNames += ',' + getAllFollowingNodes(c2.EndNode);
+                            }
+                        }
+                    }
+
+                }
+            }
+            return nodeNames;
+        }
     }
 }
