@@ -19,8 +19,11 @@ namespace Conduit
         {
             InitializeComponent();
             m = v;
-            string file = File.ReadAllText("C:/Users/kbowers/Desktop/data.txt");
-            fixOutput(file);
+            //string file = File.ReadAllText("C:/Users/kbowers/Desktop/data.txt");
+            if (runCommand() != null) {
+                fixOutput(runCommand());
+            }
+            
         }
         public string runCommand()
         {
