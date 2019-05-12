@@ -11,6 +11,7 @@ namespace Conduit
     class ScriptCreator
     {
         string dataPath;
+        string baseName;
         string masterSkeletonPath;
         string parallelSkeletonPath;
         string pipelinePath;
@@ -24,8 +25,9 @@ namespace Conduit
             { "#memPerCPU", "mem-per-cpu"}
         };
 
-        public ScriptCreator(Node n, string inputString, string conduitPath, string pipePath, string parentDir)
+        public ScriptCreator(Node n, string inputString, string conduitPath, string pipePath, string parentDir, string basename)
         {
+            baseName = basename;
             pipelinePath = pipePath;
             parentDirectory = parentDir;
             dataPath = conduitPath + "\\data";
@@ -73,6 +75,7 @@ namespace Conduit
             string baseFileText = System.IO.File.ReadAllText(masterSkeletonPath);
             baseFileText = baseFileText.Replace("*&%@pipelinePathTag", pipelinePath);
             baseFileText = baseFileText.Replace("*&%@parentDirTag", parentDirectory);
+            baseFileText = baseFileText.Replace("*&%@parallelPathTag", baseName + "_P.sh");
             string[] inputs = inputTups.Split(';');
             for (int i = 0; i < inputs.Length; i++)
             {

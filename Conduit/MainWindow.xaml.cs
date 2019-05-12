@@ -344,7 +344,8 @@ namespace Conduit
             File.WriteAllText(loadDataDir + "KrakenP.sh", sc.compileParallelScript());*/
 
             var vm = DataContext as MainViewModel;
-            vm.compilePipeline();
+            compilePipeline cp = new compilePipeline(vm);
+            cp.Show();
         }
 
         private void Button_Click_7(object sender, RoutedEventArgs e)

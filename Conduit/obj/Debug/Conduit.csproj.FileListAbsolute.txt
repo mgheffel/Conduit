@@ -185,3 +185,4 @@ C:\Users\GitHub\Documents\GitHub\Conduit\Conduit\obj\Debug\Conduit.csproj.CoreCo
 C:\Users\GitHub\Documents\GitHub\Conduit\Conduit\obj\Debug\Conduit.csproj.CopyComplete
 C:\Users\GitHub\Documents\GitHub\Conduit\Conduit\obj\Debug\Conduit.exe
 C:\Users\GitHub\Documents\GitHub\Conduit\Conduit\obj\Debug\Conduit.pdb
+C:\Users\Heffel\Documents\GitHub\Conduit\Conduit\obj\Debug\Conduit.compilePipeline.resources

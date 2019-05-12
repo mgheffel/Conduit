@@ -1,6 +1,6 @@
 List of Nodes
 100,100,1,SN1,4,3,p1,,,,,,,,,,0,,,,,,,,,,i1,i2,i3,o1,o2,o3,o4
-100,100,2,SeqPurge,1,2,#runTime,#memPerCPU,,,,,,,,,4,8,,,,,,,,,rawReads,adapters,raw_cleaned
+100,100,2,SeqPurge,1,2,#runTime,#mem,,,,,,,,,4,8,,,,,,,,,readsInput,adaptersFile,cleanedReadsDir
 100,100,1,Kraken,1,2,#runTime,,,,,,,,,,18,,,,,,,,,,cleanedReads,database,raw_kraken
 100,100,1,Krona,1,2,#runTime,,,,,,,,,,3,,,,,,,,,,database,raw_kraken,Krona
 100,100,1,GetTaxonomy,1,3,taxID,,,,,,,,,,10239,,,,,,,,,,cleanedReads,krakenData,database,taxAndUnknownReads

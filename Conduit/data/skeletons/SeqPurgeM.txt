@@ -6,12 +6,14 @@ declare fileNames
 #HERE="/homes/mgheffel/SDP"
 pipelinePath=*&%@pipelinePathTag
 parentDir=*&%@parentDirTag
-runSoftware=$pipelinePath/parallel/SeqPurgeP.sh
+runSoftware=$pipelinePath/parallel/*&%@parallelPathTag
 readsInput=*&%@readsInputTag
 adapters=*&%@adaptersFileTag
-chain=${HERE}/.other/chain.sh
+chain=${pipelinePath}/parallel/chain.sh
 cleanedReadsDir=*&%@cleanedReadsDirTag
 
+rm -rf $cleanedReadsDir
+mkdir $cleanedReadsDir
 
 # Create cleaned diretory
 IFS='/' read -r -a readsInputSplit <<< "$readsInput"
@@ -57,4 +59,4 @@ do
 done
 
 JOBS=$(echo $JOBS | sed 's/,\([^,]*\)$/ \1/')
-sbatch --dependency $JOBS $chain $parentDir/1_SeqPurge.done &>/dev/null
+sbatch --dependency $JOBS $chain $parentDir/$1 &>/dev/null

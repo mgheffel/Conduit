@@ -652,18 +652,19 @@ namespace Conduit
 
         #endregion
 
-        public void compilePipeline()
+
+        public void compilePipeline(string pipelinePath,string dataParentDir, bool deleteWhenDone)
         {
             List<string> branchStrings = new List<string>();
             string tempPipelinePath = conduitLocation + "\\data\\tempPipeline";
+            string chain=File.ReadAllText(conduitLocation+"\\data\\skeletons\\chain.sh");
+            File.WriteAllText(conduitLocation + "\\data\\tempPipeline\\parallel\\chain.sh",chain);
             if (Directory.Exists(tempPipelinePath))
                 Directory.Delete(tempPipelinePath, true);
             Directory.CreateDirectory(tempPipelinePath);
             System.Threading.Thread.Sleep(100);
             Directory.CreateDirectory(tempPipelinePath + "\\parallel");
             Directory.CreateDirectory(tempPipelinePath + "\\pyscripts");
-            string pipelinePath = "/homes/mgheffel/SDP";
-            string dataParentDir = "/bulk/mgheffel/data/SDP";
             List<string> nodeNames = new List<string>();
             for (int i = 0; i < Nodes.Count; i++)
             {
@@ -758,15 +759,19 @@ namespace Conduit
                 }
             }
             outDirs = outDirs.Substring(0, outDirs.Length - 1);
-            ScriptCreator sc = new ScriptCreator(headNode, inDirs, conduitLocation, pipelinePath, dataParentDir);
-            sc.compileMasterScript(tempPipelinePath + "\\1a_" + headNode.Name.Split('-')[0] + "M.sh", outDirs);
-            sc.compileParallelScript(tempPipelinePath + "\\parallel\\1a_" + headNode.Name.Split('-')[0] + "P.sh");
+            
 
             //temp vars that will be imported later
             int runTime = 48;
             int mainStage = 1;
             string runallHeader = "#!/bin/bash\n#SBATCH --nodes=1\n#SBATCH --time=" + runTime.ToString() + ":00:00\n";
             string branchNum = "0";
+
+            string basename = branchNum + '-' + mainStage.ToString();
+            ScriptCreator sc = new ScriptCreator(headNode, inDirs, conduitLocation, pipelinePath, dataParentDir, basename);
+            sc.compileMasterScript(tempPipelinePath + "\\"+ branchNum + '-' + mainStage.ToString() + "_" + "M.sh", outDirs);
+            sc.compileParallelScript(tempPipelinePath + "\\parallel\\"+ branchNum + '-' + mainStage.ToString() + "_"  + "P.sh");
+
             string runallFile = "while ( ! $alldoneflag )\n\tdo\n"; 
             runallHeader += "pipePath=" + pipelinePath + "\n";
             runallHeader += "dataParentDir=" + dataParentDir + "\n";
@@ -775,8 +780,8 @@ namespace Conduit
             //add headnode to runall
             runallFile += "\tif [ ${stages["+branchNum+"]} == 1 ] ; then\n";
             runallFile += "\t\tif [ ${stepflags[" + branchNum + "]} == false ] ; then\n";
-            //runallFile += "\t\t\tsbatch " + pipelinePath + "/1a_" + headNode.Name.Split('-')[0] + "M.sh\n";
-            runallFile += "\t\t\ttouch " + dataParentDir + "/" + branchNum + '-' + mainStage.ToString() + ".done\n";
+            runallFile += "\t\t\tsbatch " + pipelinePath + "/" + branchNum + '-' + mainStage.ToString() +"_" + "M.sh " + branchNum + '-' + mainStage.ToString() + ".done\n";
+            //runallFile += "\t\t\ttouch " + dataParentDir + "/" + branchNum + '-' + mainStage.ToString() + ".done\n";
             runallFile += "\t\t\tstepflags["+branchNum+"]=true\n";
             runallFile += "\t\telif [ -e $dataParentDir/"+ branchNum + '-' + mainStage.ToString()+".done ] ; then\n";
             runallFile += "\t\t\tstages[" + branchNum + "]=$((${stages[" + branchNum + "]}+1))\n";
@@ -911,7 +916,7 @@ namespace Conduit
                             for (int b = 0; b < branches.Count; b++)
                             {
                                 if (b != indexMain)
-                                    branchStrings.Add(createBranch(branches[b],branchStrings,dataParentDir));
+                                    branchStrings.Add(createBranch(branches[b],branchStrings,dataParentDir,pipelinePath));
                             }
                         }
                     }
@@ -931,8 +936,8 @@ namespace Conduit
                 runallFile += "\t\tfi\n";*/
 
                 runallFile += "\t\tif [ ${stepflags[" + branchNum + "]} == false ] ; then\n";
-                //runallFile += "\t\t\tsbatch " + pipelinePath + "/" +branchNum+'-'+ mainStage.ToString() + "_" + curNode.Name + "M.sh\n";
-                runallFile += "\t\t\ttouch " + dataParentDir + "/" + branchNum + '-' + mainStage.ToString() + ".done\n";
+                runallFile += "\t\t\tsbatch " + pipelinePath + "/" + branchNum + '-' + mainStage.ToString() + "_" + "M.sh " + branchNum + '-' + mainStage.ToString() + ".done\n";
+                //runallFile += "\t\t\ttouch " + dataParentDir + "/" + branchNum + '-' + mainStage.ToString() + ".done\n";
                 runallFile += "\t\t\tstepflags[" + branchNum + "]=true\n";
                 runallFile += "\t\telif [ -e $dataParentDir/"+branchNum + '-' + mainStage.ToString() +".done ] ; then\n";
                 runallFile += "\t\t\tstages[" + branchNum + "]=$((${stages[" + branchNum + "]}+1))\n";
@@ -954,7 +959,8 @@ namespace Conduit
             }
             runallFile += "\talldoneflag=true\n\tfor i in ${doneflags[@]}\n\t\tdo\n\t\tif [ \"$i\" == false ] ; then\n\t\t\talldoneflag=false\n\t\tfi\n\tdone\n";
             runallFile += "\tsleep 60\n";
-            runallFile += "done";
+            runallFile += "done\n";
+            runallFile += "touch $dataParentDir/all.done";
             runallHeader += "doneflags=(";
             for (int i = 0; i <= branchStrings.Count; i++)
                 runallHeader += "false ";
@@ -967,18 +973,18 @@ namespace Conduit
             for (int i = 0; i <= branchStrings.Count; i++)
                 runallHeader += "1 ";
             runallHeader = runallHeader.Substring(0, runallHeader.Length - 1) + ")\n";
-            File.WriteAllText(tempPipelinePath + "\\0_runall.sh", runallHeader+runallFile);
+            File.WriteAllText(tempPipelinePath + "\\runall.sh", runallHeader+runallFile);
         }
 
-        public string createBranch(Node n, List<string> branchStrings, string dataParentDir)
+        public string createBranch(Node n, List<string> branchStrings, string dataParentDir, string pipelinePath)
         {
             string branchNum = (branchStrings.Count + 1).ToString();
             Node curNode = n;
             int mainStage = 1;
             string branchString = "\tif [ ${stages["+branchNum+"]} == 1 ] ; then\n";
             branchString += "\t\tif [ ${stepflags[" + branchNum + "]} == false ] ; then\n";
-            //branchString += "\t\t\tsbatch " + branchNum + "-1" + curNode.Name + "\n";
-            branchString += "\t\t\ttouch " + dataParentDir + "/" + branchNum + '-' + mainStage.ToString() + ".done\n";
+            branchString += "\t\t\tsbatch " + pipelinePath + "/" + branchNum + '-' + mainStage.ToString() + "_" + "M.sh "+ branchNum + '-' + mainStage.ToString() + ".done\n";
+            //branchString += "\t\t\ttouch " + dataParentDir + "/" + branchNum + '-' + mainStage.ToString() + ".done\n";
             branchString += "\t\t\tstepflags[" + branchNum + "]=true\n";
             branchString += "\t\telif [ -e $dataParentDir/" + branchNum + "-1.done ] ; then\n";
             branchString += "\t\t\tstepflags[" + branchNum + "]=false\n";
@@ -1112,7 +1118,7 @@ namespace Conduit
                             for (int b = 0; b < branches.Count; b++)
                             {
                                 if (b != indexMain)
-                                    branchStrings.Add(createBranch(branches[b],branchStrings,dataParentDir));
+                                    branchStrings.Add(createBranch(branches[b],branchStrings,dataParentDir,pipelinePath));
                             }
                         }
                     }
@@ -1121,8 +1127,8 @@ namespace Conduit
 
                 branchString += "\telif [ ${stages[" + branchNum + "]} == "+mainStage.ToString()+" ] ; then\n";
                 branchString += "\t\tif [ ${stepflags[" + branchNum + "]} == false ] ; then\n";
-                //branchString += "\t\t\tsbatch " + branchNum + "-1" + curNode.Name + "\n";
-                branchString += "\t\t\ttouch " + dataParentDir + "/" + branchNum + '-' + mainStage.ToString() + ".done\n";
+                branchString += "\t\t\tsbatch " + pipelinePath + "/" + branchNum + '-' + mainStage.ToString() + "_" + "M.sh " + branchNum + '-' + mainStage.ToString() + ".done\n";
+                //branchString += "\t\t\ttouch " + dataParentDir + "/" + branchNum + '-' + mainStage.ToString() + ".done\n";
                 branchString += "\t\t\tstepflags[" + branchNum + "]=true\n";
                 branchString += "\t\telif [ -e $dataParentDir/" + branchNum + "-1.done ] ; then\n";
                 branchString += "\t\t\tstepflags[" + branchNum + "]=false\n";
