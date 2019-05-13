@@ -1,0 +1,20 @@
+#!/bin/bash
+
+
+pipelinePath=*&%@pipelinePathTag
+parentDir=*&%@parentDirTag
+runSoftware=$pipelinePath/parallel/*&%@parallelPathTag
+readsInput=*&%@readsInputTag
+runSoftware=$pipePath/.other/KrakenP.sh
+chain=${pipelinePath}/parallel/chain.sh
+krakenOutDir=*&%@krakenOutDirTag
+database=*&$@databasePathTag
+
+results="$(echo $input | rev | cut -f 2- -d '_' | rev)_kraken"
+
+
+#qsub $config -N "Kraken" -l mem=14G,h_rt=3:00:00 -e $log"Kraken.log" -o $log"Kraken.log" -pe single 12 $KRAKEN_RUN "$input $DB $results" &>/dev/null
+JID=$(sbatch $runSoftware $readsInput $database $krakenOutDir)
+JID=$(echo $JID | rev | cut -f 1 -d ' '|rev)
+sbatch --dependency $JID $chain $parentDir/$1 &>/dev/null
+
