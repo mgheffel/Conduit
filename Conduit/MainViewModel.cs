@@ -916,11 +916,16 @@ namespace Conduit
                             for (int b = 0; b < branches.Count; b++)
                             {
                                 if (b != indexMain)
-                                    branchStrings.Add(createBranch(branches[b],branchStrings,dataParentDir,pipelinePath));
+                                    branchStrings.Add(createBranch(branches[b],branchStrings,dataParentDir,pipelinePath,tempPipelinePath));
                             }
                         }
                     }
                 }
+
+                basename = branchNum + '-' + mainStage.ToString();
+                sc = new ScriptCreator(headNode, inDirs, conduitLocation, pipelinePath, dataParentDir, basename);
+                sc.compileMasterScript(tempPipelinePath + "\\" + branchNum + '-' + mainStage.ToString() + "_" + "M.sh", outDirs);
+                sc.compileParallelScript(tempPipelinePath + "\\parallel\\" + branchNum + '-' + mainStage.ToString() + "_" + "P.sh");
 
 
                 //MessageBox.Show(curNode.Name);
@@ -976,11 +981,50 @@ namespace Conduit
             File.WriteAllText(tempPipelinePath + "\\runall.sh", runallHeader+runallFile);
         }
 
-        public string createBranch(Node n, List<string> branchStrings, string dataParentDir, string pipelinePath)
+        public string createBranch(Node n, List<string> branchStrings, string dataParentDir, string pipelinePath, string tempPipelinePath)
         {
             string branchNum = (branchStrings.Count + 1).ToString();
             Node curNode = n;
             int mainStage = 1;
+
+            string inDirs = "";
+            foreach (var item in curNode.InSnaps)
+            {
+                for (int c = 0; c < Connectors.Count; c++)
+                {
+                    if (Connectors[c].EndNode == null)
+                        continue;
+                    if (Connectors[c].EndNode == curNode && Connectors[c].End.Name == item.Value.Name)
+                    {
+                        inDirs += item.Value.Name + ',' + Connectors[c].StartNode2.T1.ToString() + ';';
+                        break;
+                    }
+                }
+            }
+            inDirs = inDirs.Substring(0, inDirs.Length - 1);
+            string outDirs = "";
+            foreach (var item in curNode.OutSnaps)
+            {
+                for (int c = 0; c < Connectors.Count; c++)
+                {
+                    if (Connectors[c].StartNode == null)
+                        continue;
+                    if (Connectors[c].StartNode == curNode && Connectors[c].Start.Name == item.Value.Name)
+                    {
+                        outDirs += item.Value.Name + ',' + Connectors[c].EndNode2.T1.ToString() + ';';
+                        break;
+                    }
+                }
+            }
+            outDirs = outDirs.Substring(0, outDirs.Length - 1);
+
+
+            string basename = branchNum + '-' + mainStage.ToString();
+            ScriptCreator sc = new ScriptCreator(curNode, inDirs, conduitLocation, pipelinePath, dataParentDir, basename);
+            sc.compileMasterScript(tempPipelinePath + "\\" + branchNum + '-' + mainStage.ToString() + "_" + "M.sh", outDirs);
+            sc.compileParallelScript(tempPipelinePath + "\\parallel\\" + branchNum + '-' + mainStage.ToString() + "_" + "P.sh");
+
+
             string branchString = "\tif [ ${stages["+branchNum+"]} == 1 ] ; then\n";
             branchString += "\t\tif [ ${stepflags[" + branchNum + "]} == false ] ; then\n";
             branchString += "\t\t\tsbatch " + pipelinePath + "/" + branchNum + '-' + mainStage.ToString() + "_" + "M.sh "+ branchNum + '-' + mainStage.ToString() + ".done\n";
@@ -1118,12 +1162,47 @@ namespace Conduit
                             for (int b = 0; b < branches.Count; b++)
                             {
                                 if (b != indexMain)
-                                    branchStrings.Add(createBranch(branches[b],branchStrings,dataParentDir,pipelinePath));
+                                    branchStrings.Add(createBranch(branches[b],branchStrings,dataParentDir,pipelinePath,tempPipelinePath));
                             }
                         }
                     }
                 }
+                inDirs = "";
+                foreach (var item in curNode.InSnaps)
+                {
+                    for (int c = 0; c < Connectors.Count; c++)
+                    {
+                        if (Connectors[c].EndNode == null)
+                            continue;
+                        if (Connectors[c].EndNode == curNode && Connectors[c].End.Name == item.Value.Name)
+                        {
+                            inDirs += item.Value.Name + ',' + Connectors[c].StartNode2.T1.ToString() + ';';
+                            break;
+                        }
+                    }
+                }
+                inDirs = inDirs.Substring(0, inDirs.Length - 1);
+                outDirs = "";
+                foreach (var item in curNode.OutSnaps)
+                {
+                    for (int c = 0; c < Connectors.Count; c++)
+                    {
+                        if (Connectors[c].StartNode == null)
+                            continue;
+                        if (Connectors[c].StartNode == curNode && Connectors[c].Start.Name == item.Value.Name)
+                        {
+                            outDirs += item.Value.Name + ',' + Connectors[c].EndNode2.T1.ToString() + ';';
+                            break;
+                        }
+                    }
+                }
+                outDirs = outDirs.Substring(0, outDirs.Length - 1);
 
+
+                basename = branchNum + '-' + mainStage.ToString();
+                sc = new ScriptCreator(curNode, inDirs, conduitLocation, pipelinePath, dataParentDir, basename);
+                sc.compileMasterScript(tempPipelinePath + "\\" + branchNum + '-' + mainStage.ToString() + "_" + "M.sh", outDirs);
+                sc.compileParallelScript(tempPipelinePath + "\\parallel\\" + branchNum + '-' + mainStage.ToString() + "_" + "P.sh");
 
                 branchString += "\telif [ ${stages[" + branchNum + "]} == "+mainStage.ToString()+" ] ; then\n";
                 branchString += "\t\tif [ ${stepflags[" + branchNum + "]} == false ] ; then\n";
