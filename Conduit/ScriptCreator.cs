@@ -22,7 +22,8 @@ namespace Conduit
         {
             { "#runTime", "time" },
             { "#numCPUs", "ntasks-per-node"},
-            { "#memPerCPU", "mem-per-cpu"}
+            { "#memPerCPU", "mem-per-cpu"},
+            { "#mem","mem" }
         };
 
         public ScriptCreator(Node n, string inputString, string conduitPath, string pipePath, string parentDir, string basename)
@@ -61,12 +62,16 @@ namespace Conduit
             paramTups = paramTups.Substring(0, paramTups.Length - 1);
         }
 
-        public void compileScripts()
+        public void compileScripts(string basePath, string outDirs)
         {
             if (File.Exists(parallelSkeletonPath))
             {
                 //compileMasterScript();
                 //compileParallelScript();
+            }
+            else
+            {
+                compileNoParallel(basePath + "_M.sh", outDirs);
             }
         }
 
@@ -127,6 +132,57 @@ namespace Conduit
             }
             parallelFileText += fileSplit[1];
             File.WriteAllText(path, parallelFileText.Replace("\r\n", "\n"));
+        }
+
+        public void compileNoParallel(string path, string outDirs)
+        {
+            string baseFileText = System.IO.File.ReadAllText(parallelSkeletonPath);
+            string[] pars = paramTups.Split(';');
+            List<string> sbatchParams = new List<string>();
+            List<string> softwareParams = new List<string>();
+            for (int i = 0; i < pars.Length; i++)
+            {
+                if (pars[i].Substring(0, 1) == "#")
+                {
+                    sbatchParams.Add(pars[i]);
+                }
+                else
+                {
+                    softwareParams.Add(pars[i]);
+                }
+            }
+            string[] fileSplit = baseFileText.Split(new String[] { "*&%@pTag" }, StringSplitOptions.None);
+            string parallelFileText = "";
+            for (int i = 0; i < fileSplit.Length - 1; i++)
+            {
+                string[] inputSplit = softwareParams[i].Split(',');
+                parallelFileText += fileSplit[i] + inputSplit[0] + '=' + inputSplit[1];
+            }
+            parallelFileText += fileSplit[fileSplit.Length - 1];
+            fileSplit = parallelFileText.Split(new String[] { "*&%@sTag" }, StringSplitOptions.None);
+            parallelFileText = fileSplit[0];
+            for (int i = 0; i < sbatchParams.Count; i++)
+            {
+                string[] inputSplit = sbatchParams[i].Split(',');
+                parallelFileText += "#SBATCH --" + convertSbatch[inputSplit[0]] + '=' + inputSplit[1] + '\n';
+            }
+            parallelFileText += fileSplit[1];
+            baseFileText = parallelFileText;
+            baseFileText = baseFileText.Replace("*&%@pipelinePathTag", pipelinePath);
+            baseFileText = baseFileText.Replace("*&%@parentDirTag", parentDirectory);
+            string[] inputs = inputTups.Split(';');
+            for (int i = 0; i < inputs.Length; i++)
+            {
+                string[] split = inputs[i].Split(',');
+                baseFileText = baseFileText.Replace("*&%@" + split[0] + "Tag", split[1]);
+            }
+            string[] outputs = outDirs.Split(';');
+            for (int i = 0; i < outputs.Length; i++)
+            {
+                string[] split = outputs[i].Split(',');
+                baseFileText = baseFileText.Replace("*&%@" + split[0] + "Tag", split[1]);
+            }
+            File.WriteAllText(path, baseFileText.Replace("\r\n", "\n"));
         }
     }
 }
