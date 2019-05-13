@@ -78,6 +78,12 @@
     <Compile Include="CheckProgress.Designer.cs">
       <DependentUpon>CheckProgress.cs</DependentUpon>
     </Compile>
+    <Compile Include="compilePipeline.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="compilePipeline.Designer.cs">
+      <DependentUpon>compilePipeline.cs</DependentUpon>
+    </Compile>
     <Compile Include="CreateNode2.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -179,6 +185,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="CheckProgress.resx">
       <DependentUpon>CheckProgress.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="compilePipeline.resx">
+      <DependentUpon>compilePipeline.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="CreateNode2.resx">
       <DependentUpon>CreateNode2.cs</DependentUpon>

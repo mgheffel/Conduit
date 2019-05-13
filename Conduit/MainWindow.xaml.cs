@@ -334,25 +334,18 @@ namespace Conduit
                 loadDataDir += cwdsplit[i] + '\\';
             }
             loadDataDir += "data\\";
-            /*string masterLoc = loadDataDir + "SeqPurgeM.txt";
-            string parLoc = loadDataDir + "SeqPurgeP.txt";
-
-            string inTups = "adapterFile,$HERE/dependencies/illumina_adapters.fa;readsInput,/bulk/mgheffel/data/SDP/raw";
-            string pTups = "#runTime,00-02:00:00;#memPerCPU,32G";
-            ScriptCreator sc = new ScriptCreator(masterLoc, parLoc, pTups, inTups);
-            //MessageBox.Show(sc.compileMasterScript());
-            //MessageBox.Show(sc.compileParallelScript());
-
-            File.WriteAllText(loadDataDir + "SeqPurgeM.sh", sc.compileMasterScript());
-            File.WriteAllText(loadDataDir + "SeqPurgeP.sh", sc.compileParallelScript());
-            */
+            /*
             string masterLoc = loadDataDir + "KrakenM.txt";
             string parLoc = loadDataDir + "KrakenP.txt";
             string inTups = "pipePath,/homes/mgheffel/SDP;input,/bulk/mgheffel/data/SDP/raw_cleaned;database,/bulk/bioinfo/vdl/.dependencies/krakenDBs/DB21";
             string pTups = "#runTime,00-18:00:00";
             ScriptCreator sc = new ScriptCreator(masterLoc, parLoc, pTups, inTups);
             File.WriteAllText(loadDataDir + "KrakenM.sh", sc.compileMasterScript());
-            File.WriteAllText(loadDataDir + "KrakenP.sh", sc.compileParallelScript());
+            File.WriteAllText(loadDataDir + "KrakenP.sh", sc.compileParallelScript());*/
+
+            var vm = DataContext as MainViewModel;
+            compilePipeline cp = new compilePipeline(vm);
+            cp.Show();
         }
 
         private void Button_Click_7(object sender, RoutedEventArgs e)

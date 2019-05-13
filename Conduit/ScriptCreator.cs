@@ -1,17 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Conduit
 {
     class ScriptCreator
     {
-        public String masterBaseFileLoc;
-        public String parallelBaseFileLoc;
-        public String paramTups;
-        public String inputTups;
+        string dataPath;
+        string baseName;
+        string masterSkeletonPath;
+        string parallelSkeletonPath;
+        string pipelinePath;
+        string parentDirectory;
+        public String paramTups = "";
+        public String inputTups = "";
         private static Dictionary<string, string> convertSbatch = new Dictionary<string, string>()
         {
             { "#runTime", "time" },
@@ -19,33 +25,77 @@ namespace Conduit
             { "#memPerCPU", "mem-per-cpu"}
         };
 
-        public ScriptCreator(String masterBaseFile, String parallelBaseFile, String paramTups, String inputTups)
+        public ScriptCreator(Node n, string inputString, string conduitPath, string pipePath, string parentDir, string basename)
         {
-            this.masterBaseFileLoc = masterBaseFile;
-            this.parallelBaseFileLoc = parallelBaseFile;
-            this.paramTups = paramTups;
-            this.inputTups = inputTups;
-        }
-
-        public string compileMasterScript()
-        {
-            string baseFileText = System.IO.File.ReadAllText(masterBaseFileLoc);
-            string[] fileSplit = baseFileText.Split(new String[] { "*&%@iTag" }, StringSplitOptions.None);
-            string[] inputs = inputTups.Split(';');
-            string masterFileText = "";
-            for (int i = 0; i < fileSplit.Length - 1; i++)
+            baseName = basename;
+            pipelinePath = pipePath;
+            parentDirectory = parentDir;
+            dataPath = conduitPath + "\\data";
+            masterSkeletonPath = dataPath + "\\skeletons\\" + n.Name + "M.txt";
+            parallelSkeletonPath = dataPath + "\\skeletons\\" + n.Name + "P.txt";
+            if (!File.Exists(parallelSkeletonPath))
             {
-                string[] inputSplit = inputs[i].Split(',');
-                masterFileText += fileSplit[i] + inputSplit[0] + '=' + inputSplit[1];
+                parallelSkeletonPath = "";
             }
-            masterFileText += fileSplit[fileSplit.Length - 1];
-
-            return masterFileText.Replace("\r\n", "\n");
+            inputTups = inputString;
+            if (n.V1 != "")
+                paramTups += n.V1 + ',' + n.T1 + ';';
+            if (n.V2 != "")
+                paramTups += n.V2 + ',' + n.T2 + ';';
+            if (n.V3 != "")
+                paramTups += n.V3 + ',' + n.T3 + ';';
+            if (n.V4 != "")
+                paramTups += n.V4 + ',' + n.T4 + ';';
+            if (n.V5 != "")
+                paramTups += n.V5 + ',' + n.T5 + ';';
+            if (n.V6 != "")
+                paramTups += n.V6 + ',' + n.T6 + ';';
+            if (n.V7 != "")
+                paramTups += n.V7 + ',' + n.T7 + ';';
+            if (n.V8 != "")
+                paramTups += n.V8 + ',' + n.T8 + ';';
+            if (n.V9 != "")
+                paramTups += n.V9 + ',' + n.T9 + ';';
+            if (n.V10 != "")
+                paramTups += n.V10 + ',' + n.T10 + ';';
+            paramTups = paramTups.Substring(0, paramTups.Length - 1);
         }
 
-        public string compileParallelScript()
+        public void compileScripts()
         {
-            string baseFileText = System.IO.File.ReadAllText(parallelBaseFileLoc);
+            if (File.Exists(parallelSkeletonPath))
+            {
+                //compileMasterScript();
+                //compileParallelScript();
+            }
+        }
+
+        public void compileMasterScript(string path, string outDirs)
+        {
+            string baseFileText = System.IO.File.ReadAllText(masterSkeletonPath);
+            baseFileText = baseFileText.Replace("*&%@pipelinePathTag", pipelinePath);
+            baseFileText = baseFileText.Replace("*&%@parentDirTag", parentDirectory);
+            baseFileText = baseFileText.Replace("*&%@parallelPathTag", baseName + "_P.sh");
+            string[] inputs = inputTups.Split(';');
+            for (int i = 0; i < inputs.Length; i++)
+            {
+                string[] split = inputs[i].Split(',');
+                baseFileText = baseFileText.Replace("*&%@" + split[0] + "Tag", split[1]);
+            }
+            string[] outputs = outDirs.Split(';');
+            for (int i = 0; i < outputs.Length; i++)
+            {
+                string[] split = outputs[i].Split(',');
+                baseFileText = baseFileText.Replace("*&%@" + split[0] + "Tag", split[1]);
+            }
+            File.WriteAllText(path, baseFileText.Replace("\r\n", "\n"));
+        }
+
+
+
+        public void compileParallelScript(string path)
+        {
+            string baseFileText = System.IO.File.ReadAllText(parallelSkeletonPath);
             string[] pars = paramTups.Split(';');
             List<string> sbatchParams = new List<string>();
             List<string> softwareParams = new List<string>();
@@ -61,7 +111,6 @@ namespace Conduit
                 }
             }
             string[] fileSplit = baseFileText.Split(new String[] { "*&%@pTag" }, StringSplitOptions.None);
-
             string parallelFileText = "";
             for (int i = 0; i < fileSplit.Length - 1; i++)
             {
@@ -77,7 +126,7 @@ namespace Conduit
                 parallelFileText += "#SBATCH --" + convertSbatch[inputSplit[0]] + '=' + inputSplit[1] + '\n';
             }
             parallelFileText += fileSplit[1];
-            return parallelFileText.Replace("\r\n", "\n");
+            File.WriteAllText(path, parallelFileText.Replace("\r\n", "\n"));
         }
     }
 }

@@ -1,21 +1,23 @@
+#!/bin/bash
 declare adapters
 declare filePaths
 declare fileNames
 
-HERE="/homes/mgheffel/SDP"
-runSoftware=$HERE/.other/SeqPurgeP.sh
-*&%@iTag
-*&%@iTag
-chain=${HERE}/.other/chain.sh
+#HERE="/homes/mgheffel/SDP"
+pipelinePath=/homes/mgheffel/SDP
+parentDir=/bulk/mgheffel/data/SDP
+runSoftware=$pipelinePath/parallel/0-1_P.sh
+readsInput=/bulk/mgheffel/data/SDP/raw
+adapters=/homes/bioinfo/vdl/v4/.other/illumina_adapters.fa
+chain=${pipelinePath}/parallel/chain.sh
+cleanedReadsDir=/bulk/mgheffel/data/SDP/raw_cleaned
 
-parentdir="$(dirname "$readsInput")"
+rm -rf $cleanedReadsDir
+mkdir $cleanedReadsDir
 
 # Create cleaned diretory
 IFS='/' read -r -a readsInputSplit <<< "$readsInput"
 readsInput_name=${readsInputSplit[${#readsInputSplit[@]}-1]}
-OutFolder=$parentdir'/'$readsInput_name'_cleaned'
-rm -rf $OutFolder
-mkdir $OutFolder
 
 
 # Read in all Adapters and add to list
@@ -51,10 +53,10 @@ fileLen=${#filePaths[@]}
 for (( i=0; i<$fileLen; i+=2 ))
 do
   # Adapter List - Output Folder - file names forward/reverse - file paths foward/reverse - amount of files in directory - Parent directory
-  JID=$(sbatch $runSoftware $adapters $OutFolder ${fileNames[$i]} ${fileNames[$i+1]} ${filePaths[$i]} ${filePaths[$i+1]} $fileLen $parentdir)
+  JID=$(sbatch $runSoftware $adapters $cleanedReadsDir ${fileNames[$i]} ${fileNames[$i+1]} ${filePaths[$i]} ${filePaths[$i+1]} $fileLen)
   JID=$(echo $JID | rev | cut -f 1 -d ' '|rev)
   JOBS="${JOBS}$JID,"
 done
 
 JOBS=$(echo $JOBS | sed 's/,\([^,]*\)$/ \1/')
-sbatch --dependency $JOBS $chain $parentdir/1_SeqPurge.done &>/dev/null
+sbatch --dependency $JOBS $chain $parentDir/$1 &>/dev/null

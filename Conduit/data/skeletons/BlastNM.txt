@@ -1,0 +1,30 @@
+#!/bin/bash
+
+pipelinePath=*&%@pipelinePathTag
+parentDir=*&%@parentDirTag
+runSoftware=$pipelinePath/parallel/*&%@parallelPathTag
+chain=${pipelinePath}/parallel/chain.sh
+fastaInputDir=*&%@fastaInputDirTag
+blastOurDir=*&%@blastOutDirTag
+
+file_list=$(ls $fastaInputDir/*.fasta | grep -v ".blast.sh")
+
+rm -rf $blastOurDir
+mkdir $blastOurDir
+
+#cd $RESULTS
+JOBS=""
+for file in $file_list
+do
+	file_name=$(basename $file | rev | cut -f 2- -d '.' | rev)
+	echo "Blasting and submitting file: " $(basename $file)
+	X=$(basename $file)"_blast"
+	#JID=$(sbatch --job-name=D$X $config $script $file $RESULTS/$file_name.blast $blastargs)
+	JID=$(sbatch --job-name=blastn $config $runSoftware $file $blastOurDir/$file_name.blast $blastargs)
+	JID=$(echo $JID | rev | cut -f 1 -d ' '|rev)
+	JOBS="${JOBS}$JID,"
+done
+JOBS=$(echo $JOBS | sed 's/,\([^,]*\)$/ \1/')
+sbatch --dependency $JOBS $chain $parentDir/$1 &>/dev/null
+
+
