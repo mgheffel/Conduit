@@ -69,7 +69,9 @@ namespace Conduit
                     var command = ssh.CreateCommand("unzip " + justName +".zip");
                     command.Execute();
                 }
+                ssh.Disconnect();
             }
+            
         }
 
         public static ConnectionInfo getSftpConnection(string host, string username, int port, string password)

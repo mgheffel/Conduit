@@ -19,15 +19,17 @@ namespace Conduit
         {
             InitializeComponent();
             m = v;
-            
+
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
             if (userName.Text == string.Empty || password.Text == string.Empty)
                 MessageBox.Show("Login Failed. Must enter username and password.");
-            else { 
-                setClient(userName.Text, password.Text);
+            else
+            {
+                ssh = new SshClient("headnode.beocat.ksu.edu", userName.Text, password.Text);
+                //setClient(userName.Text, password.Text);
                 if (ssh != null)
                 {
                     using (ssh)
@@ -42,7 +44,7 @@ namespace Conduit
                             m.password = password.Text;
                             userName.Text = "";
                             password.Text = "";
-                    }
+                        }
                         catch (Renci.SshNet.Common.SshAuthenticationException)
                         {
                             MessageBox.Show("Wrong Password");
@@ -51,12 +53,16 @@ namespace Conduit
                         ssh.Disconnect();
                     }
                 }
-               
+
             }
-            
+
         }
 
-        private void button2_Click(object sender, EventArgs e)
+       
+    }
+}
+
+       /* private void button2_Click(object sender, EventArgs e)
         {
             setClient(m.user, m.password);
             if (ssh != null)
@@ -145,5 +151,5 @@ namespace Conduit
                 }
             }
         }
-    }
-}
+    }*/
+//}

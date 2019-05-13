@@ -32,8 +32,9 @@ namespace Conduit
                     ssh.Connect();
                     var command = ssh.CreateCommand("kstat --me");
                     var results = command.Execute();
-
+                    ssh.Disconnect();
                     return results;
+                    
 
                 }
             }
@@ -41,6 +42,7 @@ namespace Conduit
             {
                 return null;
             }
+            
 
         }
         public void fixOutput(string results)
@@ -235,7 +237,7 @@ namespace Conduit
             
             string[] nodeName = NodeName.ToArray();
             string[] jobName = JobNames.ToArray();
-            MessageBox.Show(jobName.Count().ToString());
+            //MessageBox.Show(jobName.Count().ToString());
             string[] jobID = JobID.ToArray();
             string[] cores = Cores.ToArray();
             string[] maxGB = MaxGB.ToArray();

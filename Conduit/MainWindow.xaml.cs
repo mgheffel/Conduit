@@ -159,6 +159,8 @@ namespace Conduit
             snap.Offset.Value = Point.Add(snap.Offset.Value, new Vector(snap.LockX ? 0 : e.HorizontalChange / 1000, snap.LockY ? 0 : e.VerticalChange / 1000));
         }
 
+       
+
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             var vm = DataContext as MainViewModel;
@@ -261,6 +263,7 @@ namespace Conduit
             }
             updateNodes();
         }
+       
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         { 
@@ -303,7 +306,8 @@ namespace Conduit
 
         private void Button_Click_5(object sender, RoutedEventArgs e)
         {
-            var vm = DataContext as MainViewModel;
+            clearScreen();
+            /*var vm = DataContext as MainViewModel;
             vm.Nodes.ToList().ForEach(x => vm.Nodes.Remove(x));
             List<SnapSpot> snaps = vm.Snaps.ToList();
             foreach(SnapSpot s in snaps)
@@ -313,9 +317,21 @@ namespace Conduit
             vm.Snaps.ToList().ForEach(x => vm.Snaps.Remove(x));
             vm.Connectors.ToList().ForEach(x => vm.Connectors.Remove(x));
             vm.Nodes2.ToList().ForEach(x => vm.Nodes2.Remove(x));
+            updateNodes();*/
+        }
+        public void clearScreen()
+        {
+            var vm = DataContext as MainViewModel;
+            vm.Nodes.ToList().ForEach(x => vm.Nodes.Remove(x));
+            List<SnapSpot> snaps = vm.Snaps.ToList();
+            foreach (SnapSpot s in snaps)
+            {
+                s.IsConnected = false;
+            }
+            vm.Snaps.ToList().ForEach(x => vm.Snaps.Remove(x));
+            vm.Connectors.ToList().ForEach(x => vm.Connectors.Remove(x));
+            vm.Nodes2.ToList().ForEach(x => vm.Nodes2.Remove(x));
             updateNodes();
-
-
         }
 
         private void Button_Click_6(object sender, RoutedEventArgs e)
@@ -411,6 +427,7 @@ namespace Conduit
                 }
                 vm.NodeSkeletons.Add(nodeString[3], nodeString);
                 ListOfNodes.Items.Add(nodeString[3]);
+                ListOfNodes.SelectedIndex = 0;
                 //Node n = vm.CreateNewNode(Convert.ToInt32(nodeString[2]), 10, strings);
                 //n.Location.Value = new System.Windows.Point(Convert.ToInt32(nodeString[0]), Convert.ToInt32(nodeString[1]));
                 //updateNodes();

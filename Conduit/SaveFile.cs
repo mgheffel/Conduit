@@ -24,6 +24,7 @@ namespace Conduit
 
         private void button1_Click(object sender, EventArgs e)
         {
+            
             if (x.Nodes.Count > 0 || x.Nodes2.Count > 0)
             {
                 string three = "";
@@ -118,6 +119,7 @@ namespace Conduit
 
         private void button2_Click(object sender, EventArgs e)
         {
+            x.clearScreen();
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 string filename = openFileDialog1.FileName;

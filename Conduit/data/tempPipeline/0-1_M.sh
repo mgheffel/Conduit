@@ -1,61 +1,29 @@
 #!/bin/bash
-declare adapters
-declare filePaths
-declare fileNames
+#SBATCH --time=4:00:00
 
-#HERE="/homes/mgheffel/SDP"
-pipelinePath=/homes/mgheffel/SDP
-parentDir=/bulk/mgheffel/data/SDP
+pipelinePath=jdhgfddj
+parentDir=dsnnv
 runSoftware=$pipelinePath/parallel/0-1_P.sh
-readsInput=/bulk/mgheffel/data/SDP/raw
-adapters=/homes/bioinfo/vdl/v4/.other/illumina_adapters.fa
 chain=${pipelinePath}/parallel/chain.sh
-cleanedReadsDir=/bulk/mgheffel/data/SDP/raw_cleaned
-
-rm -rf $cleanedReadsDir
-mkdir $cleanedReadsDir
-
-# Create cleaned diretory
-IFS='/' read -r -a readsInputSplit <<< "$readsInput"
-readsInput_name=${readsInputSplit[${#readsInputSplit[@]}-1]}
+referencesToMapToDir=/bulk/mgheffel/data/SDP/raw_denovo
+pairedReadsToMapDir=/bulk/mgheffel/data/SDP/raw_cleaned
+remappedOutDir=/bulk/mgheffel/data/SDP/raw_remap
 
 
-# Read in all Adapters and add to list
-i=0
-while IFS='' read -r line || [[ -n "$line" ]]; do
-  if [ ${line:0:1} != '>' ]
-  then
-    IFS='/' read -r -a splitLine <<< "$line"
-    adapters[$i]=${splitLine[0]}
-    adapters[$i+1]=${splitLine[1]}
-    i=$i+2
-  fi
-done < "$adapterFile"
+mkdir $remappedOutDir
+JOBS=""
 
-# Read in all fastq files and to file lists
-i=0
-for entry in "$readsInput"/*
+rm -rf $remappedOutDir
+mkdir $remappedOutDir
+for contig in `ls $referencesToMapToDir/*-contigs.fasta`;
 do
-  if [[ $entry =~ \.fastq$ ]]
-  then
-    filePaths[$i]="$entry"
-    IFS='/' read -r -a entrySplit <<< "$entry"
-    entryLen=${#entrySplit[@]}
-    fileNames[$i]=${entrySplit[$entrylen-1]}
-    i=$i+1
-  fi
-done
-
-# Get lengths for loop
-fileLen=${#filePaths[@]}
-
-# Loop through all fastq files
-for (( i=0; i<$fileLen; i+=2 ))
-do
-  # Adapter List - Output Folder - file names forward/reverse - file paths foward/reverse - amount of files in directory - Parent directory
-  JID=$(sbatch $runSoftware $adapters $cleanedReadsDir ${fileNames[$i]} ${fileNames[$i+1]} ${filePaths[$i]} ${filePaths[$i+1]} $fileLen)
-  JID=$(echo $JID | rev | cut -f 1 -d ' '|rev)
-  JOBS="${JOBS}$JID,"
+	sample=${contig#*trimmedContigs/}
+	echo $sample
+	sample=${sample%-contigs*}
+	JID=$(sbatch $runSoftware $(realpath $contig) $pairedReadsToMapDir/*${sample}_R1*.fastq $pairedReadsToMapDir/*${sample}_R2*.fastq $remappedOutDir)
+	JID=$(echo $JID | rev | cut -f 1 -d ' '|rev)
+	JOBS="${JOBS}$JID,"
+	
 done
 
 JOBS=$(echo $JOBS | sed 's/,\([^,]*\)$/ \1/')

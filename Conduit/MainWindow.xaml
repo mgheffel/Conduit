@@ -32,7 +32,7 @@
             <Expander Content="{Binding SelectedObject}"
                       Header="{Binding SelectedObject.Name,FallbackValue='[Select an Element]'}" 
                       Margin="2,2,2,10" BorderThickness="1" BorderBrush="LightGray"
-                      IsExpanded="True" FontWeight="Bold">
+                      IsExpanded="False" FontWeight="Bold">
                 <Expander.Resources>
                     <DataTemplate DataType="{x:Type local2:Node}">
                         <local2:NodePropertyEditor/>
@@ -48,307 +48,307 @@
                     </DataTemplate>
                 </Expander.Resources>
             </Expander>
-            <Button Content="Delete Selected Element" Click="Button_Click"/>
-            <Button Content="Custom Node" HorizontalAlignment="Left" Height="28" Margin="29,0,0,0" Width="82" Click="Button_Click_1"/>
-            <Button Content="Create Connector" Height="27" Margin="10,0,22,0" Click="Button_Click_2"/>
-            <Button Content="Sign in to Beocat" Click="Button_Click_3"/>
-            <Button Content="Open/Save File" HorizontalAlignment="Left" Height="25" Margin="10,0,0,0" Width="118" Click="Button_Click_4"/>
-            <Button Content="Clear Screen" Click="Button_Click_5"/>
-            <Button Content="New Node" HorizontalAlignment="Left" Height="21" Margin="29,0,0,0" Width="82" Click="Button_Click_6"/>
-            <Button Content="complileScript" Click="Button_Click_X"/>
-            <ComboBox x:Name="ListOfNodes" HorizontalAlignment="Left" Height="29" Margin="10,0,0,0" Width="118"/>
-            <Button Content="Add Node" HorizontalAlignment="Left" Height="34" Margin="32,0,0,0" Width="79" Click="Button_Click_7"/>
-            <Button Content="FTP" HorizontalAlignment="Left" Height="27" Margin="25,0,0,0" Width="86" Click="Button_Click_8"/>
-            <Button Content="Check Progress" HorizontalAlignment="Left" Height="31" Margin="27,0,0,0" Width="84" Click="Button_Click_9"/>
+            <Button Content="Open/Save File" HorizontalAlignment="Left" Height="28" Width="150" Click="Button_Click_4"/>
+            <ComboBox x:Name="ListOfNodes" HorizontalAlignment="Left" Height="28" Width="150"/>
+            <Button Content="Add Software Node" HorizontalAlignment="Left" Height="28" Width="150" Click="Button_Click_7"/>
+            <Button Content="Create Data Node" HorizontalAlignment="Left" Height="28" Width="150" Click="Button_Click_6"/>
+            <Button Content="Create Connector" Height="27" Click="Button_Click_2"/>
+            <Button Content="Custom Software Node" HorizontalAlignment="Left" Height="28" Width="150" Click="Button_Click_1"/>
+            <Button Content="Delete Selected Element" Click="Button_Click" Height="28"/>
+            <Button Content="Clear Screen" Click="Button_Click_5" Height="28"/>
+            <Button Content="Sign in to Beocat" Click="Button_Click_3" Height="28"/>
+            <Button Content="Complile Script" Click="Button_Click_X" Height="28"/>
+            <Button Content="Transfer File to Beocat" HorizontalAlignment="Left" Height="27" Width="150" Click="Button_Click_8"/>
+            <Button Content="Check Progress on Beocat" HorizontalAlignment="Left" Height="28" Width="150" Click="Button_Click_9"/>
         </StackPanel>
         <Grid Margin="10">
-                <Grid.Resources>
-                    <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
-                    <!-- This CompositeCollection basically Concatenates the Nodes and Connectors in a single one -->
-                    <CompositeCollection x:Key="Col">
-                        <CollectionContainer Collection="{Binding DataContext.Nodes,Source={x:Reference view}}"/>
-                        <CollectionContainer Collection="{Binding DataContext.Nodes2,Source={x:Reference view}}"/>
-                        <CollectionContainer Collection="{Binding DataContext.Connectors,Source={x:Reference view}}"/>
-                        <CollectionContainer Collection="{Binding DataContext.Snaps,Source={x:Reference view}}"/>
-                        <ListBoxItem Canvas.Left="{Binding SelectedObject.MidPoint.X}" Canvas.Top="{Binding SelectedObject.MidPoint.Y}">
-                            <Thumb DataContext="{Binding SelectedObject}" DragDelta="MidPoint_DragDelta" Height="10" Width="10"
+            <Grid.Resources>
+                <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+                <!-- This CompositeCollection basically Concatenates the Nodes and Connectors in a single one -->
+                <CompositeCollection x:Key="Col">
+                    <CollectionContainer Collection="{Binding DataContext.Nodes,Source={x:Reference view}}"/>
+                    <CollectionContainer Collection="{Binding DataContext.Nodes2,Source={x:Reference view}}"/>
+                    <CollectionContainer Collection="{Binding DataContext.Connectors,Source={x:Reference view}}"/>
+                    <CollectionContainer Collection="{Binding DataContext.Snaps,Source={x:Reference view}}"/>
+                    <ListBoxItem Canvas.Left="{Binding SelectedObject.MidPoint.X}" Canvas.Top="{Binding SelectedObject.MidPoint.Y}">
+                        <Thumb DataContext="{Binding SelectedObject}" DragDelta="MidPoint_DragDelta" Height="10" Width="10"
                                Background="Red" Visibility="{Binding DataContext.ShowMidPointThumb, 
                                                                      Converter={StaticResource BoolToVisibilityConverter},
                                                                      RelativeSource={RelativeSource AncestorType=Window}}"/>
-                        </ListBoxItem>
-                    </CompositeCollection>
+                    </ListBoxItem>
+                </CompositeCollection>
 
-                    <!-- This is the DataTemplate that will be used to render the Node class -->
-                    <DataTemplate DataType="{x:Type local2:Node}">
-                        <Border BorderBrush="LightGray" BorderThickness="1" Padding="1"
+                <!-- This is the DataTemplate that will be used to render the Node class -->
+                <DataTemplate DataType="{x:Type local2:Node}">
+                    <Border BorderBrush="LightGray" BorderThickness="1" Padding="1"
                             Width="{Binding Size.X}"
                             Height="{Binding Size.Y}" >
-                            <Grid>
-                                <Grid.Background>
-                                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                                        <GradientStop Color="AliceBlue" Offset="0"/>
-                                        <GradientStop Color="{Binding Color}" Offset=".5"/>
-                                    </LinearGradientBrush>
-                                </Grid.Background>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition/>
-                                </Grid.RowDefinitions>
-                                <Thumb DragDelta="Thumb_Drag"
-                                   IsEnabled="{Binding IsSelected,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBoxItem}}}"
-                                   x:Name="Thumb">
-                                    <Thumb.Template>
-                                        <ControlTemplate TargetType="Thumb">
-                                            <Border Background="#02FFFFFF">
-                                                <TextBlock Text="{Binding Name}" 
-                                                       FontSize="16" 
-                                                       VerticalAlignment="Center"
-                                                       x:Name="txt"/>
-                                            </Border>
-                                            <ControlTemplate.Triggers>
-                                                <DataTrigger Binding="{Binding IsCollapsed}" Value="True">
-                                                    <Setter TargetName="txt" Property="Text" Value="{Binding ShortName}"/>
-                                                    <Setter TargetName="txt" Property="TextAlignment" Value="Center"/>
-                                                </DataTrigger>
-                                            </ControlTemplate.Triggers>
-                                        </ControlTemplate>
-                                    </Thumb.Template>
-                                </Thumb>
-                                <Grid x:Name="Data" Grid.Row="1">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-
-                                </Grid.RowDefinitions>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                        
-                                    </Grid.ColumnDefinitions>
-                                    <Label  Content ="{Binding Path=V1, Mode=TwoWay}" Grid.Row="0" Grid.Column="0" Height="30" Width="90" Margin="2"/>
-                                    <Label  Content ="{Binding Path=V2, Mode=TwoWay}" Grid.Row="1" Grid.Column="0" Height="30" Width="90" Margin="2"/>
-                                    <Label  Content ="{Binding Path=V3, Mode=TwoWay}" Grid.Row="2" Grid.Column="0" Height="30" Width="90" Margin="2"/>
-                                    <Label  Content ="{Binding Path=V4, Mode=TwoWay}" Grid.Row="3" Grid.Column="0" Height="30" Width="90" Margin="2"/>
-                                    <Label  Content ="{Binding Path=V5, Mode=TwoWay}" Grid.Row="4" Grid.Column="0" Height="30" Width="90" Margin="2"/>
-                                    <Label  Content ="{Binding Path=V6, Mode=TwoWay}" Grid.Row="5" Grid.Column="0" Height="30" Width="90" Margin="2"/>
-                                    <Label  Content ="{Binding Path=V7, Mode=TwoWay}" Grid.Row="6" Grid.Column="0" Height="30" Width="90" Margin="2"/>
-                                    <Label  Content ="{Binding Path=V8, Mode=TwoWay}" Grid.Row="7" Grid.Column="0" Height="30" Width="90" Margin="2"/>
-                                    <Label  Content ="{Binding Path=V9, Mode=TwoWay}" Grid.Row="8" Grid.Column="0" Height="30" Width="90" Margin="2"/>
-                                    <Label  Content ="{Binding Path=V10, Mode=TwoWay}" Grid.Row="9" Grid.Column="0" Height="30" Width="90" Margin="2"/>
-
-                                    <TextBox  Text ="{Binding Path=T1, Mode=TwoWay}" Grid.Row="0" Grid.Column="1" Height="20" Width="90" Margin="2"/>
-                                    <TextBox  Text ="{Binding Path=T2, Mode=TwoWay}" Grid.Row="1" Grid.Column="1" Height="20" Width="90" Margin="2"/>
-                                    <TextBox  Text ="{Binding Path=T3, Mode=TwoWay}" Grid.Row="2" Grid.Column="1" Height="20" Width="90" Margin="2"/>
-                                    <TextBox  Text ="{Binding Path=T4, Mode=TwoWay}" Grid.Row="3" Grid.Column="1" Height="20" Width="90" Margin="2"/>
-                                    <TextBox  Text ="{Binding Path=T5, Mode=TwoWay}" Grid.Row="4" Grid.Column="1" Height="20" Width="90" Margin="2"/>
-                                    <TextBox  Text ="{Binding Path=T6, Mode=TwoWay}" Grid.Row="5" Grid.Column="1" Height="20" Width="90" Margin="2"/>
-                                    <TextBox  Text ="{Binding Path=T7, Mode=TwoWay}" Grid.Row="6" Grid.Column="1" Height="20" Width="90" Margin="2"/>
-                                    <TextBox  Text ="{Binding Path=T8, Mode=TwoWay}" Grid.Row="7" Grid.Column="1" Height="20" Width="90" Margin="2"/>
-                                    <TextBox  Text ="{Binding Path=T9, Mode=TwoWay}" Grid.Row="8" Grid.Column="1" Height="20" Width="90" Margin="2"/>
-                                    <TextBox  Text ="{Binding Path=T10, Mode=TwoWay}" Grid.Row="9" Grid.Column="1" Height="20" Width="90" Margin="2"/>
-
-                                </Grid>
-                            </Grid>
-                        </Border>
-                        <DataTemplate.Triggers>
-                            <DataTrigger Binding="{Binding IsCollapsed}" Value="True">
-                                <Setter TargetName="Data" Property="Visibility"  Value="Collapsed"/>
-                                <Setter TargetName="Thumb" Property="Grid.RowSpan" Value="2"/>
-                            </DataTrigger>
-                        </DataTemplate.Triggers>
-                    </DataTemplate>
-
-                    <DataTemplate DataType="{x:Type local2:Node2}">
-                        <Border BorderBrush="LightGray" BorderThickness="1" Padding="1"
-                            Width="{Binding Size.X}"
-                            Height="{Binding Size.Y}" >
-                            <Grid>
-                                <Grid.Background>
-                                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                                        <GradientStop Color="AliceBlue" Offset="0"/>
-                                        <GradientStop Color="{Binding Color}" Offset=".5"/>
-                                    </LinearGradientBrush>
-                                </Grid.Background>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition/>
-                                </Grid.RowDefinitions>
-                                <Thumb DragDelta="Thumb_Drag2"
-                                   IsEnabled="{Binding IsSelected,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBoxItem}}}"
-                                   x:Name="Thumb">
-                                    <Thumb.Template>
-                                        <ControlTemplate TargetType="Thumb">
-                                            <Border Background="#02FFFFFF">
-                                                <TextBlock Text="{Binding Name}" 
-                                                       FontSize="16" 
-                                                       VerticalAlignment="Center"
-                                                       x:Name="txt"/>
-                                            </Border>
-                                            <ControlTemplate.Triggers>
-                                                <DataTrigger Binding="{Binding IsCollapsed}" Value="True">
-                                                    <Setter TargetName="txt" Property="Text" Value="{Binding ShortName}"/>
-                                                    <Setter TargetName="txt" Property="TextAlignment" Value="Center"/>
-                                                </DataTrigger>
-                                            </ControlTemplate.Triggers>
-                                        </ControlTemplate>
-                                    </Thumb.Template>
-                                </Thumb>
-                                <Grid x:Name="Data" Grid.Row="1">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto"/>
-                                    </Grid.RowDefinitions>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Label  Content ="{Binding Path=V1, Mode=TwoWay}" Grid.Row="0" Grid.Column="0" Height="30" Width="90" Margin="2"/>
-                                    <TextBox  Text ="{Binding Path=T1, Mode=TwoWay}" Grid.Row="0" Grid.Column="1" Height="20" Width="90" Margin="2"/>
-
-                                </Grid>
-                            </Grid>
-                        </Border>
-                        <DataTemplate.Triggers>
-                            <DataTrigger Binding="{Binding IsCollapsed}" Value="True">
-                                <Setter TargetName="Data" Property="Visibility"  Value="Collapsed"/>
-                                <Setter TargetName="Thumb" Property="Grid.RowSpan" Value="2"/>
-                            </DataTrigger>
-                        </DataTemplate.Triggers>
-                    </DataTemplate>
-
-                    <!-- This is the DataTemplate that will be used to render the Connector class -->
-                    <DataTemplate DataType="{x:Type local2:Connector}">
                         <Grid>
-                            <Path StrokeThickness="3" x:Name="Line">
-                                <Path.Stroke>
-                                    <SolidColorBrush Color="{Binding Color}"/>
-                                </Path.Stroke>
-                                <Path.Data>
-                                    <PathGeometry>
-                                        <PathFigure StartPoint="{Binding Start.Location.Value}">
-                                            <QuadraticBezierSegment  
+                            <Grid.Background>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                    <GradientStop Color="AliceBlue" Offset="0"/>
+                                    <GradientStop Color="{Binding Color}" Offset=".5"/>
+                                </LinearGradientBrush>
+                            </Grid.Background>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <Thumb DragDelta="Thumb_Drag"
+                                   IsEnabled="{Binding IsSelected,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBoxItem}}}"
+                                   x:Name="Thumb">
+                                <Thumb.Template>
+                                    <ControlTemplate TargetType="Thumb">
+                                        <Border Background="#02FFFFFF">
+                                            <TextBlock Text="{Binding Name}" 
+                                                       FontSize="16" 
+                                                       VerticalAlignment="Center"
+                                                       x:Name="txt"/>
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <DataTrigger Binding="{Binding IsCollapsed}" Value="True">
+                                                <Setter TargetName="txt" Property="Text" Value="{Binding ShortName}"/>
+                                                <Setter TargetName="txt" Property="TextAlignment" Value="Center"/>
+                                            </DataTrigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Thumb.Template>
+                            </Thumb>
+                            <Grid x:Name="Data" Grid.Row="1">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+
+                                </Grid.ColumnDefinitions>
+                                <Label  Content ="{Binding Path=V1, Mode=TwoWay}" Grid.Row="0" Grid.Column="0" Height="30" Width="90" Margin="2"/>
+                                <Label  Content ="{Binding Path=V2, Mode=TwoWay}" Grid.Row="1" Grid.Column="0" Height="30" Width="90" Margin="2"/>
+                                <Label  Content ="{Binding Path=V3, Mode=TwoWay}" Grid.Row="2" Grid.Column="0" Height="30" Width="90" Margin="2"/>
+                                <Label  Content ="{Binding Path=V4, Mode=TwoWay}" Grid.Row="3" Grid.Column="0" Height="30" Width="90" Margin="2"/>
+                                <Label  Content ="{Binding Path=V5, Mode=TwoWay}" Grid.Row="4" Grid.Column="0" Height="30" Width="90" Margin="2"/>
+                                <Label  Content ="{Binding Path=V6, Mode=TwoWay}" Grid.Row="5" Grid.Column="0" Height="30" Width="90" Margin="2"/>
+                                <Label  Content ="{Binding Path=V7, Mode=TwoWay}" Grid.Row="6" Grid.Column="0" Height="30" Width="90" Margin="2"/>
+                                <Label  Content ="{Binding Path=V8, Mode=TwoWay}" Grid.Row="7" Grid.Column="0" Height="30" Width="90" Margin="2"/>
+                                <Label  Content ="{Binding Path=V9, Mode=TwoWay}" Grid.Row="8" Grid.Column="0" Height="30" Width="90" Margin="2"/>
+                                <Label  Content ="{Binding Path=V10, Mode=TwoWay}" Grid.Row="9" Grid.Column="0" Height="30" Width="90" Margin="2"/>
+
+                                <TextBox  Text ="{Binding Path=T1, Mode=TwoWay}" Grid.Row="0" Grid.Column="1" Height="20" Width="90" Margin="2"/>
+                                <TextBox  Text ="{Binding Path=T2, Mode=TwoWay}" Grid.Row="1" Grid.Column="1" Height="20" Width="90" Margin="2"/>
+                                <TextBox  Text ="{Binding Path=T3, Mode=TwoWay}" Grid.Row="2" Grid.Column="1" Height="20" Width="90" Margin="2"/>
+                                <TextBox  Text ="{Binding Path=T4, Mode=TwoWay}" Grid.Row="3" Grid.Column="1" Height="20" Width="90" Margin="2"/>
+                                <TextBox  Text ="{Binding Path=T5, Mode=TwoWay}" Grid.Row="4" Grid.Column="1" Height="20" Width="90" Margin="2"/>
+                                <TextBox  Text ="{Binding Path=T6, Mode=TwoWay}" Grid.Row="5" Grid.Column="1" Height="20" Width="90" Margin="2"/>
+                                <TextBox  Text ="{Binding Path=T7, Mode=TwoWay}" Grid.Row="6" Grid.Column="1" Height="20" Width="90" Margin="2"/>
+                                <TextBox  Text ="{Binding Path=T8, Mode=TwoWay}" Grid.Row="7" Grid.Column="1" Height="20" Width="90" Margin="2"/>
+                                <TextBox  Text ="{Binding Path=T9, Mode=TwoWay}" Grid.Row="8" Grid.Column="1" Height="20" Width="90" Margin="2"/>
+                                <TextBox  Text ="{Binding Path=T10, Mode=TwoWay}" Grid.Row="9" Grid.Column="1" Height="20" Width="90" Margin="2"/>
+
+                            </Grid>
+                        </Grid>
+                    </Border>
+                    <DataTemplate.Triggers>
+                        <DataTrigger Binding="{Binding IsCollapsed}" Value="True">
+                            <Setter TargetName="Data" Property="Visibility"  Value="Collapsed"/>
+                            <Setter TargetName="Thumb" Property="Grid.RowSpan" Value="2"/>
+                        </DataTrigger>
+                    </DataTemplate.Triggers>
+                </DataTemplate>
+
+                <DataTemplate DataType="{x:Type local2:Node2}">
+                    <Border BorderBrush="LightGray" BorderThickness="1" Padding="1"
+                            Width="{Binding Size.X}"
+                            Height="{Binding Size.Y}" >
+                        <Grid>
+                            <Grid.Background>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                    <GradientStop Color="AliceBlue" Offset="0"/>
+                                    <GradientStop Color="{Binding Color}" Offset=".5"/>
+                                </LinearGradientBrush>
+                            </Grid.Background>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <Thumb DragDelta="Thumb_Drag2"
+                                   IsEnabled="{Binding IsSelected,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBoxItem}}}"
+                                   x:Name="Thumb">
+                                <Thumb.Template>
+                                    <ControlTemplate TargetType="Thumb">
+                                        <Border Background="#02FFFFFF">
+                                            <TextBlock Text="{Binding Name}" 
+                                                       FontSize="16" 
+                                                       VerticalAlignment="Center"
+                                                       x:Name="txt"/>
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <DataTrigger Binding="{Binding IsCollapsed}" Value="True">
+                                                <Setter TargetName="txt" Property="Text" Value="{Binding ShortName}"/>
+                                                <Setter TargetName="txt" Property="TextAlignment" Value="Center"/>
+                                            </DataTrigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Thumb.Template>
+                            </Thumb>
+                            <Grid x:Name="Data" Grid.Row="1">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <Label  Content ="{Binding Path=V1, Mode=TwoWay}" Grid.Row="0" Grid.Column="0" Height="30" Width="90" Margin="2"/>
+                                <TextBox  Text ="{Binding Path=T1, Mode=TwoWay}" Grid.Row="0" Grid.Column="1" Height="20" Width="90" Margin="2"/>
+
+                            </Grid>
+                        </Grid>
+                    </Border>
+                    <DataTemplate.Triggers>
+                        <DataTrigger Binding="{Binding IsCollapsed}" Value="True">
+                            <Setter TargetName="Data" Property="Visibility"  Value="Collapsed"/>
+                            <Setter TargetName="Thumb" Property="Grid.RowSpan" Value="2"/>
+                        </DataTrigger>
+                    </DataTemplate.Triggers>
+                </DataTemplate>
+
+                <!-- This is the DataTemplate that will be used to render the Connector class -->
+                <DataTemplate DataType="{x:Type local2:Connector}">
+                    <Grid>
+                        <Path StrokeThickness="3" x:Name="Line">
+                            <Path.Stroke>
+                                <SolidColorBrush Color="{Binding Color}"/>
+                            </Path.Stroke>
+                            <Path.Data>
+                                <PathGeometry>
+                                    <PathFigure StartPoint="{Binding Start.Location.Value}">
+                                        <QuadraticBezierSegment  
                                                    Point1="{Binding MidPoint.Value}"
                                                    Point2="{Binding End.Location.Value}" />
-                                        </PathFigure>
-                                    </PathGeometry>
-                                </Path.Data>
-                            </Path>
-                        </Grid>
-                        <DataTemplate.Triggers>
-                            <DataTrigger Binding="{Binding End}" Value="{x:Null}">
-                                <Setter TargetName="Line" Property="Visibility" Value="Collapsed"/>
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBoxItem}}}" Value="True">
-                                <Setter TargetName="Line" Property="Stroke" Value="Red"/>
-                                <Setter TargetName="Line" Property="StrokeDashArray" Value="2 3"/>
-                                <DataTrigger.EnterActions>
-                                    <BeginStoryboard x:Name="DashAnimation">
-                                        <Storyboard Duration="00:00:01" RepeatBehavior="Forever">
-                                            <DoubleAnimation From="50" To="0" Storyboard.TargetName="Line" Storyboard.TargetProperty="StrokeDashOffset"/>
-                                        </Storyboard>
-                                    </BeginStoryboard>
-                                </DataTrigger.EnterActions>
-                                <DataTrigger.ExitActions>
-                                    <StopStoryboard BeginStoryboardName="DashAnimation"/>
-                                </DataTrigger.ExitActions>
-                            </DataTrigger>
-                        </DataTemplate.Triggers>
-                    </DataTemplate>
+                                    </PathFigure>
+                                </PathGeometry>
+                            </Path.Data>
+                        </Path>
+                    </Grid>
+                    <DataTemplate.Triggers>
+                        <DataTrigger Binding="{Binding End}" Value="{x:Null}">
+                            <Setter TargetName="Line" Property="Visibility" Value="Collapsed"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBoxItem}}}" Value="True">
+                            <Setter TargetName="Line" Property="Stroke" Value="Red"/>
+                            <Setter TargetName="Line" Property="StrokeDashArray" Value="2 3"/>
+                            <DataTrigger.EnterActions>
+                                <BeginStoryboard x:Name="DashAnimation">
+                                    <Storyboard Duration="00:00:01" RepeatBehavior="Forever">
+                                        <DoubleAnimation From="50" To="0" Storyboard.TargetName="Line" Storyboard.TargetProperty="StrokeDashOffset"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </DataTrigger.EnterActions>
+                            <DataTrigger.ExitActions>
+                                <StopStoryboard BeginStoryboardName="DashAnimation"/>
+                            </DataTrigger.ExitActions>
+                        </DataTrigger>
+                    </DataTemplate.Triggers>
+                </DataTemplate>
 
-                    <!-- This is the DataTemplate that will be used to render the SnapSpot class -->
-                    <DataTemplate DataType="{x:Type local2:SnapSpot}">
-                        <Thumb DragDelta="Snap_DragDelta"
+                <!-- This is the DataTemplate that will be used to render the SnapSpot class -->
+                <DataTemplate DataType="{x:Type local2:SnapSpot}">
+                    <Thumb DragDelta="Snap_DragDelta"
                            IsEnabled="{Binding IsSelected,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBoxItem}}}">
-                            <Thumb.Template>
-                                <ControlTemplate>
-                                    <Path Stroke="Black" Fill="Red" RenderTransformOrigin="0.0,0.0">
-                                        <Path.Data>
-                                            <PathGeometry>
-                                                <PathFigure StartPoint="-5,0">
-                                                    <ArcSegment IsLargeArc="True"
+                        <Thumb.Template>
+                            <ControlTemplate>
+                                <Path Stroke="Black" Fill="Red" RenderTransformOrigin="0.0,0.0">
+                                    <Path.Data>
+                                        <PathGeometry>
+                                            <PathFigure StartPoint="-5,0">
+                                                <ArcSegment IsLargeArc="True"
                                                             Size="5, 5"
                                                             Point="5, 0"
                                                             SweepDirection="Clockwise" />
-                                                </PathFigure>
-                                            </PathGeometry>
-                                        </Path.Data>
-                                        <Path.RenderTransform>
-                                            <RotateTransform Angle="{Binding Angle}"/>
-                                        </Path.RenderTransform>
-                                    </Path>
-                                </ControlTemplate>
-                            </Thumb.Template>
-                        </Thumb>
-                    </DataTemplate>
-                </Grid.Resources>
+                                            </PathFigure>
+                                        </PathGeometry>
+                                    </Path.Data>
+                                    <Path.RenderTransform>
+                                        <RotateTransform Angle="{Binding Angle}"/>
+                                    </Path.RenderTransform>
+                                </Path>
+                            </ControlTemplate>
+                        </Thumb.Template>
+                    </Thumb>
+                </DataTemplate>
+            </Grid.Resources>
 
-                <ListBox SelectedItem="{Binding SelectedObject}" 
+            <ListBox SelectedItem="{Binding SelectedObject}" 
                      PreviewMouseMove="ListBox_PreviewMouseMove"
                      PreviewMouseDown="ListBox_PreviewMouseDown"
                          Height=" Auto">
-                    <ListBox.Template>
-                        <ControlTemplate>
-                            <Border>
-                                <Border.Background>
-                                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1" Opacity=".3">
-                                        <GradientStop Color="White" Offset="0"/>
-                                        <GradientStop Color="GhostWhite" Offset="1"/>
-                                    </LinearGradientBrush>
-                                </Border.Background>
+                <ListBox.Template>
+                    <ControlTemplate>
+                        <Border>
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1" Opacity=".3">
+                                    <GradientStop Color="White" Offset="0"/>
+                                    <GradientStop Color="GhostWhite" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Border.Background>
 
 
 
                             <ScrollViewer VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" CanContentScroll="True">
-                                    <ItemsPresenter/>
-                                </ScrollViewer>
-                            </Border>
-                        </ControlTemplate>
-                    </ListBox.Template>
-                    <ListBox.ItemsSource>
-                        <StaticResource ResourceKey="Col"/>
-                    </ListBox.ItemsSource>
-                    <ListBox.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <Canvas IsItemsHost="True" Background="#01FFFFFF" 
+                                <ItemsPresenter/>
+                            </ScrollViewer>
+                        </Border>
+                    </ControlTemplate>
+                </ListBox.Template>
+                <ListBox.ItemsSource>
+                    <StaticResource ResourceKey="Col"/>
+                </ListBox.ItemsSource>
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Canvas IsItemsHost="True" Background="#01FFFFFF" 
                                 Height="{Binding AreaHeight}" Width="{Binding AreaWidth}"
                                 VerticalAlignment="Top" HorizontalAlignment="Left"/>
-                        </ItemsPanelTemplate>
-                    </ListBox.ItemsPanel>
-                    <ListBox.ItemContainerStyle>
-                        <Style TargetType="ListBoxItem">
-                            <Setter Property="Canvas.Left" Value="{Binding Location.X}"/>
-                            <Setter Property="Canvas.Top" Value="{Binding Location.Y}"/>
-                            <Setter Property="FocusVisualStyle" Value="{StaticResource EmptyFocusVisualStyle}"/>
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="ListBoxItem">
-                                        <ContentPresenter x:Name="Content"/>
-                                        <ControlTemplate.Triggers>
-                                            <Trigger Property="IsSelected" Value="True">
-                                                <Setter TargetName="Content" Property="Effect">
-                                                    <Setter.Value>
-                                                        <DropShadowEffect Color="Gray" ShadowDepth="4" BlurRadius="10"/>
-                                                    </Setter.Value>
-                                                </Setter>
-                                            </Trigger>
-                                            <DataTrigger Binding="{Binding IsNew}" Value="True">
-                                                <Setter Property="Opacity" Value=".5"/>
-                                            </DataTrigger>
-                                        </ControlTemplate.Triggers>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </ListBox.ItemContainerStyle>
-                </ListBox>
-            </Grid>
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="Canvas.Left" Value="{Binding Location.X}"/>
+                        <Setter Property="Canvas.Top" Value="{Binding Location.Y}"/>
+                        <Setter Property="FocusVisualStyle" Value="{StaticResource EmptyFocusVisualStyle}"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ListBoxItem">
+                                    <ContentPresenter x:Name="Content"/>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter TargetName="Content" Property="Effect">
+                                                <Setter.Value>
+                                                    <DropShadowEffect Color="Gray" ShadowDepth="4" BlurRadius="10"/>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Trigger>
+                                        <DataTrigger Binding="{Binding IsNew}" Value="True">
+                                            <Setter Property="Opacity" Value=".5"/>
+                                        </DataTrigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ListBox.ItemContainerStyle>
+            </ListBox>
+        </Grid>
     </DockPanel>
 </Window>
 
