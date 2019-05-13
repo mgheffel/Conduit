@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-C:\Users\GitHub\Documents\GitHub\Conduit\Conduit\obj\Debug\
+C:\Users\kbowers\source\repos\SeniorProject4\Conduit\obj\Debug\
 Conduit
 none
 false
 DEBUG;TRACE
-C:\Users\GitHub\Documents\GitHub\Conduit\Conduit\App.xaml
+C:\Users\kbowers\source\repos\SeniorProject4\Conduit\App.xaml
 71572330696
 
-36456037597
-19294447380
+40-1787126610
+19-290682993
 Left Edition Panel\ButtonsPanel.xaml;Left Edition Panel\ConnectorPropertyEditor.xaml;Left Edition Panel\EditorStyles.xaml;Left Edition Panel\NodePropertyEditor.xaml;Left Edition Panel\ParametersEditor.xaml;Left Edition Panel\SnapSpotPropertyEditor.xaml;MainWindow.xaml;
 
-False
+True
 
