@@ -1,14 +1,9 @@
-﻿using System;
+﻿using Renci.SshNet;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using Renci.SshNet;
 using System.IO;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace Conduit
 {
@@ -19,7 +14,8 @@ namespace Conduit
         {
             InitializeComponent();
             m = v;
-            //string file = File.ReadAllText("C:/Users/kbowers/Desktop/data.txt");
+            /*string file = File.ReadAllText("C:/Users/kbowers/Desktop/test5.txt");
+            fixOutput(file);*/
             if (runCommand() != null) {
                 fixOutput(runCommand());
             }
@@ -69,9 +65,11 @@ namespace Conduit
             List<string> FutureJobNames = new List<string>();
             List<string> FutureJobID = new List<string>();
             List<string> FutureCores = new List<string>();
+            bool isQueued = false;
+            bool containsMax = false;
 
-            int nodes = 0;
-            int b = 0;
+            //int nodes = 0;
+            //int b = 0;
             for (int i = 0; i < count; i++)
             {
                 //if line is empty skip it
@@ -120,20 +118,59 @@ namespace Conduit
                                     k++;
                                 }
                             }
-                            //Assumption that only your jobs start with 32,27
-                            JobNames.Add(nonNullValues[2]);
-                            JobID.Add(nonNullValues[3]);
-                            Cores.Add(nonNullValues[5]);
-                            char[] gb = nonNullValues[8].ToCharArray();
-                            string max = "";
-                            for (int l = 4; l<gb.Count(); l++)
+                            if (isQueued)
                             {
-                                max += gb[l];
+                                if (nonNullValues.Count() > 1)
+                                {
+                                    char[] future = nonNullValues[1].ToCharArray();
+                                    //contains queued job
+                                    if (future[0] == 27)
+                                    {
+                                        FutureJobNames.Add(nonNullValues[2]);
+                                        FutureJobID.Add(nonNullValues[3]);
+                                        FutureCores.Add(nonNullValues[5]);
+
+                                    }
+                                }
                             }
-                            MaxGB.Add(max += nonNullValues[9]);
-                            char[] rt = nonNullValues[17].ToCharArray();
-                            string run= nonNullValues[12] + nonNullValues[13] + " "+ nonNullValues [14] + nonNullValues[15]+ " " + nonNullValues[16] + rt[0];
-                            RunTime.Add(run);
+                            else
+                            {
+                                //Assumption that only your jobs start with 32,27
+                                JobNames.Add(nonNullValues[2]);
+                                JobID.Add(nonNullValues[3]);
+                                Cores.Add(nonNullValues[5]);
+                                char[] gb = nonNullValues[8].ToCharArray();
+                                string max = "";
+                                for (int l = 4; l < gb.Count(); l++)
+                                {
+                                    max += gb[l];
+                                }
+                                if (max.Last() == 'x')
+                                {
+                                    max +="" + nonNullValues[9];
+                                    containsMax = true;
+                                }
+                                else
+                                {
+                                    containsMax = false;
+                                }
+                                MaxGB.Add(max);
+                                string run = "";
+                                if (containsMax)
+                                {
+                                    char[] rt = nonNullValues[17].ToCharArray();
+                                    run = nonNullValues[12] + nonNullValues[13] + " " + nonNullValues[14] + nonNullValues[15] + " " + nonNullValues[16] + rt[0];
+                                }
+                                else
+                                {
+                                    char[] rt = nonNullValues[16].ToCharArray();
+                                    run = nonNullValues[11] + nonNullValues[12] + " " + nonNullValues[13] + nonNullValues[14] + " " + nonNullValues[15] + rt[0];
+                                }
+                                /*char[] rt = nonNullValues[17].ToCharArray();
+                                string run = nonNullValues[12] + nonNullValues[13] + " " + nonNullValues[14] + nonNullValues[15] + " " + nonNullValues[16] + rt[0];
+                                RunTime.Add(run);*/
+                                RunTime.Add(run);
+                            }
                         }
                         //ignore other people
                         else if(characters[0] == 32 && characters[1] != 27)
@@ -143,6 +180,7 @@ namespace Conduit
                         //Queue lines
                         else if(characters[0] == 27)
                         {
+                            isQueued = true;
                             int k = 0;
                             for (int j = 0; j < values.Count(); j++)
                             {
