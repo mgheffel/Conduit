@@ -1,6 +1,6 @@
 List of Nodes
 100,100,2,SeqPurge,1,2,#runTime,#mem,,,,,,,,,4,8,,,,,,,,,readsInput,adaptersFile,cleanedReadsDir
-100,100,1,Kraken,1,2,#runTime,,,,,,,,,,18,,,,,,,,,,readsInput,database,raw_kraken
+100,100,1,Kraken,1,2,#runTime,,,,,,,,,,18,,,,,,,,,,readsInput,database,krakenOutDir
 100,100,1,Krona,1,1,#runTime,,,,,,,,,,3,,,,,,,,,,krakenInput,kronaOutDir
 100,100,2,BlastN,1,1,#runTime,#mem,,,,,,,,,12,64,,,,,,,,,fastaInputDir,blastOutDir
 100,100,2,Bowtie,1,2,#runTime,#mem,,,,,,,,,2,16,,,,,,,,,referencesToMapToDir,pairedReadsToMapDir,remappedOutDir

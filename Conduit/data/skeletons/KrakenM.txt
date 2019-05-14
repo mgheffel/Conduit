@@ -7,7 +7,7 @@ runSoftware=$pipelinePath/parallel/*&%@parallelPathTag
 readsInput=*&%@readsInputTag
 chain=${pipelinePath}/parallel/chain.sh
 krakenOutDir=*&%@krakenOutDirTag
-database=*&%@databasePathTag
+database=*&%@databaseTag
 
 results="$(echo $input | rev | cut -f 2- -d '_' | rev)_kraken"
 
