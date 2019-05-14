@@ -1,8 +1,8 @@
 #!/bin/bash
 
 
-pipelinePath=/homes/mgheffel/SDP2
-parentDir=/bulk/mgheffel/data/SDP
+pipelinePath=/homes/mgheffel/SDPall
+parentDir=/bulk/mgheffel/data/SDPall
 runSoftware=$pipelinePath/parallel/0-2_P.sh
 readsInput=/bulk/mgheffel/data/SDP/raw_cleaned
 chain=${pipelinePath}/parallel/chain.sh

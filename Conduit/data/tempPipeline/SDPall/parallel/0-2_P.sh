@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash -l
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=16
 #SBATCH --mem-per-cpu=14G   # Memory per core, use --mem= for memory per node
@@ -21,6 +21,7 @@ rm -rf $results
 mkdir $results
 
 paste <(ls -1 $input/*_R1*) <(ls -1 $input/*_R2*) | while IFS="$(printf '\t')" read -r  p1 p2 ;
+paste <(ls -1 "$input"/*_R1*) <(ls -1 "$input"/*_R2*) | while IFS="$(printf '\t')" read -r  p1 p2 ;
 do
   out=$(basename $p1 .fastq | cut -f 2- -d "_" | awk -F'_R1' '{print $1}').kraken
   kraken --db $db --threads $N --preload --paired $p1 $p2 --output $results/$out

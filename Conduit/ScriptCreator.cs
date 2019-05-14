@@ -136,7 +136,7 @@ namespace Conduit
 
         public void compileStandalone(string path, string outDirs)
         {
-            string baseFileText = System.IO.File.ReadAllText(parallelSkeletonPath);
+            string baseFileText = System.IO.File.ReadAllText(masterSkeletonPath);
             string[] pars = paramTups.Split(';');
             List<string> sbatchParams = new List<string>();
             List<string> softwareParams = new List<string>();
