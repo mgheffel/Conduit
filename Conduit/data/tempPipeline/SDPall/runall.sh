@@ -2,7 +2,7 @@
 #SBATCH --nodes=1
 #SBATCH --time=48:00:00
 pipePath=/homes/mgheffel/SDPall
-dataParentDir=/bulk/mgheffel/data/SDPall
+dataParentDir=/bulk/mgheffel/data/SDP
 alldoneflag=false
 doneflags=(false false)
 stepflags=(false false)

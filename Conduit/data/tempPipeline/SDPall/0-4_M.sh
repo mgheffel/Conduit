@@ -5,7 +5,7 @@
 #SBATCH --job-name=a5
 
 pipelinePath=/homes/mgheffel/SDPall
-parentDir=/bulk/mgheffel/data/SDPall
+parentDir=/bulk/mgheffel/data/SDP
 runSoftware=$pipelinePath/parallel/0-4_P.sh
 chain=${pipelinePath}/parallel/chain.sh
 readsInputDir=/bulk/mgheffel/data/SDP/vraw_iralUK

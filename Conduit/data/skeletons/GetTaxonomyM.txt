@@ -10,12 +10,11 @@ chain=${pipelinePath}/parallel/chain.sh
 database=*&%@databaseTag
 cleanedReadsDir=*&%@cleanedReadsDirTag
 krakenDir=*&%@krakenDirTag
-taxonomyReadsDir=*&%@unknownAndTaxReads
+taxonomyReadsDir=*&%@unknownAndTaxReadsTag
 
-HERE="/homes/bioinfo/vdl/v3"
-select=$pipelinePath/dependencies/select_sequences.pl
-get_by_tax=$pipelinePath/dependencies/get_by_tax.sh
-clean=$HERE/dependencies/guv_clean.sh
+select=/homes/bioinfo/vdl/v4/.other/select_sequences.pl
+get_by_tax=/homes/bioinfo/vdl/v4/.other/get_by_tax.sh
+clean=homes/bioinfo/vdl/v4/.other/guv_clean.sh
 
 JOBS=""
 
