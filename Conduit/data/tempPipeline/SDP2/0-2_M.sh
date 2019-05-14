@@ -1,10 +1,10 @@
 #!/bin/bash
 
 
-pipelinePath=*&%@pipelinePathTag
-parentDir=*&%@parentDirTag
-runSoftware=$pipelinePath/parallel/*&%@parallelPathTag
-readsInput=*&%@readsInputTag
+pipelinePath=/homes/mgheffel/SDP2
+parentDir=/bulk/mgheffel/data/SDP
+runSoftware=$pipelinePath/parallel/0-2_P.sh
+readsInput=/bulk/mgheffel/data/SDP/raw_cleaned
 chain=${pipelinePath}/parallel/chain.sh
 krakenOutDir=*&%@krakenOutDirTag
 database=*&%@databasePathTag

@@ -360,6 +360,8 @@ namespace Conduit
             File.WriteAllText(loadDataDir + "KrakenP.sh", sc.compileParallelScript());*/
 
             var vm = DataContext as MainViewModel;
+            vm.user = user;
+            vm.pass = password;
             compilePipeline cp = new compilePipeline(vm);
             cp.Show();
         }

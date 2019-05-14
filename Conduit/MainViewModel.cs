@@ -6,6 +6,8 @@ using System.Windows.Media;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
+using Renci.SshNet;
 
 namespace Conduit
 {
@@ -658,13 +660,20 @@ namespace Conduit
             List<string> branchStrings = new List<string>();
             string tempPipelinePath = conduitLocation + "\\data\\tempPipeline";
             string chain=File.ReadAllText(conduitLocation+"\\data\\skeletons\\chain.sh");
-            File.WriteAllText(conduitLocation + "\\data\\tempPipeline\\parallel\\chain.sh",chain);
+            
             if (Directory.Exists(tempPipelinePath))
                 Directory.Delete(tempPipelinePath, true);
+            Directory.CreateDirectory(tempPipelinePath);
+            tempPipelinePath += '\\' + Path.GetFileName(pipelinePath);
+            
+            System.Threading.Thread.Sleep(100);
             Directory.CreateDirectory(tempPipelinePath);
             System.Threading.Thread.Sleep(100);
             Directory.CreateDirectory(tempPipelinePath + "\\parallel");
             Directory.CreateDirectory(tempPipelinePath + "\\pyscripts");
+            Directory.CreateDirectory(tempPipelinePath + "\\dependencies");
+            System.Threading.Thread.Sleep(100);
+            File.WriteAllText(tempPipelinePath+"\\parallel\\chain.sh", chain.Replace("\r\n", "\n"));
             List<string> nodeNames = new List<string>();
             for (int i = 0; i < Nodes.Count; i++)
             {
@@ -769,8 +778,9 @@ namespace Conduit
 
             string basename = branchNum + '-' + mainStage.ToString();
             ScriptCreator sc = new ScriptCreator(headNode, inDirs, conduitLocation, pipelinePath, dataParentDir, basename);
-            sc.compileMasterScript(tempPipelinePath + "\\"+ branchNum + '-' + mainStage.ToString() + "_" + "M.sh", outDirs);
-            sc.compileParallelScript(tempPipelinePath + "\\parallel\\"+ branchNum + '-' + mainStage.ToString() + "_"  + "P.sh");
+            //sc.compileMasterScript(tempPipelinePath + "\\"+ branchNum + '-' + mainStage.ToString() + "_" + "M.sh", outDirs);
+            //sc.compileParallelScript(tempPipelinePath + "\\parallel\\"+ branchNum + '-' + mainStage.ToString() + "_"  + "P.sh");
+            sc.compileScripts(tempPipelinePath, basename, outDirs);
 
             string runallFile = "while ( ! $alldoneflag )\n\tdo\n"; 
             runallHeader += "pipePath=" + pipelinePath + "\n";
@@ -796,6 +806,7 @@ namespace Conduit
             bool endPipelineFlag = false;
             while (!endPipelineFlag)
             {
+                List<int> newBranchIndicies = new List<int>();
                 mainStage ++;
                 List<Node> possibleCurNodes = new List<Node>();
                 Node curNode = new Node();
@@ -916,16 +927,53 @@ namespace Conduit
                             for (int b = 0; b < branches.Count; b++)
                             {
                                 if (b != indexMain)
-                                    branchStrings.Add(createBranch(branches[b],branchStrings,dataParentDir,pipelinePath,tempPipelinePath));
+                                {
+                                    branchStrings.Add(createBranch(branches[b], branchStrings, dataParentDir, pipelinePath, tempPipelinePath));
+                                    newBranchIndicies.Add(branchStrings.Count + 1);
+                                }
+                                    
                             }
                         }
                     }
                 }
 
+
+                inDirs = "";
+                foreach (var item in curNode.InSnaps)
+                {
+                    for (int c = 0; c < Connectors.Count; c++)
+                    {
+                        if (Connectors[c].EndNode == null)
+                            continue;
+                        if (Connectors[c].EndNode == curNode && Connectors[c].End.Name == item.Value.Name)
+                        {
+                            inDirs += item.Value.Name + ',' + Connectors[c].StartNode2.T1.ToString() + ';';
+                            break;
+                        }
+                    }
+                }
+                inDirs = inDirs.Substring(0, inDirs.Length - 1);
+                outDirs = "";
+                foreach (var item in curNode.OutSnaps)
+                {
+                    for (int c = 0; c < Connectors.Count; c++)
+                    {
+                        if (Connectors[c].StartNode == null)
+                            continue;
+                        if (Connectors[c].StartNode == curNode && Connectors[c].Start.Name == item.Value.Name)
+                        {
+                            outDirs += item.Value.Name + ',' + Connectors[c].EndNode2.T1.ToString() + ';';
+                            break;
+                        }
+                    }
+                }
+                outDirs = outDirs.Substring(0, outDirs.Length - 1);
+
                 basename = branchNum + '-' + mainStage.ToString();
-                sc = new ScriptCreator(headNode, inDirs, conduitLocation, pipelinePath, dataParentDir, basename);
-                sc.compileMasterScript(tempPipelinePath + "\\" + branchNum + '-' + mainStage.ToString() + "_" + "M.sh", outDirs);
-                sc.compileParallelScript(tempPipelinePath + "\\parallel\\" + branchNum + '-' + mainStage.ToString() + "_" + "P.sh");
+                sc = new ScriptCreator(curNode, inDirs, conduitLocation, pipelinePath, dataParentDir, basename);
+                //sc.compileMasterScript(tempPipelinePath + "\\" + branchNum + '-' + mainStage.ToString() + "_" + "M.sh", outDirs);
+                //sc.compileParallelScript(tempPipelinePath + "\\parallel\\" + branchNum + '-' + mainStage.ToString() + "_" + "P.sh");
+                sc.compileScripts(tempPipelinePath, basename, outDirs);
 
 
                 //MessageBox.Show(curNode.Name);
@@ -946,6 +994,10 @@ namespace Conduit
                 runallFile += "\t\t\tstepflags[" + branchNum + "]=true\n";
                 runallFile += "\t\telif [ -e $dataParentDir/"+branchNum + '-' + mainStage.ToString() +".done ] ; then\n";
                 runallFile += "\t\t\tstages[" + branchNum + "]=$((${stages[" + branchNum + "]}+1))\n";
+                foreach (int b in newBranchIndicies)
+                {
+                    runallFile+= "\t\t\tstages[" + b + "]=1\n";
+                }
                 runallFile += "\t\t\tstepflags[" + branchNum + "]=false\n";
                 //remove next line
                 runallFile += "\t\t\techo \"" + branchNum + '-' + mainStage.ToString() + " done\"\n";
@@ -974,11 +1026,12 @@ namespace Conduit
             for (int i = 0; i <= branchStrings.Count; i++)
                 runallHeader += "false ";
             runallHeader = runallHeader.Substring(0, runallHeader.Length - 1) + ")\n";
-            runallHeader += "stages=(";
-            for (int i = 0; i <= branchStrings.Count; i++)
-                runallHeader += "1 ";
+            runallHeader += "stages=(1 ";
+            for (int i = 1; i <= branchStrings.Count; i++)
+                runallHeader += "0 ";
             runallHeader = runallHeader.Substring(0, runallHeader.Length - 1) + ")\n";
             File.WriteAllText(tempPipelinePath + "\\runall.sh", runallHeader+runallFile);
+            SendPipeline("doesntmatter", conduitLocation + "\\data\\tempPipeline");
         }
 
         public string createBranch(Node n, List<string> branchStrings, string dataParentDir, string pipelinePath, string tempPipelinePath)
@@ -1021,9 +1074,9 @@ namespace Conduit
 
             string basename = branchNum + '-' + mainStage.ToString();
             ScriptCreator sc = new ScriptCreator(curNode, inDirs, conduitLocation, pipelinePath, dataParentDir, basename);
-            sc.compileMasterScript(tempPipelinePath + "\\" + branchNum + '-' + mainStage.ToString() + "_" + "M.sh", outDirs);
-            sc.compileParallelScript(tempPipelinePath + "\\parallel\\" + branchNum + '-' + mainStage.ToString() + "_" + "P.sh");
-
+            //sc.compileMasterScript(tempPipelinePath + "\\" + branchNum + '-' + mainStage.ToString() + "_" + "M.sh", outDirs);
+            //sc.compileParallelScript(tempPipelinePath + "\\parallel\\" + branchNum + '-' + mainStage.ToString() + "_" + "P.sh");
+            sc.compileScripts(tempPipelinePath, basename, outDirs);
 
             string branchString = "\tif [ ${stages["+branchNum+"]} == 1 ] ; then\n";
             branchString += "\t\tif [ ${stepflags[" + branchNum + "]} == false ] ; then\n";
@@ -1043,6 +1096,7 @@ namespace Conduit
             bool endPipelineFlag = false;
             while (!endPipelineFlag)
             {
+                List<int> newBranchIndicies = new List<int>();
                 mainStage++;
                 Node2 outDataNode = new Node2();
                 SnapSpot curOut = new SnapSpot(null, null);
@@ -1162,7 +1216,11 @@ namespace Conduit
                             for (int b = 0; b < branches.Count; b++)
                             {
                                 if (b != indexMain)
-                                    branchStrings.Add(createBranch(branches[b],branchStrings,dataParentDir,pipelinePath,tempPipelinePath));
+                                {
+                                    branchStrings.Add(createBranch(branches[b], branchStrings, dataParentDir, pipelinePath, tempPipelinePath));
+                                    newBranchIndicies.Add(branchStrings.Count + 1);
+                                }
+                                    
                             }
                         }
                     }
@@ -1201,8 +1259,9 @@ namespace Conduit
 
                 basename = branchNum + '-' + mainStage.ToString();
                 sc = new ScriptCreator(curNode, inDirs, conduitLocation, pipelinePath, dataParentDir, basename);
-                sc.compileMasterScript(tempPipelinePath + "\\" + branchNum + '-' + mainStage.ToString() + "_" + "M.sh", outDirs);
-                sc.compileParallelScript(tempPipelinePath + "\\parallel\\" + branchNum + '-' + mainStage.ToString() + "_" + "P.sh");
+                //sc.compileMasterScript(tempPipelinePath + "\\" + branchNum + '-' + mainStage.ToString() + "_" + "M.sh", outDirs);
+                //sc.compileParallelScript(tempPipelinePath + "\\parallel\\" + branchNum + '-' + mainStage.ToString() + "_" + "P.sh");
+                sc.compileScripts(tempPipelinePath, basename, outDirs);
 
                 branchString += "\telif [ ${stages[" + branchNum + "]} == "+mainStage.ToString()+" ] ; then\n";
                 branchString += "\t\tif [ ${stepflags[" + branchNum + "]} == false ] ; then\n";
@@ -1212,6 +1271,10 @@ namespace Conduit
                 branchString += "\t\telif [ -e $dataParentDir/" + branchNum + "-1.done ] ; then\n";
                 branchString += "\t\t\tstepflags[" + branchNum + "]=false\n";
                 branchString += "\t\t\tstages[" + branchNum + "]=$((${stages[" + branchNum + "]}+1))\n";
+                foreach (int b in newBranchIndicies)
+                {
+                    branchString += "\t\t\tstages[" + b + "]=1\n";
+                }
                 //remove next line
                 branchString += "\t\t\techo \"" + branchNum + '-' + mainStage.ToString() + " done\"\n";
                 branchString += "\t\tfi\n";
@@ -1262,6 +1325,62 @@ namespace Conduit
                 }
             }
             return nodeNames;
+        }
+
+        public static ConnectionInfo getSftpConnection(string host, string username, int port, string password)
+        {
+            return new PasswordConnectionInfo(host, port, username, password);
+        }
+        public string user;
+        public string pass;
+        public void SendPipeline(string beocatPath, string localPath)
+        {
+            if (File.Exists(conduitLocation + "\\data\\tempPipe.zip"))
+            {
+                File.Delete(conduitLocation + "\\data\\tempPipe.zip");
+                System.Threading.Thread.Sleep(100);
+            }
+            ZipFile.CreateFromDirectory(localPath, conduitLocation+"\\data\\tempPipe.zip");
+
+            string filename = conduitLocation + "\\data\\tempPipe.zip";
+            string justName = "";
+
+
+            justName = Path.GetFileNameWithoutExtension(filename);
+            //MessageBox.Show("Create client Object");
+            using (SftpClient sftpClient = new SftpClient(getSftpConnection("headnode.beocat.ksu.edu", user, 22, pass)))
+            {
+                //MessageBox.Show("Connect to server");
+                sftpClient.Connect();
+                //MessageBox.Show("Creating FileStream object to stream a file");
+                using (FileStream fs = new FileStream(filename, FileMode.Open))
+                {
+                    sftpClient.BufferSize = 1024;
+                    sftpClient.UploadFile(fs, Path.GetFileName(filename));
+                    /* string directory = sftpClient.WorkingDirectory;
+                     directory += "/results.zip";
+                     MessageBox.Show(directory);
+                     ZipFile.ExtractToDirectory(directory, justName);*/
+                }
+
+                sftpClient.Dispose();
+            }
+            
+
+            SshClient ssh = new SshClient("headnode.beocat.ksu.edu", user, pass);
+            if (ssh != null)
+            {
+                using (ssh)
+                {
+                    ssh.Connect();
+                    string file2upzip = "unzip " + justName + ".zip";
+                    var command = ssh.CreateCommand("unzip " + justName + ".zip");
+                    command.Execute();
+                }
+                //transferred zip to beocat but threw error here
+                //ssh.Disconnect();
+            }
+            MessageBox.Show("File successfully added");
         }
     }
 }

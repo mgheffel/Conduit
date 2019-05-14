@@ -20,10 +20,10 @@ namespace Conduit
         public String inputTups = "";
         private static Dictionary<string, string> convertSbatch = new Dictionary<string, string>()
         {
-            { "#runTime", "time" },
-            { "#numCPUs", "ntasks-per-node"},
-            { "#memPerCPU", "mem-per-cpu"},
-            { "#mem","mem" }
+            { "#runTime", "time,:00:00" },
+            { "#numCPUs", "ntasks-per-node,"},
+            { "#memPerCPU", "mem-per-cpu,G"},
+            { "#mem","mem,G" }
         };
 
         public ScriptCreator(Node n, string inputString, string conduitPath, string pipePath, string parentDir, string basename)
@@ -62,16 +62,16 @@ namespace Conduit
             paramTups = paramTups.Substring(0, paramTups.Length - 1);
         }
 
-        public void compileScripts(string basePath, string outDirs)
+        public void compileScripts(string path, string basename, string outDirs)
         {
             if (File.Exists(parallelSkeletonPath))
             {
-                //compileMasterScript();
-                //compileParallelScript();
+                compileMasterScript(path+"\\"+basename+"_M.sh",outDirs);
+                compileParallelScript(path+"\\parallel\\"+basename+"_P.sh");
             }
             else
             {
-                compileNoParallel(basePath + "_M.sh", outDirs);
+                compileStandalone(path + "\\" + basename + "_M.sh", outDirs);
             }
         }
 
@@ -128,13 +128,13 @@ namespace Conduit
             for (int i = 0; i < sbatchParams.Count; i++)
             {
                 string[] inputSplit = sbatchParams[i].Split(',');
-                parallelFileText += "#SBATCH --" + convertSbatch[inputSplit[0]] + '=' + inputSplit[1] + '\n';
+                parallelFileText += "#SBATCH --" + convertSbatch[inputSplit[0]].Split(',')[0] + '=' + inputSplit[1] + convertSbatch[inputSplit[0]].Split(',')[1]+'\n';
             }
             parallelFileText += fileSplit[1];
             File.WriteAllText(path, parallelFileText.Replace("\r\n", "\n"));
         }
 
-        public void compileNoParallel(string path, string outDirs)
+        public void compileStandalone(string path, string outDirs)
         {
             string baseFileText = System.IO.File.ReadAllText(parallelSkeletonPath);
             string[] pars = paramTups.Split(';');
