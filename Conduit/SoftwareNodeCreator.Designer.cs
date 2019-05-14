@@ -1,6 +1,6 @@
 ﻿namespace Conduit
 {
-    partial class NodeCreator
+    partial class SoftwareNodeCreator
     {
         /// <summary>
         /// Required designer variable.

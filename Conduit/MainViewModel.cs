@@ -17,6 +17,8 @@ namespace Conduit
         string conduitLocation;
         #region Collections
 
+        //Observable Collections for Software Nodes, Data Nodes, and Connectors present on the screen as well as Software Nodes that have not been added
+
         private ObservableCollection<Node> _nodes;
         public ObservableCollection<Node> Nodes
         {
@@ -51,6 +53,7 @@ namespace Conduit
             get { return _snaps ?? (_snaps = new ObservableCollection<SnapSpot>()); }
         }
 
+        //Shows and sets what item is selected so it can be deleted and identified
         private DiagramObject _selectedObject;
         public DiagramObject SelectedObject
         {
@@ -65,7 +68,7 @@ namespace Conduit
                 _selectedObject = value;
                 OnPropertyChanged("SelectedObject");
 
-                DeleteCommand.IsEnabled = value != null;
+                //DeleteCommand.IsEnabled = value != null;
 
                 var connector = value as Connector;
                 ShowMidPointThumb = connector != null;
@@ -80,8 +83,8 @@ namespace Conduit
                 var snap = value as SnapSpot;
                 if (snap != null)
                 {
+                    //Shows the name of the selected SnapSpot
                     MessageBox.Show(snap.Name);
-                    MessageBox.Show(snap.IsConnected.ToString());
                 }
             }
         }
@@ -120,9 +123,7 @@ namespace Conduit
 
         public MainViewModel()
         {
-            //_nodes = new ObservableCollection<Node>(NodesDataSource.GetRandomNodes());
-            //_connectors = new ObservableCollection<Connector>(NodesDataSource.GetRandomConnectors(Nodes.ToList()));
-            //_snaps = new ObservableCollection<SnapSpot>(Nodes.SelectMany(x => x.Snaps));
+            //Gets the current directory to be used when necessary
             string cwd = Directory.GetCurrentDirectory();
             string[] cwdsplit = cwd.Split('\\');
             string loadDataDir = "";
@@ -167,11 +168,15 @@ namespace Conduit
             }
         }
 
-        public Node CreateNewNode(int numFields,int num, string[] strings)//, string[] outputs, string[] inputs)
+        /*Method to create a new Software Node. It takes a given node string array and uses that to create snapSnop 
+         * and set the appropriate parameter labels and values as well as input and output snap names
+         */
+        public Node CreateNewNode(int numFields,int num, string[] strings)
         {
             int input = Convert.ToInt32(strings[2]);
             int output = Convert.ToInt32(strings[1]);
 
+            //sets the size of the node so the appropriate number of parameters appear
             double xincrement = .1;
             double yincrement = .1;
             double xpoint = 194;
@@ -216,12 +221,10 @@ namespace Conduit
             yincrement = .9 / input;
 
 
-
+            //creates the node
             var node = new Node()
             {
                 Name = strings[0],
-                //IsNew = true,
-
                 Size = { Value = new Point(xpoint, ypoint) },
                 ShortName = "N",
                 Location = { Value = new Point(100, 100) },
@@ -229,6 +232,7 @@ namespace Conduit
 
             };
             
+            //sets the parameter names and values
             switch (num)
             {
                 case 0:
@@ -364,6 +368,8 @@ namespace Conduit
                     node.T10 = strings[22];
                     break;
             }
+
+            //Creates string[] of the inputSnap names and the outputSnap names and then uses that to add the snap points
             int total = strings.Count();
             int nodeCount = total- input - output;
             int inStop = (input + nodeCount - 1);
@@ -389,23 +395,21 @@ namespace Conduit
                 stringOfOutputs[i] = strings[i + inStop + 1];
 
             }
+            //adds the snapPoints 
             addSnapPoints(node, input, output, yincrement, xincrement, stringOfInputs,stringOfOutputs);
+            //Sets the variables of the node to match the appropriate numbers of fields, input snaps, and output snaps
             node.InputSnaps = input;
             node.OutputSnaps = output;
             node.Fields = numFields;
-
-            //NodesThatExist.Add(node);
-            //Nodes.Add(node);
             SelectedObject = node;
+            //Returns the created Software Node
             return node;
         }
+
+        //Method to add a software node to the screen
         public void viewNodes(Node n)
         {
             Nodes.Add(n);
-            /*foreach( SnapSpot s in n.Snaps)
-            {
-                Snaps.Add(s);
-            }*/
             foreach (var item in n.InSnaps)
             {
                 Snaps.Add(item.Value);
@@ -416,14 +420,13 @@ namespace Conduit
             }
         }
 
-
+        //Method to Create a Data Node which similarily takes a node string of the input names, output names, parameter names and values
         public Node2 CreateNewNode2(int numFields, string[] strings)
         {
             int input = Convert.ToInt32(strings[2]);
             int output = Convert.ToInt32(strings[1]);
-            //int input = Convert.ToInt32(strings[3]);
-           // int output = Convert.ToInt32(strings[2]); 
 
+            //creates the appropriately sized node
             double xincrement = .1;
             double yincrement = .1;
             double xpoint = 194;
@@ -431,10 +434,10 @@ namespace Conduit
             xincrement = .9 / output;
             yincrement = .9 / input;
 
+            //Creates the data node
             var node = new Node2()
             {
                 Name = strings[0],
-                //IsNew = true,
 
                 Size = { Value = new Point(xpoint, ypoint) },
                 ShortName = "N",
@@ -442,46 +445,49 @@ namespace Conduit
                 Color = Colors.AliceBlue
 
             };
+
+            //sets the parameter and value
             node.V1 = strings[3];
             node.T1 = strings[4];
-        
+             //adds snapPoints to the data node
             addSnapPoints2(node, input, output, yincrement, xincrement);
             node.Fields = numFields;
-
+            //Adds the DataNode to the screen
             Nodes2.Add(node);
             SelectedObject = node;
+            //returns the DataNode just added
             return node;
         }
 
-
-
+       
+        //Adds snapPoints to the Software Node that are evenly spaced along the appropriate side of the node
         public void addSnapPoints(Node node, int left, int right, double yincrement, double xincrement, string[] inputs, string[] outputs ) {
 
+            //input snaps
             double y = .1;
             for (int i = 0 ; i < left; i++)
             {
-                
                 SnapSpot s = new SnapSpot(node,null) { Offset = { X = 0, Y = y }, Angle = -90, Name = inputs[i], LockX = true, LockY = true };
                 node.InSnaps.Add(inputs[i],s);
-                //Snaps.Add(s);
                 y = y + yincrement;
 
             }
+            //output snaps
             double x = .1;
             for (int j = 0; j < right; j++)
             {
 
                 SnapSpot s = new SnapSpot(node,null) { Offset = { X = 1, Y = x }, Angle = 90, Name = outputs[j], LockX = true, LockY = true };
                 node.OutSnaps.Add(outputs[j],s);
-                //Snaps.Add(s);
                 x = x + xincrement;
 
             }
             
         }
-
+        //Adds snaps for Data Nodes
         public void addSnapPoints2(Node2 node, int left, int right, double yincrement, double xincrement)
         {
+            //input snaps
             double y = .1;
             for (int i = 0; i < left; i++)
             {
@@ -492,6 +498,7 @@ namespace Conduit
                 y = y + yincrement;
 
             }
+            //output snaps
             double x = .1;
             for (int j = 0; j < right; j++)
             {
@@ -502,7 +509,6 @@ namespace Conduit
                 x = x + xincrement;
 
             }
-
         }
 
         public void RemoveNewObjects()
@@ -538,41 +544,41 @@ namespace Conduit
             Connectors.Add(connector);
             SelectedObject = connector;
         }
-
+        //Creates a connector from a software node to a data node
         public void customConnectorToData(SnapSpot a, SnapSpot b)
         {
 
             bool make = true;
-            
+            //checks to make sure the software node snap is not connected
             if (a.IsConnected)
             {
                 MessageBox.Show("Not output availability for " + a.Name);
                 make = false;
             }
             if (make)
+            {
+                //creates connector
+                var connector = new Connector()
                 {
-                    var connector = new Connector()
-                    {
-                        Name = "Connector" + (Connectors.Count + 1),
-                        //IsNew = true,
-                        Start = a,
-                        End = b,
-                        Color = Colors.Red
-                    };
-                    connector.StartNode = a.Parent;
-                    connector.EndNode2 = b.Parent2;
-                    Connectors.Add(connector);
-                    SelectedObject = connector;
-                    a.IsConnected = true;
-                    b.IsConnected = true;
-                }
-
-            
+                    Name = "Connector" + (Connectors.Count + 1),
+                    Start = a,
+                    End = b,
+                    Color = Colors.Red
+                };
+                //sets appropriate properties of the connector to their respective values
+                connector.StartNode = a.Parent;
+                connector.EndNode2 = b.Parent2;
+                Connectors.Add(connector);
+                SelectedObject = connector;
+                a.IsConnected = true;
+                b.IsConnected = true;
+            }
         }
-
+        //Creates a connector from a data node to a software node
         public void customConnectorFromData(SnapSpot a,SnapSpot b)
         {
             bool make = true;
+            //Ensures that the Software snap is not already connected
             if (b.IsConnected)
             {
                 MessageBox.Show("Not output availability for " + a.Name);
@@ -581,14 +587,15 @@ namespace Conduit
 
             if (make)
             {
+                // makes the connector
                 var connector = new Connector()
                 {
                     Name = "Connector" + (Connectors.Count + 1),
-                    //IsNew = true,
                     Start = a,
                     End = b,
                     Color = Colors.Red
                 };
+                //sets appropriate properties of the connector to their respective values
                 connector.StartNode2 = a.Parent2;
                 connector.EndNode = b.Parent;
                 Connectors.Add(connector);
@@ -596,8 +603,6 @@ namespace Conduit
                 a.IsConnected = true;
                 b.IsConnected = true;
             }
-
-
         }
 
 
@@ -621,7 +626,6 @@ namespace Conduit
             if (SelectedObject is Node)
             {
                 var node = SelectedObject as Node;
-                //Connectors.Where(x => x.Start == node || x.End == node).ToList().ForEach(x => Connectors.Remove(x));
                 Nodes.Remove(node);
             }
         }

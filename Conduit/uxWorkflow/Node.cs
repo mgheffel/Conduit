@@ -4,19 +4,18 @@ using System.Windows;
 
 namespace Conduit
 {
-    public class Node: DiagramObject
+    public class Node : DiagramObject
     {
         public Node()
         {
             Size.ValueChanged = RecalculateSnaps;
             Location.ValueChanged = RecalculateSnaps;
-            
+
         }
 
         public void RecalculateSnaps()
         {
-            //Snaps.ForEach(x => x.Recalculate());
-            foreach(var item in InSnaps)
+            foreach (var item in InSnaps)
             {
                 item.Value.Recalculate();
             }
@@ -25,23 +24,18 @@ namespace Conduit
                 item.Value.Recalculate();
             }
         }
-
+        //Dictonary containing the input snapSpots of the software node
         private Dictionary<string, SnapSpot> _inSnaps;
         public Dictionary<string, SnapSpot> InSnaps
         {
             get { return _inSnaps ?? (_inSnaps = new Dictionary<string, SnapSpot>()); }
         }
+        //Dictonary containing the output snapSpots of the software Node
         private Dictionary<string, SnapSpot> _outSnaps;
         public Dictionary<string, SnapSpot> OutSnaps
         {
             get { return _outSnaps ?? (_outSnaps = new Dictionary<string, SnapSpot>()); }
         }
-        /* private List<SnapSpot> _snaps;
-         public List<SnapSpot> Snaps
-         {
-             get { return _snaps ?? (_snaps = new List<SnapSpot>()); }
-         }
-         */
 
         private Point originalSize;
         private BindablePoint _size;
@@ -49,7 +43,7 @@ namespace Conduit
         {
             get { return _size ?? (_size = new BindablePoint()); }
         }
-    
+
 
         private bool _isCollapsed;
         public bool IsCollapsed
@@ -73,7 +67,8 @@ namespace Conduit
 
         private string _shortName;
 
-        private string t1 ="";
+        //Strings for the values of the parameters that will populate the textboxes on the Node
+        private string t1 = "";
         private string t2 = "";
         private string t3 = "";
         private string t4 = "";
@@ -83,7 +78,7 @@ namespace Conduit
         private string t8 = "";
         private string t9 = "";
         private string t10 = "";
-
+        //Strings for the labels of the parameters that will populate the labels on the Node
         private string v1 = "";
         private string v2 = "";
         private string v3 = "";

@@ -7,7 +7,7 @@ namespace Conduit
         {
             get { return new BindablePoint(); }
         }
-    	  
+    	//initial snapspot of connectore  
         private SnapSpot _start;
         public SnapSpot Start
         {
@@ -18,7 +18,7 @@ namespace Conduit
                 OnPropertyChanged("Start");
             }
         }
-
+        //final SnapSpot of connector
         private SnapSpot _end;
         public SnapSpot End
         {
@@ -31,6 +31,7 @@ namespace Conduit
                                      ((End.Location.Y + Start.Location.Y) / 2));
             }
         }
+        //Node that contains the start SnapSpot for software nodes
         private Node startNode;
         public Node StartNode
         {
@@ -44,6 +45,7 @@ namespace Conduit
                 }
             }
         }
+        //Node2 that contains the start SnapSpot for data nodes
         private Node2 startNode2;
         public Node2 StartNode2
         {
@@ -57,6 +59,7 @@ namespace Conduit
                 }
             }
         }
+        //Node that contains the end SnapSpot for software nodes
         private Node endNode;
         public Node EndNode
         {
@@ -70,6 +73,7 @@ namespace Conduit
                 }
             }
         }
+        //Node2 that contains the end SnapSpot for data nodes
         private Node2 endNode2;
         public Node2 EndNode2
         {

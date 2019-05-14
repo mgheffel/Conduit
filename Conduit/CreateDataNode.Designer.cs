@@ -1,6 +1,6 @@
 ﻿namespace Conduit
 {
-    partial class CreateNode2
+    partial class CreateDataNode
     {
         /// <summary>
         /// Required designer variable.
@@ -88,14 +88,14 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(328, 120);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.ParameterValue);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.nodeName);
             this.Name = "CreateNode2";
-            this.Text = "CreateNode2";
+            this.Text = "Create Data Node";
             ((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

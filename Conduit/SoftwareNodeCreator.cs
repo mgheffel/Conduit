@@ -10,37 +10,38 @@ using System.Windows.Forms;
 
 namespace Conduit
 {
-    public partial class NodeCreator : Form
+    public partial class SoftwareNodeCreator : Form
     {
-        //private int n;
         private int inValue;
         private int outValue;
         private int numFields;
         private MainWindow v;
 
-        public NodeCreator(MainWindow a)
+        public SoftwareNodeCreator(MainWindow a)
         {
             InitializeComponent();
-           // n = k;
             v = a;
+            //range of parameter fields
             string[] range = new string[] { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" };
             cb.Items.AddRange(range);
-           // createFields();
             this.AutoSize = true;
         }
 
+        //Method to create fields for Node parameters, labels, inputSnaps, and outputSnaps
         private void createFields(int m)
         {
+            //string[] of all the strings on the form
             var strings = Controls.OfType<TextBox>()
                       .Select(c => c.Text)
                       .ToList();
+            //Adds the Node Name the user created to the form
             Label nodeName = new Label();
             nodeName.Text = String.Format(strings[0]);
             nodeName.Left = 480;
             nodeName.Top = 25;
             this.Controls.Add(nodeName);
 
-
+            //Creates Parameter Name Labels and Textboxes
             for (int i = 1; i <= m; i++)
             {
                 //Create label
@@ -60,7 +61,7 @@ namespace Conduit
                 this.Controls.Add(label);
                 this.Controls.Add(TextBox);
             }
-
+            //Creates Parameter Value labels and textboxes
             for (int i = 1; i <= m; i++)
             {
                 //Create label
@@ -81,6 +82,7 @@ namespace Conduit
                 this.Controls.Add(textBox);
                
             }
+            //Creates inputSnaps labels and  values textboxes
             for (int i = 1; i <= inValue; i++)
             {
                 //Create label
@@ -100,7 +102,7 @@ namespace Conduit
                 this.Controls.Add(label);
                 this.Controls.Add(TextBox);
             }
-
+            //Creates outputSnaps labels and  values textboxes
             for (int i = 1; i <= outValue; i++)
             {
                 //Create label
@@ -121,7 +123,7 @@ namespace Conduit
                 this.Controls.Add(textBox);
 
             }
-
+            //Adds a button at the bottom of the above textboxes and labels so that the node can be added
             Button button = new Button();
             button.Text = String.Format("Create Node");
             button.Left = 440;
@@ -133,6 +135,7 @@ namespace Conduit
             button.Click += new EventHandler(this.button_Click);
            
         }
+        /*Button Click method to add node to the dictionary list of previously created custom software nodes*/
         void button_Click(object sender, EventArgs e)
         {
             var vm = v.DataContext as MainViewModel;
@@ -140,26 +143,31 @@ namespace Conduit
             var strings = Controls.OfType<TextBox>()
                       .Select(c => c.Text)
                       .ToList();
-            string[] yep = new string[strings.Count];
+            //Gets the string [] of values of the strings on the form
+            string[] nodeString = new string[strings.Count];
             for (int i = 0; i < strings.Count; i++)
             {
-                yep[i] = strings[i];
+                nodeString[i] = strings[i];
             }
 
             
             bool addToDictionary = true;
+            //Checks to see if the name already exists
             foreach (var item in vm.NodeSkeletons)
             {
-                if (item.Key== yep[0])
+                if (item.Key== nodeString[0])
                 {
                     addToDictionary = false;
                     MessageBox.Show("Cannot create a node with the same name as a previously created node");
                     break;
                 }
             }
+            //if it passes all the test the node is then added to the dictionary of available nodes
             if (addToDictionary)
             {
-                Node node = vm.CreateNewNode(numFields, numFields, yep);
+                //create node
+                Node node = vm.CreateNewNode(numFields, numFields, nodeString);
+                //add to dictionary
                 vm.NodeSkeletons.Add(node.Name, v.writeNode(node).Split(','));
             }
             v.updateNodes();
@@ -167,31 +175,36 @@ namespace Conduit
             
 
         }
-
+        /*Button click to create the necessary fields to create the node*/
         private void button1_Click(object sender, EventArgs e)
         {
-
+            //Must have a number of fields
             if (cb.SelectedItem == null)
             {
                 MessageBox.Show("Must Select Number of Fields");
             }
+            //Must have an integer number of inputSnaps
             else if (inputValue == null || !int.TryParse(inputValue.Text, out inValue))
             {
                 MessageBox.Show("Input Snaps must be an integer value");
             }
+            //Must have an integer value of outputSnaps
             else if (outputValue == null || !int.TryParse(outputValue.Text, out outValue))
             {
                 MessageBox.Show("Output Snaps must be an integer value");
             }
+            //Name must not have spaces or hyphens
             else if (name == null || name.Text.Contains('-') == true || name.Text.Contains(' ')) 
             {
                 MessageBox.Show("Node must have a name without hypens or spaces");
             }
             else
             {
+                //Set global variables to appropriate numbers
                 int.TryParse(inputValue.Text, out inValue);
                 int.TryParse(outputValue.Text, out outValue);
                 int.TryParse(cb.SelectedItem.ToString(), out numFields);
+                //use these numbers to create appropriate fields
                 createFields(numFields);
             }
         }

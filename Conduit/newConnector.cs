@@ -20,6 +20,9 @@ namespace Conduit
             populateFields();
         }
 
+        /*This method is used to populate the available fields for Software and Data Nodes
+         * It ensures that the nodes present have available connectors.
+         */
         public void populateFields()
         {
             List<Node> a = v.Nodes.ToList();
@@ -66,6 +69,7 @@ namespace Conduit
             }
         }
 
+        //Button click for populating the available SnapSpot names for the selected software node outputs
         private void button1_Click(object sender, EventArgs e)
         {
             ToSnaps.Items.Clear();
@@ -75,8 +79,6 @@ namespace Conduit
             }
             else
             {
-                //Node a = v.Nodes[outputBox.SelectedIndex];
-                //Node2 b = v.Nodes2[inputBox.SelectedIndex];
                 string n1name = outputBox.SelectedItem.ToString();
                 Node n1 = v.Nodes[0];
                 for (int i = 0; i < v.Nodes.Count; i++)
@@ -97,17 +99,6 @@ namespace Conduit
                         break;
                     }
                 }
-                /*int n = a.Snaps.Count;
-                int l = a.InputSnaps;
-                int k = a.OutputSnaps;
-                for (int i = l; i < n; i++)
-                {
-                    if (a.Snaps[i].IsConnected == false)
-                    {
-                        ToSnaps.Items.Add(a.Snaps[i].Name);
-                    }
-
-                }*/
                 foreach (var item in n1.OutSnaps)
                 {
                     if (item.Value.IsConnected == false)
@@ -115,19 +106,10 @@ namespace Conduit
                         ToSnaps.Items.Add(item.Value.Name);
                     }
                 }
-                /*foreach (var item in a.Snaps)
-                {
-                    item.Value.Recalculate();
-                }*/
                 n1.RecalculateSnaps();
-
-                /*var vm = v.DataContext as MainViewModel;
-                vm.customConnectorToData(a,b);*/
             }
-            //v.updateNodes();
-            //Close();
         }
-
+        //Button click for populating the available SnapSpot names for the selected software node inputs
         private void button2_Click(object sender, EventArgs e)
         {
             FromSnaps.Items.Clear();
@@ -147,7 +129,6 @@ namespace Conduit
                         break;
                     }
                 }
-                //Node b = v.Nodes[inputBox2.SelectedIndex];
                 string n1name = inputBox2.SelectedItem.ToString();
                 Node n1 = v.Nodes[0];
                 for (int i = 0; i < v.Nodes.Count; i++)
@@ -158,17 +139,6 @@ namespace Conduit
                         break;
                     }
                 }
-                /*int n = b.Snaps.Count;
-                int k = b.InputSnaps;
-                for (int i = 0; i < k; i++)
-                {
-                    if (b.Snaps[i].IsConnected == false)
-                    {
-                        FromSnaps.Items.Add(b.Snaps[i].Name);
-                    }
-
-
-                }*/
                 foreach (var item in n1.InSnaps)
                 {
                     if (item.Value.IsConnected == false)
@@ -176,14 +146,9 @@ namespace Conduit
                         FromSnaps.Items.Add(item.Value.Name);
                     }
                 }
-                /*var vm = v.DataContext as MainViewModel;
-
-                vm.customConnectorFromData(a,b);*/
             }
-            // v.updateNodes();
-            //Close();
         }
-
+        //Button click to create a connector from the selected software node snap to the selected data node
         private void createToConnector_Click(object sender, EventArgs e)
         {
             if (ToSnaps.SelectedItem == null)
@@ -192,8 +157,6 @@ namespace Conduit
             }
             else
             {
-                //Node a = v.Nodes[outputBox.SelectedIndex];
-                //Node2 b = v.Nodes2[inputBox.SelectedIndex];
                 string n1name = outputBox.SelectedItem.ToString();
                 Node n1 = v.Nodes[0];
                 for (int i = 0; i < v.Nodes.Count; i++)
@@ -218,13 +181,14 @@ namespace Conduit
                 SnapSpot snapA = n1.OutSnaps[ToSnaps.SelectedItem.ToString()];
                 SnapSpot snapB = n2.Snaps[0];
                 
+                //Constructor to make the connector
                 vm.customConnectorToData(snapA, snapB);
             }
             v.updateNodes();
             Close();
 
         }
-
+        //Button click to create a connector from the selected data node to the selected software node snap
         private void createFromConnector_Click(object sender, EventArgs e)
         {
             if (FromSnaps.SelectedItem == null)
@@ -233,8 +197,6 @@ namespace Conduit
             }
             else
             {
-                //Node2 a = v.Nodes2[outputBox2.SelectedIndex];
-                //Node b = v.Nodes[inputBox2.SelectedIndex];
                 string n1name = inputBox2.SelectedItem.ToString();
                 Node n1 = v.Nodes[0];
                 for (int i = 0; i < v.Nodes.Count; i++)
@@ -256,12 +218,9 @@ namespace Conduit
                     }
                 }
                 SnapSpot snapA = n2.Snaps[1];
-                
-
-                
                 SnapSpot snapB = n1.InSnaps[FromSnaps.SelectedItem.ToString()];
                 var vm = v.DataContext as MainViewModel;
-
+                //Constructor to make the connector
                 vm.customConnectorFromData(snapA, snapB);
 
             }

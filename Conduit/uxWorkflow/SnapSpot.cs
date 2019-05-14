@@ -4,6 +4,7 @@ namespace Conduit
 {
     public class SnapSpot: DiagramObject
     {
+        //The parent node of the SnapSpot if it is a software node
         private Node _parent;
         public Node Parent
         {
@@ -13,6 +14,7 @@ namespace Conduit
                 _parent = value;
             }
         }
+        //The parent node of the SnapSpot if it is a data node
         private Node2 _parent2;
         public Node2 Parent2
         {
@@ -39,7 +41,7 @@ namespace Conduit
                 OnPropertyChanged("Angle");
             }
         }
-
+        //Used to determine if a SnapSpot is connected
         private bool _isConnected;
         public bool IsConnected
         {
@@ -50,7 +52,7 @@ namespace Conduit
                 OnPropertyChanged("IsConnected");
             }
         }
-
+        //Constructor for the SnapSpot
         public SnapSpot(Node parent, Node2 parent2)
         {
             if (parent == null)

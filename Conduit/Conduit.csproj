@@ -84,11 +84,11 @@
     <Compile Include="compilePipeline.Designer.cs">
       <DependentUpon>compilePipeline.cs</DependentUpon>
     </Compile>
-    <Compile Include="CreateNode2.cs">
+    <Compile Include="CreateDataNode.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="CreateNode2.Designer.cs">
-      <DependentUpon>CreateNode2.cs</DependentUpon>
+    <Compile Include="CreateDataNode.Designer.cs">
+      <DependentUpon>CreateDataNode.cs</DependentUpon>
     </Compile>
     <Compile Include="FTP.cs">
       <SubType>Form</SubType>
@@ -108,11 +108,11 @@
     <Compile Include="newConnector.Designer.cs">
       <DependentUpon>newConnector.cs</DependentUpon>
     </Compile>
-    <Compile Include="NodeCreator.cs">
+    <Compile Include="SoftwareNodeCreator.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="NodeCreator.Designer.cs">
-      <DependentUpon>NodeCreator.cs</DependentUpon>
+    <Compile Include="SoftwareNodeCreator.Designer.cs">
+      <DependentUpon>SoftwareNodeCreator.cs</DependentUpon>
     </Compile>
     <Compile Include="Left Edition Panel\ButtonsPanel.xaml.cs" />
     <Compile Include="Left Edition Panel\ConnectorPropertyEditor.xaml.cs" />
@@ -189,8 +189,8 @@
     <EmbeddedResource Include="compilePipeline.resx">
       <DependentUpon>compilePipeline.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="CreateNode2.resx">
-      <DependentUpon>CreateNode2.cs</DependentUpon>
+    <EmbeddedResource Include="CreateDataNode.resx">
+      <DependentUpon>CreateDataNode.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FTP.resx">
       <DependentUpon>FTP.cs</DependentUpon>
@@ -201,8 +201,8 @@
     <EmbeddedResource Include="newConnector.resx">
       <DependentUpon>newConnector.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="NodeCreator.resx">
-      <DependentUpon>NodeCreator.cs</DependentUpon>
+    <EmbeddedResource Include="SoftwareNodeCreator.resx">
+      <DependentUpon>SoftwareNodeCreator.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

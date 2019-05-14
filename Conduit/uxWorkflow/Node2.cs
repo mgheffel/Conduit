@@ -9,7 +9,6 @@ namespace Conduit
         {
             Size.ValueChanged = RecalculateSnaps;
             Location.ValueChanged = RecalculateSnaps;
-
         }
 
         private void RecalculateSnaps()
@@ -54,8 +53,9 @@ namespace Conduit
         }
 
         private string _shortName;
-
+        //textbox for the location value on the data node
         private string t1 = "";
+        //label for location on the data node
         private string v1 = "";
         
         public string T1

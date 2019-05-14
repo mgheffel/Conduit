@@ -11,6 +11,7 @@ using Renci.SshNet;
 
 namespace Conduit
 {
+    //Form used to sign into Beocat
     public partial class Beocat : Form
     {
         private SshClient ssh;
@@ -22,6 +23,11 @@ namespace Conduit
 
         }
 
+        /*Button Click for login
+         * Checks to see if a username and password has been entered
+         * It then attempts to SSH into Beocat and throws an error if unsuccessful
+         * Username and Password are then saved as private variables in the MainWindow form to be used for FTP
+        */
         private void button1_Click(object sender, EventArgs e)
         {
             if (userName.Text == string.Empty || password.Text == string.Empty)
@@ -29,7 +35,6 @@ namespace Conduit
             else
             {
                 ssh = new SshClient("headnode.beocat.ksu.edu", userName.Text, password.Text);
-                //setClient(userName.Text, password.Text);
                 if (ssh != null)
                 {
                     using (ssh)
@@ -44,6 +49,7 @@ namespace Conduit
                             m.password = password.Text;
                             userName.Text = "";
                             password.Text = "";
+                            Close();
                         }
                         catch (Renci.SshNet.Common.SshAuthenticationException)
                         {
@@ -57,99 +63,5 @@ namespace Conduit
             }
 
         }
-
-       
     }
 }
-
-       /* private void button2_Click(object sender, EventArgs e)
-        {
-            setClient(m.user, m.password);
-            if (ssh != null)
-            {
-                using (ssh)
-                {
-                    ssh.Disconnect();
-                }
-                MessageBox.Show("You have logged out of Beocat.");
-                Close();
-            }
-
-        }
-
-        public void setClient(string username, string pword)
-        {
-            
-            
-                ssh = new SshClient("headnode.beocat.ksu.edu", username, pword);
-            
-        }
-
-        private void button3_Click(object sender, EventArgs e)
-        {
-            setClient(m.user, m.password);
-            //MessageBox.Show(ssh.ToString());
-            if (ssh != null)
-            {
-                using (ssh)
-                {
-                    ssh.Connect();
-                    var command = ssh.CreateCommand("ls");
-                    var results = command.Execute();
-                    //command.Execute();
-                    CommandOutput.Text = (results);
-                }
-            }
-        }
-
-        private void button4_Click(object sender, EventArgs e)
-        {
-            setClient(m.user,m.password);
-            //MessageBox.Show(ssh.ToString());
-            if (ssh != null)
-            {
-                using (ssh)
-                {
-                    ssh.Connect();
-                    var command = ssh.CreateCommand("cd /bulk ; ls");
-                    var results = command.Execute();
-                    CommandOutput.Text = (results);
-                }
-            }
-        }
-
-        private void button5_Click(object sender, EventArgs e)
-        {
-            CommandOutput.Text = "";
-        }
-
-        private void button6_Click(object sender, EventArgs e)
-        {
-            setClient(m.user, m.password);
-            
-            if (ssh != null)
-            {
-                using (ssh)
-                {
-                    ssh.Connect();
-                    var command = ssh.CreateCommand("kstat --me");
-                    var results = command.Execute();
-                    
-                    CommandOutput.Text = (results);
-
-                    SaveFileDialog sfd = new SaveFileDialog();
-                    sfd.Filter = "TXT Files (*.txt)|*.txt";
-                    sfd.DefaultExt = "txt";
-                    sfd.AddExtension = true;
-
-
-                    sfd.ShowDialog();
-                    if (sfd.FileName != null)
-                    {
-                        System.IO.File.WriteAllText(sfd.FileName, results);
-                    }
-                }
-            }
-        }
-    }*/
-//}

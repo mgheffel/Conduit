@@ -21,10 +21,8 @@ namespace Conduit
         public List<Connector> Connectors { get; set; }
         public List<Node> NodesThatExist { get; set; }
 
-        private string User = "kbowers";
-        private string Password = "KENmad1464!";
-
-        //private int n = 0;
+        private string User = "";
+        private string Password = "";
 
         public MainWindow()
         {
@@ -35,6 +33,7 @@ namespace Conduit
             
         }
 
+        //Ability to drag and drop Software Nodes
         private void Thumb_Drag(object sender, DragDeltaEventArgs e)
         {
             var thumb = sender as Thumb;
@@ -46,9 +45,9 @@ namespace Conduit
                 return;
             
             node.Location.Value = Point.Add(node.Location.Value, new Vector(e.HorizontalChange, e.VerticalChange));
-            //node.Location.Value = Point.Add(node.Location.Value, new Vector(e.HorizontalChange, e.VerticalChange));
 
         }
+        //Ability to drag and drop data nodes
         private void Thumb_Drag2(object sender, DragDeltaEventArgs e)
         {
             var thumb = sender as Thumb;
@@ -65,9 +64,6 @@ namespace Conduit
 
         }
 
-
-
-       
         private void ListBox_PreviewMouseMove(object sender, MouseEventArgs e)
         {
             var listbox = sender as ListBox;
@@ -91,9 +87,6 @@ namespace Conduit
                     return;
 
                 var connector = vm.SelectedObject as Connector;
-
-                /*if (connector.Start != null && node != connector.Start)
-                    connector.End = node;*/
             }
         }
 
@@ -108,7 +101,6 @@ namespace Conduit
                     var connector = vm.SelectedObject as Connector;
                     if (node != null && connector != null && connector.Start == null)
                     {
-                        //connector.Start = node;
                         node.IsHighlighted = true;
                         
                         e.Handled = true;
@@ -160,7 +152,7 @@ namespace Conduit
         }
 
        
-
+        //Deletes the selected element 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             var vm = DataContext as MainViewModel;
@@ -169,8 +161,10 @@ namespace Conduit
             if (n == null)
             {
             }
+            //Deletes a Software Node
             else
             {
+                //Deletes its input SnapSpots
                 foreach (SnapSpot s in n.InSnaps.Values)
                 {
                     if (s.IsConnected)
@@ -179,14 +173,17 @@ namespace Conduit
                         {
                             if (connector.End == s)
                             {
+                                //deletes the connector
                                 deleteConnector(connector);
                             }
                         }
                     }
+                    //removes snaps
                     vm.Snaps.Remove(s);
                     
                 }
                 connectors = vm.Connectors.ToList();
+                //deletes it output SnapSpots
                 foreach (SnapSpot s in n.OutSnaps.Values)
                 {
                     if (s.IsConnected)
@@ -195,19 +192,24 @@ namespace Conduit
                         {
                             if (connector.Start == s)
                             {
+                                //deletes the connector
                                 deleteConnector(connector);
                             }
                         }
                     }
+                    //removes snaps
                     vm.Snaps.Remove(s);
                 }
+                //removes the software node
                 vm.Nodes.Remove(n);
                 updateNodes();
             }
+
             Node2 n2 = vm.SelectedObject as Node2;
             if(n2 == null)
             {
             }
+            //Deleting a Data Node
             else
             {
                 foreach (SnapSpot s in n2.Snaps)
@@ -218,14 +220,15 @@ namespace Conduit
                         {
                             if (connector.Start == s || connector.End ==s)
                             {
+                                //deletes Connectors
                                 deleteConnector(connector);
                             }
                         }
                     }
-
+                    //Removes snaps
                     vm.Snaps.Remove(s);
                 }
-               
+               //removes Data Node
                 vm.Nodes2.Remove(n2);
             }
 
@@ -233,26 +236,30 @@ namespace Conduit
             if (c == null)
             {
             }
+            //deleting connector
             else
             {
+                //deletes connector
                 deleteConnector(c);
             }
             updateNodes();
            
         }
+        //Method to delete a connector
         public void deleteConnector(Connector c)
         {
             var vm = DataContext as MainViewModel;
             SnapSpot end = c.End;
             SnapSpot start = c.Start;
-
-                
-                c.End.IsConnected = false;
-                c.Start.IsConnected = false;
-                vm.Connectors.Remove(c);
-            foreach(Connector x in vm.Connectors)
+            //Sets the SnapSpots to be not connected
+            c.End.IsConnected = false;
+            c.Start.IsConnected = false;
+            //Removes the Connector
+            vm.Connectors.Remove(c);
+            //If that snap is being used elsewhwere it is set back to being connected
+            foreach (Connector x in vm.Connectors)
             {
-                if(x.Start == start)
+                if (x.Start == start)
                 {
                     x.Start.IsConnected = true;
                 }
@@ -263,15 +270,16 @@ namespace Conduit
             }
             updateNodes();
         }
-       
 
+        //Opens form for the Create new Software Node
         private void Button_Click_1(object sender, RoutedEventArgs e)
         { 
-            NodeCreator nc = new NodeCreator(this);
+            SoftwareNodeCreator nc = new SoftwareNodeCreator(this);
             nc.Show();
             
         }
 
+        //Updates the variables in this class to match the master list in Main Window
         public void updateNodes()
         {
             var vm = DataContext as MainViewModel;
@@ -284,59 +292,54 @@ namespace Conduit
             Nodes2 = c;
 
         }
-
+        //Opens the form to add a new connector
         private void Button_Click_2(object sender, RoutedEventArgs e)
         {
             newConnector c = new newConnector(this);
             c.Show();
         }
-
+        //Opens the form to sign into Beocat
         private void Button_Click_3(object sender, RoutedEventArgs e)
         {
             Beocat b = new Beocat(this);
             b.Show();
         }
-
+        //opens the form to save/load a file
         private void Button_Click_4(object sender, RoutedEventArgs e)
         {
             
             SaveFile f = new SaveFile(this);
             f.Show();
         }
-
+        //Button click to clear the entire screen
         private void Button_Click_5(object sender, RoutedEventArgs e)
         {
             clearScreen();
-            /*var vm = DataContext as MainViewModel;
-            vm.Nodes.ToList().ForEach(x => vm.Nodes.Remove(x));
-            List<SnapSpot> snaps = vm.Snaps.ToList();
-            foreach(SnapSpot s in snaps)
-            {
-                s.IsConnected = false;
-            }
-            vm.Snaps.ToList().ForEach(x => vm.Snaps.Remove(x));
-            vm.Connectors.ToList().ForEach(x => vm.Connectors.Remove(x));
-            vm.Nodes2.ToList().ForEach(x => vm.Nodes2.Remove(x));
-            updateNodes();*/
         }
+        //Method to Clear Screen
         public void clearScreen()
         {
             var vm = DataContext as MainViewModel;
+            //removes Nodes
             vm.Nodes.ToList().ForEach(x => vm.Nodes.Remove(x));
+            //Sets SnapSpots to not connected
             List<SnapSpot> snaps = vm.Snaps.ToList();
             foreach (SnapSpot s in snaps)
             {
                 s.IsConnected = false;
             }
+            //deletes SnapSpots
             vm.Snaps.ToList().ForEach(x => vm.Snaps.Remove(x));
+            //deletes Connectors
             vm.Connectors.ToList().ForEach(x => vm.Connectors.Remove(x));
+            //deletes DataNodes
             vm.Nodes2.ToList().ForEach(x => vm.Nodes2.Remove(x));
             updateNodes();
         }
-
+        //Opens form to add a connectors
         private void Button_Click_6(object sender, RoutedEventArgs e)
         {
-            CreateNode2 cn = new CreateNode2(this);
+            CreateDataNode cn = new CreateDataNode(this);
             cn.Show();
         }
 
@@ -366,10 +369,12 @@ namespace Conduit
             cp.Show();
         }
 
+        //Adds selected software node to the screen
         private void Button_Click_7(object sender, RoutedEventArgs e)
         {
             var vm = DataContext as MainViewModel;
             string[] skeleton = vm.NodeSkeletons[ListOfNodes.SelectedItem.ToString()];
+            //creates the string needed to create the node
             string[] strings = new string[(skeleton.Length - 3)];
             for (int j = 0; j < strings.Length; j++)
             {
@@ -395,19 +400,21 @@ namespace Conduit
                 }
             } while (flag);
             strings[0] = name;
-
+            //creates the node
             Node n = vm.CreateNewNode(Convert.ToInt32(skeleton[2]), 10, strings);
             n.Location.Value = new System.Windows.Point(Convert.ToInt32(skeleton[0]), Convert.ToInt32(skeleton[1]));
-            Nodes.Add(n);
+            
+            //adds it to list of shown nodes
             vm.viewNodes(n);
             updateNodes();
         }
+        //populates already existing software nodes from the file in Conduit/data/ExistingNodes
         public void populateAvailableNodes()
         {
             var vm = DataContext as MainViewModel;
             ListOfNodes.Items.Clear();
             
-
+            //gets directory
             string cwd = Directory.GetCurrentDirectory();
             string[] cwdsplit = cwd.Split('\\');
             string loadDataDir = "";
@@ -416,9 +423,9 @@ namespace Conduit
                 loadDataDir += cwdsplit[i] + '\\';
             }
             loadDataDir += "data\\ExistingNodes\\ExistingNodes.txt";
-
+            //reads in the nodes from the file
             string[] filelines = File.ReadAllLines(loadDataDir);
-
+            //for each node it adds it to the skeleton list of nodes
             for (int k = 1; k < filelines.Length; k++)
             {
                 string[] nodeString = filelines[k].Split(',');
@@ -428,17 +435,13 @@ namespace Conduit
                     strings[j] = nodeString[(j + 3)];
                 }
                 vm.NodeSkeletons.Add(nodeString[3], nodeString);
+                //adds the name to the list of available software nodes
                 ListOfNodes.Items.Add(nodeString[3]);
                 ListOfNodes.SelectedIndex = 0;
-                //Node n = vm.CreateNewNode(Convert.ToInt32(nodeString[2]), 10, strings);
-                //n.Location.Value = new System.Windows.Point(Convert.ToInt32(nodeString[0]), Convert.ToInt32(nodeString[1]));
-                //updateNodes();
             }
-            /*foreach (Node n in NodesThatExist)
-            {
-                ListOfNodes.Items.Add(n.Name);
-            }*/
         }
+
+        //writes a newly created software node to the Conduit\data\ExistingNodes file
         public string writeNode(Node n)
         {
             string cwd = Directory.GetCurrentDirectory();
@@ -449,14 +452,11 @@ namespace Conduit
                 loadDataDir += cwdsplit[i] + '\\';
             }
             loadDataDir += "data\\ExistingNodes\\ExistingNodes.txt";
-
+            //Writes the necessary information of the node to a string
             string one = "";
                 one = one + n.Location.Value.X.ToString() + "," + n.Location.Value.Y.ToString() + "," + n.Fields.ToString() + "," + n.Name.ToString() + "," + n.OutputSnaps.ToString() + "," + n.InputSnaps.ToString() + "," + n.V1.ToString() + "," + n.V2.ToString() + "," + n.V3.ToString() + "," + n.V4.ToString() + "," + n.V5.ToString() + "," + n.V6.ToString() + "," + n.V7.ToString() + "," + n.V8.ToString() + "," + n.V9.ToString() + "," + n.V10.ToString() + ","
                     + n.T1.ToString() + "," + n.T2.ToString() + "," + n.T3.ToString() + "," + n.T4.ToString() + "," + n.T5.ToString() + "," + n.T6.ToString() + "," + n.T7.ToString() + "," + n.T8.ToString() + "," + n.T9.ToString() + "," + n.T10.ToString();
-            /*foreach (SnapSpot s in n.Snaps)
-            {
-                one = one + "," + s.Name.ToString();
-            }*/
+            //writes the necessary information on the software nodes snaps
             foreach (var item in n.InSnaps)
             {
                 one = one + "," + item.Value.Name.ToString();
@@ -465,20 +465,23 @@ namespace Conduit
             {
                 one = one + "," + item.Value.Name.ToString();
             }
-
+            //appends the new software node to the file
             using (StreamWriter sw = File.AppendText(loadDataDir))
             {
                 sw.WriteLine(one);
             }
+            //adds the name to the list of available software nodes
             ListOfNodes.Items.Add(n.Name);
             return one;
         }
-
+        //Opens form to FTP a zipped file into Beocat or to zip a directory
         private void Button_Click_8(object sender, RoutedEventArgs e)
         {
             FTP ftp = new FTP(this);
             ftp.Show();
         }
+
+
         public string password
         {
             get { return Password; }
@@ -504,6 +507,7 @@ namespace Conduit
             }
         }
 
+        //Opens window that runs a kstat -- me and returns the result to a textbox
         private void Button_Click_9(object sender, RoutedEventArgs e)
         {
             CheckProgress cp = new CheckProgress(this);
