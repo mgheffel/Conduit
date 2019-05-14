@@ -1,12 +1,12 @@
 #!/bin/bash
 #SBATCH --mem-per-cpu=32G
 
-pipelinePath=*&%@pipelinePathTag
-parentDir=*&%@parentDirTag
-runSoftware=$pipelinePath/parallel/*&%@parallelPathTag
+pipelinePath=/homes/mgheffel/SDPall
+parentDir=/bulk/mgheffel/data/SDPall
+runSoftware=$pipelinePath/parallel/1-1_P.sh
 chain=${pipelinePath}/parallel/chain.sh
-krakenInput=*&%@krakenInputTag
-kronaOutDir=*&%@kronaOutDirTag
+krakenInput=/bulk/mgheffel/data/SDP/raw_kraken
+kronaOutDir=*&%@kronaOurDirTag
 
 for f in $krakenInput/*.kraken
 do
