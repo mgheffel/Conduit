@@ -81,7 +81,6 @@ namespace Conduit
                 if (snap != null)
                 {
                     MessageBox.Show(snap.Name);
-                    MessageBox.Show(snap.IsConnected.ToString());
                 }
             }
         }
@@ -875,7 +874,7 @@ namespace Conduit
                     //successfully found branching
                     if (nodesLeft > 1)
                     {
-                        MessageBox.Show("branch");
+                        //MessageBox.Show("branch");
                         
                         List<Node> branches = new List<Node>();
                         for (int i = 0; i < possibleCurNodes.Count; i++)
@@ -1031,7 +1030,7 @@ namespace Conduit
                 runallHeader += "0 ";
             runallHeader = runallHeader.Substring(0, runallHeader.Length - 1) + ")\n";
             File.WriteAllText(tempPipelinePath + "\\runall.sh", runallHeader+runallFile);
-            SendPipeline("doesntmatter", conduitLocation + "\\data\\tempPipeline");
+            SendPipeline(pipelinePath, conduitLocation + "\\data\\tempPipeline", dataParentDir);
         }
 
         public string createBranch(Node n, List<string> branchStrings, string dataParentDir, string pipelinePath, string tempPipelinePath)
@@ -1333,7 +1332,7 @@ namespace Conduit
         }
         public string user;
         public string pass;
-        public void SendPipeline(string beocatPath, string localPath)
+        public void SendPipeline(string beocatPath, string localPath, string parentDir)
         {
             if (File.Exists(conduitLocation + "\\data\\tempPipe.zip"))
             {
@@ -1376,11 +1375,15 @@ namespace Conduit
                     string file2upzip = "unzip " + justName + ".zip";
                     var command = ssh.CreateCommand("unzip " + justName + ".zip");
                     command.Execute();
+                    command = ssh.CreateCommand("cd " + parentDir);
+                    command.Execute();
+                    command=ssh.CreateCommand("sbatch " + beocatPath + "/runall.sh");
+                    command.Execute();
                 }
                 //transferred zip to beocat but threw error here
                 //ssh.Disconnect();
             }
-            MessageBox.Show("File successfully added");
+            MessageBox.Show("Pipeline submitted");
         }
     }
 }

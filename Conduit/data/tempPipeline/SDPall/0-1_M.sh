@@ -5,7 +5,7 @@ declare fileNames
 
 #HERE="/homes/mgheffel/SDP"
 pipelinePath=/homes/mgheffel/SDPall
-parentDir=/bulk/mgheffel/data/SDPall
+parentDir=/bulk/mgheffel/data/SDP
 runSoftware=$pipelinePath/parallel/0-1_P.sh
 readsInput=/bulk/mgheffel/data/SDP/raw
 adapters=/homes/bioinfo/vdl/v4/.other/illumina_adapters.fa

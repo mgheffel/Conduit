@@ -2,7 +2,7 @@
 
 
 pipelinePath=/homes/mgheffel/SDPall
-parentDir=/bulk/mgheffel/data/SDPall
+parentDir=/bulk/mgheffel/data/SDP
 runSoftware=$pipelinePath/parallel/0-2_P.sh
 readsInput=/bulk/mgheffel/data/SDP/raw_cleaned
 chain=${pipelinePath}/parallel/chain.sh

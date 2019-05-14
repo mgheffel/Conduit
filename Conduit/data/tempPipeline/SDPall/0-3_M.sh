@@ -7,17 +7,16 @@
 #SBATCH --job-name=getTaxUK
 
 pipelinePath=/homes/mgheffel/SDPall
-parentDir=/bulk/mgheffel/data/SDPall
+parentDir=/bulk/mgheffel/data/SDP
 chain=${pipelinePath}/parallel/chain.sh
 database=/bulk/bioinfo/vdl/.dependencies/krakenDBs/DB21
 cleanedReadsDir=/bulk/mgheffel/data/SDP/raw_cleaned
 krakenDir=/bulk/mgheffel/data/SDP/raw_kraken
-taxonomyReadsDir=*&%@taxonomyReadsDirTag
+taxonomyReadsDir=/bulk/mgheffel/data/SDP/vraw_iralUK
 
-HERE="/homes/bioinfo/vdl/v3"
-select=$pipelinePath/dependencies/select_sequences.pl
-get_by_tax=$pipelinePath/dependencies/get_by_tax.sh
-clean=$HERE/dependencies/guv_clean.sh
+select=/homes/bioinfo/vdl/v4/.other/select_sequences.pl
+get_by_tax=/homes/bioinfo/vdl/v4/.other/get_by_tax.sh
+clean=homes/bioinfo/vdl/v4/.other/guv_clean.sh
 
 JOBS=""
 
@@ -32,10 +31,10 @@ do
 	X=$(echo $(basename $p1 .fastq) | awk -F'_R1' '{print $1}' | cut -f 2- -d "_")
 
 	awk -F"\t" '{if ($1 == "U") print $2}' $krakenDir/$X.kraken > $taxonomyReadsDir/$X.selectu
-	JID=$(sbatch $config -J tax_$X.kraken $get_by_tax -k $kinput/$X.kraken -d $database -o $output/$X.selectt -t 10239)
+	JID=$(sbatch $config -J tax_$X.kraken $get_by_tax -k $kinput/$X.kraken -d $database -o $taxonomyReadsDir/$X.selectt -t 10239)
 	JID=$(echo $JID | rev | cut -f 1 -d ' '|rev)
 	sleep 5	
-	JID=$(sbatch $config --dependency $JID -J clean_$X.kraken $clean $X $p1 $p2 $output)
+	JID=$(sbatch $config --dependency $JID -J clean_$X.kraken $clean $X $p1 $p2 $taxonomyReadsDir)
 	JID=$(echo $JID | rev | cut -f 1 -d ' '|rev)
 	
 	

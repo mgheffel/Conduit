@@ -2,7 +2,7 @@
 #SBATCH --time=4:00:00
 
 pipelinePath=/homes/mgheffel/SDPall
-parentDir=/bulk/mgheffel/data/SDPall
+parentDir=/bulk/mgheffel/data/SDP
 runSoftware=$pipelinePath/parallel/0-5_P.sh
 chain=${pipelinePath}/parallel/chain.sh
 referencesToMapToDir=/bulk/mgheffel/data/SDP/raw_denovo

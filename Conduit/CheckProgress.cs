@@ -16,12 +16,13 @@ namespace Conduit
             m = v;
             /*string file = File.ReadAllText("C:/Users/kbowers/Desktop/test5.txt");
             fixOutput(file);*/
-            if (runCommand() != null) {
-                fixOutput(runCommand());
-            }
+            /*if (runCommand() != null) {
+                //fixOutput(runCommand());
+            }*/
+            runCommand();
             
         }
-        public string runCommand()
+        public void runCommand()
         {
             SshClient ssh = new SshClient("headnode.beocat.ksu.edu", m.user, m.password);
 
@@ -33,14 +34,14 @@ namespace Conduit
                     var command = ssh.CreateCommand("kstat --me");
                     var results = command.Execute();
                     ssh.Disconnect();
-                    return results;
+                    kstatProgress.Text = results;
                     
 
                 }
             }
             else
             {
-                return null;
+                //return null;
             }
             
 
