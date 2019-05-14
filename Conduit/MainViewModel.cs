@@ -929,7 +929,7 @@ namespace Conduit
                                 if (b != indexMain)
                                 {
                                     branchStrings.Add(createBranch(branches[b], branchStrings, dataParentDir, pipelinePath, tempPipelinePath));
-                                    newBranchIndicies.Add(branchStrings.Count + 1);
+                                    newBranchIndicies.Add(branchStrings.Count);
                                 }
                                     
                             }
@@ -1218,7 +1218,7 @@ namespace Conduit
                                 if (b != indexMain)
                                 {
                                     branchStrings.Add(createBranch(branches[b], branchStrings, dataParentDir, pipelinePath, tempPipelinePath));
-                                    newBranchIndicies.Add(branchStrings.Count + 1);
+                                    newBranchIndicies.Add(branchStrings.Count);
                                 }
                                     
                             }
