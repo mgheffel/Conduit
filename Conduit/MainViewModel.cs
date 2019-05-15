@@ -14,6 +14,7 @@ namespace Conduit
 
     public class MainViewModel : INotifyPropertyChanged
     {
+        //stores conduit's location on the local device
         string conduitLocation;
         #region Collections
 
@@ -658,19 +659,22 @@ namespace Conduit
 
         #endregion
 
-
+        //turns user interface into a graph that is parsed into a software pipeline
         public void compilePipeline(string pipelinePath,string dataParentDir, bool deleteWhenDone)
         {
             List<string> branchStrings = new List<string>();
+            //temporary locatino to build pipeline
             string tempPipelinePath = conduitLocation + "\\data\\tempPipeline";
+            //every master script uses chain to indicate when the step is done
             string chain=File.ReadAllText(conduitLocation+"\\data\\skeletons\\chain.sh");
-            
+            //remove previously created pipeline
             if (Directory.Exists(tempPipelinePath))
                 Directory.Delete(tempPipelinePath, true);
             Directory.CreateDirectory(tempPipelinePath);
             tempPipelinePath += '\\' + Path.GetFileName(pipelinePath);
             
             System.Threading.Thread.Sleep(100);
+            //set up new pipeline structure
             Directory.CreateDirectory(tempPipelinePath);
             System.Threading.Thread.Sleep(100);
             Directory.CreateDirectory(tempPipelinePath + "\\parallel");
@@ -678,10 +682,9 @@ namespace Conduit
             Directory.CreateDirectory(tempPipelinePath + "\\dependencies");
             System.Threading.Thread.Sleep(100);
             File.WriteAllText(tempPipelinePath+"\\parallel\\chain.sh", chain.Replace("\r\n", "\n"));
-            List<string> nodeNames = new List<string>();
+            //check for fatal errors that would currupt pipeline assembly
             for (int i = 0; i < Nodes.Count; i++)
             {
-                nodeNames.Add(Nodes[i].Name);
                 foreach (var item in Nodes[i].InSnaps)
                 {
                     if (item.Value.IsConnected == false)
@@ -697,11 +700,10 @@ namespace Conduit
                     }
                 }
             }
-            List<string> node2names = new List<string>();
+            //find first node in pipeline
             List<Node2> potentialHeadNodes = new List<Node2>();
             for (int i = 0; i < Nodes2.Count; i++)
             {
-                node2names.Add(Nodes2[i].Name);
                 if (Nodes2[i].Snaps[0].IsConnected == false)
                 {
                     if (Nodes2[i].Snaps[1].IsConnected == false)
@@ -735,79 +737,47 @@ namespace Conduit
                     break;
                 }
             }
-            //MessageBox.Show(headNode.Name);
-            //MessageBox.Show(getAllFollowingNodes(headNode));
-            List<Node> linearPipe = new List<Node>();
-            linearPipe.Add(headNode);
 
 
-            //get input and output dirs
-            string inDirs = "";
-            foreach (var item in headNode.InSnaps)
-            {
-                for (int c = 0; c < Connectors.Count; c++)
-                {
-                    if (Connectors[c].EndNode == null)
-                        continue;
-                    if (Connectors[c].EndNode == headNode && Connectors[c].End.Name == item.Value.Name)
-                    {
-                        inDirs += item.Value.Name + ',' + Connectors[c].StartNode2.T1.ToString() + ';';
-                        break;
-                    }
-                }
-            }
-            inDirs = inDirs.Substring(0, inDirs.Length - 1);
-            string outDirs = "";
-            foreach (var item in headNode.OutSnaps)
-            {
-                for (int c = 0; c < Connectors.Count; c++)
-                {
-                    if (Connectors[c].StartNode == null)
-                        continue;
-                    if (Connectors[c].StartNode == headNode && Connectors[c].Start.Name == item.Value.Name)
-                    {
-                        outDirs += item.Value.Name + ',' + Connectors[c].EndNode2.T1.ToString() + ';';
-                        break;
-                    }
-                }
-            }
-            outDirs = outDirs.Substring(0, outDirs.Length - 1);
-            
 
-            //temp vars that will be imported later
+            //get input and output dirs of headnode
+            string inDirs = getInDirs(headNode, headNode.InSnaps);
+            string outDirs = getOutDirs(headNode, headNode.OutSnaps);
+
+
+            //default runall time
             int runTime = 48;
             int mainStage = 1;
+            //set up runall script
             string runallHeader = "#!/bin/bash\n#SBATCH --nodes=1\n#SBATCH --time=" + runTime.ToString() + ":00:00\n";
             string branchNum = "0";
-
+            //build linear pipeline on main branch
             string basename = branchNum + '-' + mainStage.ToString();
             ScriptCreator sc = new ScriptCreator(headNode, inDirs, conduitLocation, pipelinePath, dataParentDir, basename);
             //sc.compileMasterScript(tempPipelinePath + "\\"+ branchNum + '-' + mainStage.ToString() + "_" + "M.sh", outDirs);
             //sc.compileParallelScript(tempPipelinePath + "\\parallel\\"+ branchNum + '-' + mainStage.ToString() + "_"  + "P.sh");
             sc.compileScripts(tempPipelinePath, basename, outDirs);
 
+            //string appended to that is eventually writted as the runall script
             string runallFile = "while ( ! $alldoneflag )\n\tdo\n"; 
             runallHeader += "pipePath=" + pipelinePath + "\n";
             runallHeader += "dataParentDir=" + dataParentDir + "\n";
             runallHeader += "alldoneflag=false\n";
-            //runallFile += "doneflag=false\nstepflag=false\nstages=(0)\nwhile ( ! $doneflag )\n\tdo\n";
             //add headnode to runall
             runallFile += "\tif [ ${stages["+branchNum+"]} == 1 ] ; then\n";
             runallFile += "\t\tif [ ${stepflags[" + branchNum + "]} == false ] ; then\n";
             runallFile += "\t\t\tsbatch " + pipelinePath + "/" + branchNum + '-' + mainStage.ToString() +"_" + "M.sh " + branchNum + '-' + mainStage.ToString() + ".done\n";
-            //runallFile += "\t\t\ttouch " + dataParentDir + "/" + branchNum + '-' + mainStage.ToString() + ".done\n";
             runallFile += "\t\t\tstepflags["+branchNum+"]=true\n";
             runallFile += "\t\telif [ -e $dataParentDir/"+ branchNum + '-' + mainStage.ToString()+".done ] ; then\n";
             runallFile += "\t\t\tstages[" + branchNum + "]=$((${stages[" + branchNum + "]}+1))\n";
             runallFile += "\t\t\tstepflags["+branchNum+"]=false\n";
-            //remove next line
             runallFile += "\t\t\techo \"" + branchNum + '-' + mainStage.ToString() + " done\"\n";
             runallFile += "\t\tfi\n";
 
             
             Node pastNode = headNode;
-            //do the complex thing
             bool endPipelineFlag = false;
+            //iterate through nodes on linear main branch
             while (!endPipelineFlag)
             {
                 List<int> newBranchIndicies = new List<int>();
@@ -876,7 +846,7 @@ namespace Conduit
                             curNode = possibleCurNodes[i];
                         }
                     }
-                    //successfully found branching
+                    //detect branching
                     if (nodesLeft > 1)
                     {
                         //MessageBox.Show("branch");
@@ -905,14 +875,15 @@ namespace Conduit
                                     if (followingNodes2.Contains(s))
                                     {
                                         //successful merge detect
-                                        MessageBox.Show("merge");
+                                        MessageBox.Show("Merging pipelines not supported in current version");
                                         mergeFlag = true;
+                                        return;
                                     }
                                 }
 
                             }
                         }
-                        //handle branching
+                        //handle branching without merge
                         if (!mergeFlag)
                         {
                             //get main branch
@@ -928,6 +899,7 @@ namespace Conduit
                                 }
                             }
                             curNode = branches[indexMain];
+                            //fork nessecary branches
                             for (int b = 0; b < branches.Count; b++)
                             {
                                 if (b != indexMain)
@@ -941,63 +913,22 @@ namespace Conduit
                     }
                 }
 
-
-                inDirs = "";
-                foreach (var item in curNode.InSnaps)
-                {
-                    for (int c = 0; c < Connectors.Count; c++)
-                    {
-                        if (Connectors[c].EndNode == null)
-                            continue;
-                        if (Connectors[c].EndNode == curNode && Connectors[c].End.Name == item.Value.Name)
-                        {
-                            inDirs += item.Value.Name + ',' + Connectors[c].StartNode2.T1.ToString() + ';';
-                            break;
-                        }
-                    }
-                }
-                inDirs = inDirs.Substring(0, inDirs.Length - 1);
-                outDirs = "";
-                foreach (var item in curNode.OutSnaps)
-                {
-                    for (int c = 0; c < Connectors.Count; c++)
-                    {
-                        if (Connectors[c].StartNode == null)
-                            continue;
-                        if (Connectors[c].StartNode == curNode && Connectors[c].Start.Name == item.Value.Name)
-                        {
-                            outDirs += item.Value.Name + ',' + Connectors[c].EndNode2.T1.ToString() + ';';
-                            break;
-                        }
-                    }
-                }
-                outDirs = outDirs.Substring(0, outDirs.Length - 1);
+                //get input and outputs of current node
+                inDirs = getInDirs(curNode, curNode.InSnaps);
+                outDirs = getOutDirs(curNode, curNode.OutSnaps);
 
                 basename = branchNum + '-' + mainStage.ToString();
                 sc = new ScriptCreator(curNode, inDirs, conduitLocation, pipelinePath, dataParentDir, basename);
-                //sc.compileMasterScript(tempPipelinePath + "\\" + branchNum + '-' + mainStage.ToString() + "_" + "M.sh", outDirs);
-                //sc.compileParallelScript(tempPipelinePath + "\\parallel\\" + branchNum + '-' + mainStage.ToString() + "_" + "P.sh");
                 sc.compileScripts(tempPipelinePath, basename, outDirs);
 
-
-                //MessageBox.Show(curNode.Name);
-                //MessageBox.Show(getAllFollowingNodes(curNode));
+                //add current node to script
                 runallFile += "\telif [ ${stages[0]} == " + mainStage.ToString() + " ] ; then\n";
-
-                /*runallFile += "\t\tif ( ! $stepflag ) ; then\n";
-                runallFile += "\t\t\tsbatch " + mainStage.ToString() + curNode.Name + ".sh\n";
-                runallFile += "\t\t\tstepflag=true\n";
-                runallFile += "\t\telif [ -e " + mainStage.ToString() + ".done ] ; then\n";
-                runallFile += "\t\t\tstepflag=false\n";
-                runallFile += "\t\t\tstages[0]=${stages[0]}+1\n";
-                runallFile += "\t\tfi\n";*/
-
                 runallFile += "\t\tif [ ${stepflags[" + branchNum + "]} == false ] ; then\n";
                 runallFile += "\t\t\tsbatch " + pipelinePath + "/" + branchNum + '-' + mainStage.ToString() + "_" + "M.sh " + branchNum + '-' + mainStage.ToString() + ".done\n";
-                //runallFile += "\t\t\ttouch " + dataParentDir + "/" + branchNum + '-' + mainStage.ToString() + ".done\n";
                 runallFile += "\t\t\tstepflags[" + branchNum + "]=true\n";
                 runallFile += "\t\telif [ -e $dataParentDir/"+branchNum + '-' + mainStage.ToString() +".done ] ; then\n";
                 runallFile += "\t\t\tstages[" + branchNum + "]=$((${stages[" + branchNum + "]}+1))\n";
+                //add branches to runall script
                 foreach (int b in newBranchIndicies)
                 {
                     runallFile+= "\t\t\tstages[" + b + "]=1\n";
@@ -1011,6 +942,7 @@ namespace Conduit
                 
                 pastNode = curNode;
             }
+            //finish runall script
             runallFile += "\telse\n";
             runallFile += "\t\tdoneflags[" + branchNum + "]=true\n";
             runallFile += "\tfi\n";
@@ -1038,65 +970,35 @@ namespace Conduit
             SendPipeline(pipelinePath, conduitLocation + "\\data\\tempPipeline", dataParentDir);
         }
 
+        //recursively create branches in runall script as needed by pipeline graph
+        //follows logic of above linear branch assembly
         public string createBranch(Node n, List<string> branchStrings, string dataParentDir, string pipelinePath, string tempPipelinePath)
         {
             string branchNum = (branchStrings.Count + 1).ToString();
             Node curNode = n;
             int mainStage = 1;
 
-            string inDirs = "";
-            foreach (var item in curNode.InSnaps)
-            {
-                for (int c = 0; c < Connectors.Count; c++)
-                {
-                    if (Connectors[c].EndNode == null)
-                        continue;
-                    if (Connectors[c].EndNode == curNode && Connectors[c].End.Name == item.Value.Name)
-                    {
-                        inDirs += item.Value.Name + ',' + Connectors[c].StartNode2.T1.ToString() + ';';
-                        break;
-                    }
-                }
-            }
-            inDirs = inDirs.Substring(0, inDirs.Length - 1);
-            string outDirs = "";
-            foreach (var item in curNode.OutSnaps)
-            {
-                for (int c = 0; c < Connectors.Count; c++)
-                {
-                    if (Connectors[c].StartNode == null)
-                        continue;
-                    if (Connectors[c].StartNode == curNode && Connectors[c].Start.Name == item.Value.Name)
-                    {
-                        outDirs += item.Value.Name + ',' + Connectors[c].EndNode2.T1.ToString() + ';';
-                        break;
-                    }
-                }
-            }
-            outDirs = outDirs.Substring(0, outDirs.Length - 1);
+            string inDirs = getInDirs(curNode, curNode.InSnaps);
+            string outDirs = getOutDirs(curNode, curNode.OutSnaps);
 
 
             string basename = branchNum + '-' + mainStage.ToString();
             ScriptCreator sc = new ScriptCreator(curNode, inDirs, conduitLocation, pipelinePath, dataParentDir, basename);
-            //sc.compileMasterScript(tempPipelinePath + "\\" + branchNum + '-' + mainStage.ToString() + "_" + "M.sh", outDirs);
-            //sc.compileParallelScript(tempPipelinePath + "\\parallel\\" + branchNum + '-' + mainStage.ToString() + "_" + "P.sh");
             sc.compileScripts(tempPipelinePath, basename, outDirs);
 
             string branchString = "\tif [ ${stages["+branchNum+"]} == 1 ] ; then\n";
             branchString += "\t\tif [ ${stepflags[" + branchNum + "]} == false ] ; then\n";
             branchString += "\t\t\tsbatch " + pipelinePath + "/" + branchNum + '-' + mainStage.ToString() + "_" + "M.sh "+ branchNum + '-' + mainStage.ToString() + ".done\n";
-            //branchString += "\t\t\ttouch " + dataParentDir + "/" + branchNum + '-' + mainStage.ToString() + ".done\n";
             branchString += "\t\t\tstepflags[" + branchNum + "]=true\n";
             branchString += "\t\telif [ -e $dataParentDir/" + branchNum + "-1.done ] ; then\n";
             branchString += "\t\t\tstepflags[" + branchNum + "]=false\n";
             branchString += "\t\t\tstages[" + branchNum + "]=$((${stages[" + branchNum + "]}+1))\n";
-            //remove next line
             branchString += "\t\t\techo \"" + branchNum + '-' + mainStage.ToString() + " done\"\n";
             branchString += "\t\tfi\n";
             
 
 
-            //do the complex thing
+            //recursive branch creation
             bool endPipelineFlag = false;
             while (!endPipelineFlag)
             {
@@ -1161,14 +1063,11 @@ namespace Conduit
                         if (!outflags[i])
                         {
                             nodesLeft++;
-                            //MessageBox.Show(possibleNextNodes[i].Name);
                             nextNode = possibleNextNodes[i];
                         }
                     }
-                    //successfully found branching
                     if (nodesLeft > 1)
                     {
-                        //MessageBox.Show("branch");
 
                         List<Node> branches = new List<Node>();
                         for (int i = 0; i < possibleNextNodes.Count; i++)
@@ -1194,8 +1093,9 @@ namespace Conduit
                                     if (followingNodes2.Contains(s))
                                     {
                                         //successful merge detect
-                                        MessageBox.Show("merge");
+                                        MessageBox.Show("Merging pipelines not supported by current version");
                                         mergeFlag = true;
+                                        return "";
                                     }
                                 }
 
@@ -1229,48 +1129,18 @@ namespace Conduit
                         }
                     }
                 }
-                inDirs = "";
-                foreach (var item in curNode.InSnaps)
-                {
-                    for (int c = 0; c < Connectors.Count; c++)
-                    {
-                        if (Connectors[c].EndNode == null)
-                            continue;
-                        if (Connectors[c].EndNode == curNode && Connectors[c].End.Name == item.Value.Name)
-                        {
-                            inDirs += item.Value.Name + ',' + Connectors[c].StartNode2.T1.ToString() + ';';
-                            break;
-                        }
-                    }
-                }
-                inDirs = inDirs.Substring(0, inDirs.Length - 1);
-                outDirs = "";
-                foreach (var item in curNode.OutSnaps)
-                {
-                    for (int c = 0; c < Connectors.Count; c++)
-                    {
-                        if (Connectors[c].StartNode == null)
-                            continue;
-                        if (Connectors[c].StartNode == curNode && Connectors[c].Start.Name == item.Value.Name)
-                        {
-                            outDirs += item.Value.Name + ',' + Connectors[c].EndNode2.T1.ToString() + ';';
-                            break;
-                        }
-                    }
-                }
-                outDirs = outDirs.Substring(0, outDirs.Length - 1);
+
+                inDirs = getInDirs(curNode, curNode.InSnaps);
+                outDirs = getOutDirs(curNode, curNode.OutSnaps);
 
 
                 basename = branchNum + '-' + mainStage.ToString();
                 sc = new ScriptCreator(curNode, inDirs, conduitLocation, pipelinePath, dataParentDir, basename);
-                //sc.compileMasterScript(tempPipelinePath + "\\" + branchNum + '-' + mainStage.ToString() + "_" + "M.sh", outDirs);
-                //sc.compileParallelScript(tempPipelinePath + "\\parallel\\" + branchNum + '-' + mainStage.ToString() + "_" + "P.sh");
                 sc.compileScripts(tempPipelinePath, basename, outDirs);
 
                 branchString += "\telif [ ${stages[" + branchNum + "]} == "+mainStage.ToString()+" ] ; then\n";
                 branchString += "\t\tif [ ${stepflags[" + branchNum + "]} == false ] ; then\n";
                 branchString += "\t\t\tsbatch " + pipelinePath + "/" + branchNum + '-' + mainStage.ToString() + "_" + "M.sh " + branchNum + '-' + mainStage.ToString() + ".done\n";
-                //branchString += "\t\t\ttouch " + dataParentDir + "/" + branchNum + '-' + mainStage.ToString() + ".done\n";
                 branchString += "\t\t\tstepflags[" + branchNum + "]=true\n";
                 branchString += "\t\telif [ -e $dataParentDir/" + branchNum + "-1.done ] ; then\n";
                 branchString += "\t\t\tstepflags[" + branchNum + "]=false\n";
@@ -1279,23 +1149,8 @@ namespace Conduit
                 {
                     branchString += "\t\t\tstages[" + b + "]=1\n";
                 }
-                //remove next line
                 branchString += "\t\t\techo \"" + branchNum + '-' + mainStage.ToString() + " done\"\n";
                 branchString += "\t\tfi\n";
-
-
-                MessageBox.Show(nextNode.Name);
-                MessageBox.Show(getAllFollowingNodes(nextNode));
-                /*branchString += "\telif (( ${stages[" + branchNum + "]} == " + mainStage.ToString() + " )) ; then\n";
-
-                branchString += "\t\tif ( ! $stepflag ) ; then\n";
-                branchString += "\t\t\tsbatch " + mainStage.ToString() + nextNode.Name + ".sh\n";
-                branchString += "\t\t\tstepflag=true\n";
-                branchString += "\t\telif [ -e " + mainStage.ToString() + ".done ] ; then\n";
-                branchString += "\t\t\tstepflag=false\n";
-                branchString += "\t\t\tstages[0]=${stages[0]}+1\n";
-                branchString += "\t\tfi\n";*/
-
                 mainStage += 1;
                 
                 curNode=nextNode;
@@ -1305,6 +1160,9 @@ namespace Conduit
             branchString += "\tfi\n";
             return branchString;
         }
+
+        //returns a comma delimited list of all nodes following the passed node
+        //used for branch and merge detection
         public string getAllFollowingNodes(Node n)
         {
             string nodeNames = n.Name;
@@ -1330,13 +1188,14 @@ namespace Conduit
             }
             return nodeNames;
         }
-
+        //set up SFTP connection
         public static ConnectionInfo getSftpConnection(string host, string username, int port, string password)
         {
             return new PasswordConnectionInfo(host, port, username, password);
         }
         public string user;
         public string pass;
+        //zips temp pipeline location, sends it to beocat, unzips at desired location and submits runall script
         public void SendPipeline(string beocatPath, string localPath, string parentDir)
         {
             if (File.Exists(conduitLocation + "\\data\\tempPipe.zip"))
@@ -1361,10 +1220,6 @@ namespace Conduit
                 {
                     sftpClient.BufferSize = 1024;
                     sftpClient.UploadFile(fs, Path.GetFileName(filename));
-                    /* string directory = sftpClient.WorkingDirectory;
-                     directory += "/results.zip";
-                     MessageBox.Show(directory);
-                     ZipFile.ExtractToDirectory(directory, justName);*/
                 }
 
                 sftpClient.Dispose();
@@ -1389,6 +1244,46 @@ namespace Conduit
                 //ssh.Disconnect();
             }
             MessageBox.Show("Pipeline submitted");
+        }
+        //gets nodes input directories from input snaps
+        public string getInDirs(Node curNode, Dictionary<string, SnapSpot> snaps)
+        {
+            string inDirs = "";
+            foreach (var item in snaps)
+            {
+                for (int c = 0; c < Connectors.Count; c++)
+                {
+                    if (Connectors[c].EndNode == null)
+                        continue;
+                    if (Connectors[c].EndNode == curNode && Connectors[c].End.Name == item.Value.Name)
+                    {
+                        inDirs += item.Value.Name + ',' + Connectors[c].StartNode2.T1.ToString() + ';';
+                        break;
+                    }
+                }
+            }
+            inDirs = inDirs.Substring(0, inDirs.Length - 1);
+            return inDirs;
+        }
+        //gets nodes output directories from output snaps
+        public string getOutDirs(Node curNode, Dictionary<string,SnapSpot> snaps)
+        {
+            string outDirs = "";
+            foreach (var item in snaps)
+            {
+                for (int c = 0; c < Connectors.Count; c++)
+                {
+                    if (Connectors[c].StartNode == null)
+                        continue;
+                    if (Connectors[c].StartNode == curNode && Connectors[c].Start.Name == item.Value.Name)
+                    {
+                        outDirs += item.Value.Name + ',' + Connectors[c].EndNode2.T1.ToString() + ';';
+                        break;
+                    }
+                }
+            }
+            outDirs = outDirs.Substring(0, outDirs.Length - 1);
+            return outDirs;
         }
     }
 }

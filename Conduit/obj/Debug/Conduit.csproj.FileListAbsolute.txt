@@ -58,10 +58,8 @@ C:\Users\Heffel\Documents\GitHub\Conduit\Conduit\obj\Debug\Conduit_MarkupCompile
 C:\Users\Heffel\Documents\GitHub\Conduit\Conduit\obj\Debug\MainWindow.baml
 C:\Users\Heffel\Documents\GitHub\Conduit\Conduit\obj\Debug\Conduit.g.resources
 C:\Users\Heffel\Documents\GitHub\Conduit\Conduit\obj\Debug\Conduit.Beocat.resources
-C:\Users\Heffel\Documents\GitHub\Conduit\Conduit\obj\Debug\Conduit.CreateNode2.resources
 C:\Users\Heffel\Documents\GitHub\Conduit\Conduit\obj\Debug\Conduit.SaveFile.resources
 C:\Users\Heffel\Documents\GitHub\Conduit\Conduit\obj\Debug\Conduit.newConnector.resources
-C:\Users\Heffel\Documents\GitHub\Conduit\Conduit\obj\Debug\Conduit.NodeCreator.resources
 C:\Users\Heffel\Documents\GitHub\Conduit\Conduit\obj\Debug\Conduit.Properties.Resources.resources
 C:\Users\Heffel\Documents\GitHub\Conduit\Conduit\obj\Debug\Conduit.csproj.GenerateResource.cache
 C:\Users\Heffel\Documents\GitHub\Conduit\Conduit\obj\Debug\Conduit.csproj.CoreCompileInputs.cache
@@ -228,3 +226,5 @@ C:\Users\kbowers\Source\Repos\SeniorProject\Conduit\obj\Debug\Conduit.exe
 C:\Users\kbowers\Source\Repos\SeniorProject\Conduit\obj\Debug\Conduit.pdb
 C:\Users\kbowers\source\repos\SeniorProject\Conduit\obj\Debug\Conduit.CreateDataNode.resources
 C:\Users\kbowers\source\repos\SeniorProject\Conduit\obj\Debug\Conduit.SoftwareNodeCreator.resources
+C:\Users\Heffel\Documents\GitHub\Conduit\Conduit\obj\Debug\Conduit.CreateDataNode.resources
+C:\Users\Heffel\Documents\GitHub\Conduit\Conduit\obj\Debug\Conduit.SoftwareNodeCreator.resources

@@ -18,6 +18,8 @@ namespace Conduit
         string parentDirectory;
         public String paramTups = "";
         public String inputTups = "";
+
+        //dictionary that converts node parameters to beocat parameters
         private static Dictionary<string, string> convertSbatch = new Dictionary<string, string>()
         {
             { "#runTime", "time,:00:00" },
@@ -26,6 +28,7 @@ namespace Conduit
             { "#mem","mem,G" }
         };
 
+        //constructor
         public ScriptCreator(Node n, string inputString, string conduitPath, string pipePath, string parentDir, string basename)
         {
             baseName = basename;
@@ -62,6 +65,7 @@ namespace Conduit
             paramTups = paramTups.Substring(0, paramTups.Length - 1);
         }
 
+        //checks whetehr software is to be run as aprallel or standalone and then compiles scripts for it
         public void compileScripts(string path, string basename, string outDirs)
         {
             if (File.Exists(parallelSkeletonPath))
@@ -75,6 +79,7 @@ namespace Conduit
             }
         }
 
+        //compiles the master script that submits parallel scripts
         public void compileMasterScript(string path, string outDirs)
         {
             string baseFileText = System.IO.File.ReadAllText(masterSkeletonPath);
@@ -82,6 +87,7 @@ namespace Conduit
             baseFileText = baseFileText.Replace("*&%@parentDirTag", parentDirectory);
             baseFileText = baseFileText.Replace("*&%@parallelPathTag", baseName + "_P.sh");
             string[] inputs = inputTups.Split(';');
+            //sets input and outputs of script
             for (int i = 0; i < inputs.Length; i++)
             {
                 string[] split = inputs[i].Split(',');
@@ -97,15 +103,17 @@ namespace Conduit
         }
 
 
-
+        //compiles parallel script to be submitted by master
         public void compileParallelScript(string path)
         {
             string baseFileText = System.IO.File.ReadAllText(parallelSkeletonPath);
             string[] pars = paramTups.Split(';');
             List<string> sbatchParams = new List<string>();
             List<string> softwareParams = new List<string>();
+            //gather software parameters
             for (int i = 0; i < pars.Length; i++)
             {
+                //# indicates a beocat submission parameter
                 if (pars[i].Substring(0, 1) == "#")
                 {
                     sbatchParams.Add(pars[i]);
@@ -134,6 +142,8 @@ namespace Conduit
             File.WriteAllText(path, parallelFileText.Replace("\r\n", "\n"));
         }
 
+        //compiles standalone script
+        //basically a merge of compileParallel and compileMaster
         public void compileStandalone(string path, string outDirs)
         {
             string baseFileText = System.IO.File.ReadAllText(masterSkeletonPath);
